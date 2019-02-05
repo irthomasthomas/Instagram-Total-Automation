@@ -1,8 +1,4 @@
 #NoEnv
-;#include c:\instabot\JSON.ahk
-;#include json2.ahk
-;#include functions.ahk
-;#include c:\instabot\CLR.ahk
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 #SingleInstance,Force
@@ -14,8 +10,7 @@ if FileExist( "c:\instabot\settings.dll" ) {
     obj := CLR_CreateObject(asm, "Settings")
 	 */
 
-if FileExist( "settings.dll" )
-{
+if FileExist( "settings.dll" ) {
 	;FileCopy, c:\instabot\settings.dll, c:\instabot\
 	Sleep 100
 	;asm := CLR_LoadLibrary("e:\development\instabot\settings.dll")
@@ -39,12 +34,12 @@ else
 }
 ;msgbox % " client_id " client_id " client_secret " client_secret " refresh_token " refresh_token
 global myAccessToken := GetAccessCode(client_id, client_secret, refresh_token)
-
+;msgbox myAccessToken %myAccessToken%
 ;
 ;append row and then update row
 ;
 
-if FileExist( "settings.ini" ) {	
+if FileExist( "c:\instabot\settings.ini" ) {	
     IniRead, influencer_hotkey, settings.ini, General, influencer_hotkey
 	IniRead, login_type, settings.ini, General, login_type
     IniRead, e_session_id, settings.ini, Session, session_id
@@ -52,6 +47,20 @@ if FileExist( "settings.ini" ) {
     {
         session_id := e_session_id
     }
+	/* 
+	if influencer_sheetkey <> ""
+    {
+        influencerWS := getWSnames(influencer_sheetkey, myAccessToken)
+    }
+	if % influencerWS.length()
+    {
+        loop, % influencerWS.length()
+        {
+            IniRead, influencerWS_bcg_%A_index%, settings.ini, Worksheets, influencerWS_bcg_%A_index%
+            ;IniRead, hashtagsWS_txt_%A_index%, settings.ini, Worksheets, hashtagsWS_txt_%A_index%
+        }
+    }
+	 */
 }
 else
 {
@@ -59,25 +68,25 @@ else
     ErrorGui("setting.ini file not found. Exiting...")
     ExitApp
 }
-isLogged := 1
-goto, StartApp
+    isLogged := 1
+    goto, StartApp
 
 StartApp:
 {
-    ;ToolTip, control.ahk startapp(), 0, 900
-    ;StartTest()
-    ;SearchHashtag()
-    ;BrowseFeed()
-    ;FollowFromGsheet()
-    ;Unfollow()
-    ;Start()
-    /* 
-    gosub, HelpScreen
-    Hotkey, %influencer_hotkey%, CheckInfluencerList
-    Hotkey, F1, HelpScreen
-    ;SetTimer, CheckWings, 60000
-    return
-     */
+;ToolTip, control.ahk startapp(), 0, 900
+;StartTest()
+;SearchHashtag()
+;BrowseFeed()
+;FollowFromGsheet()
+;Unfollow()
+;Start()
+/* 
+gosub, HelpScreen
+Hotkey, %influencer_hotkey%, CheckInfluencerList
+Hotkey, F1, HelpScreen
+;SetTimer, CheckWings, 60000
+return
+ */
 }
 
 /* HelpScreen
@@ -155,94 +164,23 @@ CheckInfluencerList:
 
 }
  */
-
-UpdateGSheetCell(SheetKey, accessToken, cell, value)
-{
-	
-	url := "https://sheets.googleapis.com/v4/spreadsheets/" SheetKey "/values/" cell  "?includeValuesInResponse=true&valueInputOption=RAW&access_token=" accessToken
-	data = {"majorDimension":"ROWS","range":"%cell%","values":[["%value%"]]}
-	Clipboard = %url%
-	Return PutURL(url, data)
-}
-
-GsheetAppendRow(SheetKey, accessToken, cell, values)
-{
- /* 
-	url := "https://sheets.googleapis.com/v4/spreadsheets/" SheetKey "/values/" cell  ":append?includeValuesInResponse=true&valueInputOption=RAW&access_token=" accessToken
-	 */
-	 
-	url := "https://sheets.googleapis.com/v4/spreadsheets/" SheetKey "/values/" cell  ":append?includeValuesInResponse=true&valueInputOption=USER_ENTERED&access_token=" accessToken
-	data = {"majorDimension":"ROWS","range":"%cell%","values":[[%values%]]}
-	
-	Return PutURL(url, data, "post")
-}
-
-UpdateStatusSheet(result, accessToken, cell="Sheet1!A1:F1") {	
-	status := GsheetAppendRow(status_sheetkey, accessToken, cell, result)
-	Return status
-}
-
-GetWorksheetRange(SheetKey, accessToken, ranges)
-{
-	url := "https://sheets.googleapis.com/v4/spreadsheets/" sheetkey "/values/" ranges "?access_token=" accessToken
-    sheetBatch := URLDownloadToVar(url)
-	Return sheetBatch
-}
-
-URLDownloadToVar(url) {
-    if url <> ""
-    {
-        hObject:=ComObjCreate("WinHttp.WinHttpRequest.5.1")
-        hObject.Open("GET", url)
-        hObject.Send()
-        response := hObject.ResponseText
-        hObject :=
-        return response
+/* 
+    UpdateStatusSheet(result, accessToken) {
+        cell = Sheet1!A1:F1	
+        status := GsheetAppendRow(status_sheetkey, accessToken, cell, result)
+        msgbox % status
     }
-    else
-    {
-        ErrorGui("ERROR! Exiting...")
-        ExitApp
-    }
-}
 
-PutURL(url, data, method:="put") {
-    if url <> ""
+    UpdateGSheetCell(SheetKey, accessToken, cell, value)
     {
-        hObject:=ComObjCreate("WinHttp.WinHttpRequest.5.1")
-        hObject.Open(method, url, false)
-		hObject.SetRequestHeader("Content-Type", "application/json")
-        hObject.Send(data)
-        response := hObject.ResponseText
-        hObject :=
-        return response
+        url := "https://sheets.googleapis.com/v4/spreadsheets/" SheetKey "/values/" cell  "?includeValuesInResponse=true&valueInputOption=RAW&access_token=" accessToken
+        data = {"majorDimension":"ROWS","range":"%cell%","values":[["%value%"]]}
+        Return PutURL(url, data)
     }
-    else
-    {
-        ErrorGui("ERROR! Exiting...")
-        ExitApp
-    }
-}
 
-GetAccessCode(client_id, client_secret, refresh_token) 
-{
-    StringReplace, client_id, client_id, %A_SPACE%,, All
-    StringReplace, client_secret, client_secret, %A_SPACE%,, All
-    StringReplace, refresh_token, refresh_token, %A_SPACE%,, All
-    aURL := "https://www.googleapis.com/oauth2/v3/token"
-    aPostData := "client_id=" client_id "&client_secret=" client_secret "&refresh_token=" refresh_token "&grant_type=refresh_token"
-    oHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-    oHTTP.Open("POST", aURL , False)
-    oHTTP.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-    oHTTP.Send(aPostData)
-    data1 := oHTTP.ResponseText
-    parsedAToken := JSON.Load(data1, true)
-    parsedAccessToken := parsedAToken.access_token
-    oHTTP :=
-    return parsedAccessToken
-}
-
-FindImg(img, action:=1, lp:=5, sx:=180, sy:=70, ex:=1190, ey:=710, rand:=1, xr:=0, yr:=0, Debug:=False)
+    
+*/
+FindImg(img, action:=1, lp:=5, sx:=180, sy:=70, ex:=1190, ey:=710, rand:=1, xr:=0, yr:=0,Debug:=False)
 {
     Loop % lp
     {
@@ -265,6 +203,8 @@ FindImg(img, action:=1, lp:=5, sx:=180, sy:=70, ex:=1190, ey:=710, rand:=1, xr:=
     Until ErrorLevel = 0
     If ErrorLevel = 0
     {
+	If Debug = True
+		msgbox % FoundX, FoundY
 	If action = 1
 	{
 		MouseMove, %FoundX%, %FoundY%
@@ -288,7 +228,7 @@ FindImg(img, action:=1, lp:=5, sx:=180, sy:=70, ex:=1190, ey:=710, rand:=1, xr:=
     {
         Return False
     }
-SleepRand()
+    SleepRand()
 }
 
 CenterImgSrchCoords(File, ByRef CoordX, ByRef CoordY){
@@ -304,17 +244,20 @@ CenterImgSrchCoords(File, ByRef CoordX, ByRef CoordY){
 	ErrorLevel := LastEL
 }
 
-SleepRand(s:=0,e:=0) {
-    ; 
-	If s = 0
+SleepRand(x:=0,y:=0, debug:=False) {
+	If x = 0
 	{
-		Random, s, 1, 11
+		Random, x, 1, 11
 	}
-	If e  = 0
+	If y  = 0
 	{		
-		Random, e, %s%, (s+200)
+		Random, y, %x%, (x+200)
 	}
-	Random, rand, %s%, %e%
+	Random, rand, %x%, %y%
+	If debug
+	{
+		MsgBox % rand
+	}
 	Sleep, %rand%
 }
 
