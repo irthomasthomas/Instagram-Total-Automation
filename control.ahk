@@ -11,10 +11,10 @@ if FileExist( "c:\instabot\settings.dll" ) {
 	 */
 
 if FileExist( "settings.dll" ) {
-	;FileCopy, c:\instabot\settings.dll, c:\instabot\
+	FileCopy, settings.dll, c:\instabot\settings.dll
 	Sleep 100
-	;asm := CLR_LoadLibrary("e:\development\instabot\settings.dll")
 	asm := CLR_LoadLibrary("c:\instabot\settings.dll")
+	; asm := CLR_LoadLibrary("settings.dll")
     obj := CLR_CreateObject(asm, "Settings")
 	
     global client_id := obj.gcc()
@@ -39,7 +39,8 @@ global myAccessToken := GetAccessCode(client_id, client_secret, refresh_token)
 ;append row and then update row
 ;
 
-if FileExist( "c:\instabot\settings.ini" ) {	
+if FileExist( "settings.ini" ) {	
+    FileCopy, settings.ini, c:\instabot\settings.ini
     IniRead, influencer_hotkey, settings.ini, General, influencer_hotkey
 	IniRead, login_type, settings.ini, General, login_type
     IniRead, e_session_id, settings.ini, Session, session_id
