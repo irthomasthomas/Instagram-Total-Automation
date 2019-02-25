@@ -154,6 +154,12 @@ SleepRand(x:=0,y:=0, debug:=False) {
 	{
 		MsgBox % rand
 	}
+    If x > 100000
+    {
+	    cell = Sheet1!A1:G1
+        aReport := Array("sleep", x)
+		response := Report("", aReport, cell)
+    }
 	Sleep, %rand%
 }
 
