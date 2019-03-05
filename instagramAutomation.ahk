@@ -105,7 +105,7 @@ StartKardashianBot() {
     }
 
 	FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-			; array(StartTime, EndTime, errorMsg, functionName) if Error endTime = 0
+			;  array(StartTime, EndTime, errorMsg, functionName) if Error endTime = 0
 	result := Array(functionName, startTime, endTime, 0, likes, 0, comments)
 	response := Report(profile,result,cell)	
 	SleepRand(10000, 20000)
