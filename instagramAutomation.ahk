@@ -9,78 +9,202 @@ SetControlDelay, -1
 SendMode, Input
 #include FindTextFunctions.ahk
 
+
+GetHashtags(imgFormat:=1, imgType:="o", igAccount:=0) {
+	hashtag_sheetkey = 16yguXSFWUhrBMNs9BgxQM3xkKH3pcjhG-SaZ90xiEgA
+	Category1 := Object()
+	Category2 := Object()
+	Category3 := Object()
+    ;	msgbox % "GetHashtags " imgFormat " " imgType " " igAccount
+	If igAccount = philhughesart
+	{
+		nCategories = 3
+		ranges := "PHA!A1:D"
+		hashtagSheetData := GetWorksheetRange(hashtag_sheetkey, myAccessToken, ranges)
+		oArray := json.Load(hashtagSheetData)
+		If imgType = o
+		{
+			for i in oArray.values
+			{
+				If oArray.values[i][4] = "Art"
+					Category1.Insert(oArray.values[i][1])
+				Else If oArray.values[i][4] = "Scene"
+					Category2.Insert(oArray.values[i][1])
+				Else If oArray.values[i][4] = "Oil Painting"
+					Category3.Insert(oArray.values[i][1])
+			}
+		}
+		Else If imgType = d
+		{
+			for i in oArray.values
+			{
+				If oArray.values[i][4] = "Art"
+					Category1.Insert(oArray.values[i][1])
+				Else If oArray.values[i][4] = "Scene"
+					Category2.Insert(oArray.values[i][1])
+				Else If oArray.values[i][4] = "Drawing"
+					Category3.Insert(oArray.values[i][1])
+			}	
+		}
+		ELSE If imgType = w
+		{
+			for i in oArray.values
+			{
+				If oArray.values[i][4] = "Art"
+					Category1.Insert(oArray.values[i][1])
+				Else If oArray.values[i][4] = "Scene"
+					Category2.Insert(oArray.values[i][1])
+				Else If oArray.values[i][4] = "Watercolour"
+					Category3.Insert(oArray.values[i][1])
+			}
+		}
+	}
+	Else If (igAccount = "noplacetosit") || (igAccount = noplacetosit)
+	{
+		;msgbox % " GetHashtags() NPS "
+		ranges := "NPS!A1:D"
+		nCategories = 1
+		;msgbox % " sheetkey " hashtag_sheetkey " accesstoken " myAccessToken " ranges " ranges
+		hashtagSheetData := GetWorksheetRange(hashtag_sheetkey, myAccessToken, ranges)
+		oArray := json.Load(hashtagSheetData)
+		;msgbox % hashtagSheetData
+		For i in oArray.values
+		{
+			Category1.Insert(oArray.values[i][1])
+		}	
+	}
+	Else If igAccount in TT,T,thomasthomas2211 
+	{
+		nCategories = 1
+		ranges := "TT!A1:D"
+		hashtagSheetData := GetWorksheetRange(hashtag_sheetkey, myAccessToken, ranges)
+		oArray := json.Load(hashtagSheetData)
+		
+		For i in oArray.values
+		{
+			Category1.Insert(oArray.values[i][1])
+		}
+	}
+	Else If (igAccount = "b") || (igAccount = "bliss") || (igAccount = "bm") || (igAccount = "blissMolecule") || (igAccount = b)
+	{
+		;msgbox % " GetHashtags() blissMolecule "
+		nCategories = 1
+		ranges := "BM!A1:D"
+		;msgbox % " sheetkey " hashtag_sheetkey " accesstoken " myAccessToken " ranges " ranges
+		hashtagSheetData := GetWorksheetRange(hashtag_sheetkey, myAccessToken, ranges)
+		;msgbox % hashtagSheetData
+		oArray := json.Load(hashtagSheetData)
+		
+		For i in oArray.values
+		{
+			Category1.Insert(oArray.values[i][1])
+		}
+		
+	}
+
+	Loop % Category1.MaxIndex()
+	{
+		cat1Deck%A_Index% := Category1[A_Index]
+	}
+	Loop % Category1.MaxIndex()
+	{
+		random, pos, 1, Category1.MaxIndex()
+		temp := cat1Deck%A_Index%
+		cat1Deck%A_Index% := cat1Deck%pos%
+		cat1Deck%pos% := temp
+	}
+	Loop % Category2.MaxIndex()
+	{
+		cat2Deck%A_Index% := Category2[A_Index]
+	}
+	Loop % Category2.MaxIndex()
+	{
+		random, pos, 1, Category2.MaxIndex()
+		temp := cat2Deck%A_Index%
+		cat2Deck%A_Index% := cat2Deck%pos%
+		cat2Deck%pos% := temp
+	}
+	Loop % Category3.MaxIndex()
+	{
+		cat3Deck%A_Index% := Category3[A_Index]
+	}
+	Loop % Category3.MaxIndex()
+	{
+		random, pos, 1, Category3.MaxIndex()
+		temp := cat3Deck%A_Index%
+		cat3Deck%A_Index% := cat3Deck%pos%
+		cat3Deck%pos% := temp
+	}
+	
+	If nCategories = 1
+	{
+		Loop 27
+		{
+			s.=cat1Deck%A_Index%
+		}
+	}
+	Else If nCategories = 2
+	{
+		Loop 14
+		{
+			s.=cat1Deck%A_Index%
+		}
+		Loop 13
+		{
+			s.=cat2Deck%A_Index%
+		}
+	}
+	Else If nCategories = 3
+	{
+		Loop 9
+		{
+			s.= cat1Deck%A_Index% . cat2Deck%A_Index% . cat3Deck%A_Index%
+		}
+	}
+	
+	return % s
+
+}
+
 StartKardashianBot() {
 	functionName = KardashianBot
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
-
-	Loop 1
-	{
-	/*
-    Random, shortBrake, 0, 1
-    If shortBrake
-        SleepRand(10000, 100000)
-    If A_Index > 5
-    {
-        Random, longBrake, 1, 10
-        If longBrake <= 2
-        {
-            SleepRand(100000, 500000)
-        }
-    }
-	*/
-	
 	cell = Sheet1!A1:G1
 	global profile := RandChromeProfilePath(myAccessToken)
-	;instaURL := "http://instagram.com/"
-	instaURL := RandURL()
-	CloseChrome()
-	SleepRand(900,2100)
-	OpenUrlChrome(instaURL, profile[1])
-	Tooltip, sleeping - start(), 0, 900
-	SleepRand(2333,5999)
-	Sleep 10 ; LOGIN ROUTINE
-	{
-		foundLoginBtn := FindImg("needles\login2.png",,10)
-		If !foundLoginBtn {
-			;Tooltip, Start() login not found, 0,900
-			foundLoginBtn := FindImg("needles\login4.png",,10)
-			}
-		If foundLoginBtn {
-			;Tooltip, Start() login btn found, 0,900
-			SleepRand(2800,3500)
-			foundLoginBtn2 := FindImg("needles\login3.png")
-			SleepRand(450,900)
-		If foundLoginBtn2 {
-				}
-			}
-		SleepRand(800, 1500)
-		Send {BS}
-		SleepRand(300,1300)
-		Send {BS}
-		SleepRand(333,1500)
-		Send {BS}
-		SleepRand(1300,2500)
-	}
+	OpenUrlChrome("",profile[1])
+	ToolTip, KardashianBot, 0, 900
+	SleepRand(1500,3400)
 	comments = 0
 	likes = 0
-	SleepRand()
-	Loop 2
+	Random, r, 2, 5
+	Loop % r
     {
+		ToolTip, Loop, 0, 900
+		SleepRand(3000,6000)
+		instaURL := RandURL()
+		Clipboard := instaURL
+		SleepRand()
+		Send ^l
+		SleepRand()
+		Send ^v
+		SleepRand()
+		Send {Enter}
+		Tooltip, sleeping - start(), 0, 900
+		SleepRand(2333,5999)		
+		SleepRand()
+		Random p, 1, 2
+		ClickInstaPost(p)
         SleepRand(1000,3500)
-        Random, r, 1, 2
-        If r = 1
+        Random, r, 1, 3
+        Loop % r
         {
             result := KardashianComment()
             If result
 				comments++
+			SleepRand(1700,11000)
 			;response := Report(profile,result,cell)
         }
-        Else
-        {
-            Random p, 1, 2
-		    ClickInstaPost(p)
-            SleepRand(500,1000)
-        }
+        
         SleepRand(500,2500)
         open := OpenCommenterProfile()
         If !open
@@ -99,17 +223,19 @@ StartKardashianBot() {
             Continue
         }
         liked := LikePostsN()
-		likes += liked
 		Send {BS}
 		SleepRand(1000,2500)
     }
-
+	
+	
+	
 	FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
 			;  array(StartTime, EndTime, errorMsg, functionName) if Error endTime = 0
-	result := Array(functionName, startTime, endTime, 0, likes, 0, comments)
+	;MsgBox, % liked[1] " " comments
+	result := Array(functionName, startTime, endTime, 0, liked[1], 0, comments)
 	response := Report(profile,result,cell)	
 	SleepRand(10000, 20000)
-	}
+	
 }
 
 Report(profile, result, cell) {
@@ -136,9 +262,9 @@ KardashianComment(loops=1)
 	FormatTime, StartTime, ,yyyy-M-d HH:mm:ss tt
 	Loop %loops%
 	{
-		SleepRand(1100,2300)
+		SleepRand(100,1300)
 		bluestar := FindImg("needles\bluestar.png",3)
-		SleepRand(1100,2300)
+		SleepRand(100,1300)
 		smallbluetick := FindImg("needles\smallbluetick.png",3)
 		If !bluestar && !smallbluetick
 		{
@@ -297,7 +423,7 @@ QuickCheckInstaPage()
 
 CheckInstagramPage(checkOwn:=1, checkBluetick:=0) {
     MouseMove, 400, 400
-    SleepRand(500,1900)
+    SleepRand(500,900)
     MouseClick, WheelUp
     MouseClick, WheelUp
     SleepRand(500,1500)
@@ -317,14 +443,14 @@ CheckInstagramPage(checkOwn:=1, checkBluetick:=0) {
     Text:="|<private>*153$48.z06000E0zU0000k0laqMltwQlbqMnxwyzb68UAlXz66BUQlzk66BVAlzk6673AlUk6673wwzk6671qQSU"
 	if (ok:=FindText(730-70000//2, 444-70000//2, 70000, 70000, 0, 0, Text))
 		Return False
-	Text:="|<no posts>*161$34.00zw0007zs000k0k00C01k0Tk03y3w003wM0000P00000w03w03k0zw0D070s0w0k0k3k703UD0M060w1U0M3k400UD0E020w10083k601UD0M060w0k0k3k3U70D07Vs0w07y03k07U0C"
-	if (ok:=FindText(675-150000//2, 516-150000//2, 150000, 150000, 0, 0, Text))
-		Return False
 	
+	Text:="|<no posts>*161$71.0M00000000M01U000zk000M0300030k000k0C000A0k001k0M007k0y001U0k00M00600301U01U006006070020TU400C0C0041VU800Q0M00861UE00M0k00EM1UU00k1U00UU11001U300110220030600220440060A004408800A0M008A0kE00M0k00EA30U00k1k00UAA1003U3U010Dk200703002000400A06006000M00M0A006001U00k0Q007zzy003U0M0000000060U"
+	if (ok:=FindText(675-150000//2, 453-150000//2, 150000, 150000, 0, 0, Text))
+		Return False
 	If checkOwn = 1
 	{
 		ToolTip, checkOwn is 2 , 0, 930
-		SleepRand(2200,3300)
+		SleepRand(1200,3300)
 		; isThomas := FindImg("E:\Development\instabot\assets\thomasthomas.png",3)
 		Text:="|<>*151$57.3s0DU0600Nzk7z00k03Q71kQ0S01v0QA1k7k0Tk1X063y0Dy0AM0kwk3n01U06660MM0A00k0k030300A0600M0M01U0k030600M0600M1U0600k030M01U0600M600M00k031U0600600Ms03U00k03A00k00600P00A000k03zzXzy0600Q"
 		if (ok:=FindText(742-150000//2, 216-150000//2, 150000, 150000, 0, 0, Text))
@@ -354,11 +480,11 @@ or returns False if photos have been liked already
 */    
     liked = 0
 	Tooltip, LikePostsN, 0,900
-	SleepRand(1500,2700)
+	SleepRand(500,1700)
 	If %n% > 0
 		nLikes := %n%
 	else
-		random, nLikes, 2, 6
+		random, nLikes, 3, 8
 	
 	ClickInstaPost(1)
 	Text:="|<WHITE HEART>*169$24.3s7k66MM83k4E1U2E002U001U001U001U001U001k003E0028004A00A600M300k1U1U0k300M60048002E001U0U"
@@ -403,7 +529,7 @@ or returns False if photos have been liked already
                 MouseMove, %X%, %Y%
                 SleepRand()
 				Click
-                SleepRand(1000,3000)
+                SleepRand(500,1500)
                 liked++
 			}
 			Else ;double click image
@@ -413,9 +539,10 @@ or returns False if photos have been liked already
 				MouseMove, %X%, %Y%
 				SleepRand()
 				Click 2	
-                SleepRand(1000,2500)
+                SleepRand(500,1500)
                 liked++
 			}
+			count := A_Index
 			;GREY RIGHT ARROW
 			Text:="|<>*162$14.zzszy7zUzw7zUzw7zUzw7zUzw7zUzsDw3y1z0zUTkDs7w3y1zUzsTyDzzzs"
 			if (ok:=FindText(1163-500//2, 388-500//2, 500, 500, 0, 0, Text))
@@ -433,23 +560,23 @@ or returns False if photos have been liked already
 		}
     }
 	CoordMode, Pixel, Screen
-    Return liked
+    Return % Array(liked,nLikes,count)
 }
 
 ClickInstaCommentBox(){
 	CoordMode, Pixel, Windows
 	Tooltip, clickInstaCommentBox , 0,900
 	SleepRand(200,333)
-	foundImg := FindImg("needles\comment3.png")
-	If foundImg
+	Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
+	if (ok:=FindText(789-900//2, 674-900//2, 900, 900, 0, 0, Text))
 	{
-		;FoundX+=15
+		CoordMode, Mouse
+		X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+		Click, %X%, %Y%
 		Return True
 	}
-	ELSE
-	{
+	Else
 		Return False
-	}
 }
 
 PostComment(cText){
@@ -505,9 +632,9 @@ OpenUrlChrome(URL, profile){
 
 ClickInstaPost(n){
 	MouseMove, 650, 450
-	SleepRand(1000,2500)
+	SleepRand(100,1500)
 	MouseClick, WheelDown
-	SleepRand(500,2500)
+	SleepRand(100,1500)
 	postN = %n%
 	;posts 400
 	; 638
@@ -544,31 +671,19 @@ ClickInstaPost(n){
         Random,y,465,700
 		SleepRand()
         MouseMove, %x%, %y%
-        SleepRand(500,1500)
+        SleepRand(100,1100)
         Click
         SleepRand(1500,2933)
-        foundImg := FindImg("needles\comment3.png",3)
-        If !foundImg
-        {
-            SleepRand(1333,2933)
-            foundImg := FindImg("needles\comment3.png",3)
-        }
-        If !foundImg
-        {
-			SleepRand(500,2000)
-            Random,x,175,450
-            Random,y, 580, 650
-            MouseMove, %x%, %y%
-            SleepRand(500,2500)
-            Click
-            SleepRand(333,555)
-            foundImg := FindImg("needles\comment3.png",3)
-            If !foundImg
-            {
-                Return False
-            }
-            Else Return True
-        }
+		Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
+		if (ok:=FindText(789-900//2, 674-900//2, 900, 900, 0, 0, Text))
+		{
+			CoordMode, Mouse
+			X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+			;Click, %X%, %Y%
+			Return True
+		}
+		Else Return False
+		
 	}
 	Else If postN = 2
 	{
@@ -577,16 +692,19 @@ ClickInstaPost(n){
             Random,x,545,800
 	        Random,y,465,700
             MouseMove, %x%, %y%
-            SleepRand(1000,2400)
+            SleepRand(100,800)
             Click
             SleepRand(1600,2600)
-            foundImg := FindImg("needles\comment3.png",3)
-            If foundImg
-            {
-                Return True
-            }
+            Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
+			if (ok:=FindText(789-900//2, 674-900//2, 900, 900, 0, 0, Text))
+			{
+				CoordMode, Mouse
+				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+				;Click, %X%, %Y%
+				Return True
+			}
+			Else Return False
         }
-        Return False
 	}
 	
 	Else If postN = 3
@@ -709,7 +827,7 @@ RandChromeProfilePath(accessToken, profile:=0)
 	if not profile
 		Random, row, 2, 5
     sheetId := "1LBsGtFQu_G8h5_RHX96W36iRDPwn9si9FyUOwf_B4dU"
-	range1 := "A" . row ":B" . row
+	range1 := "A" . row ":C" . row
 	url := "https://sheets.googleapis.com/v4/spreadsheets/" sheetId "/values/" range1  "?access_token=" accessToken
 	sheetData := UrlDownloadToVar(url)
     Sleep 100
@@ -717,7 +835,8 @@ RandChromeProfilePath(accessToken, profile:=0)
     userAccount := oArray.values[1][1]
     Sleep 100
     chromePath := oArray.values[1][2]
-    Return % Array(chromePath, userAccount)
+	sheetId := oArray.values[1][3]
+    Return % Array(chromePath, userAccount,sheetId)
 }
 
 CloseChrome() {

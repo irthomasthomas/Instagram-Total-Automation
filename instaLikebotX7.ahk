@@ -16,13 +16,13 @@ Loop
 	;SleepRand(200000, 5000000)
 	cell = Sheet1!A1:G1
 	global profile := RandChromeProfilePath(myAccessToken)
-	;instaURL := "http://instagram.com/"
-	instaURL := RandURL()
+	instaURL := "http://instagram.com/"
+	;instaURL := RandURL()
 	CloseChrome()
-	SleepRand(900,2100)
+	SleepRand(1900,3100)
 	OpenUrlChrome(instaURL, profile[1])
 	Tooltip, sleeping - start(), 0, 900
-	SleepRand(2333,3999) 
+	SleepRand(2333,5999)
 	/* 
 		foundLoginBtn := FindImg("E:\Development\instabot\assets\login2.png",,10)
 		If !foundLoginBtn {
@@ -46,58 +46,68 @@ Loop
 		SleepRand(1300,2500)
 		 */
 	SleepRand()
-	Random, nLoop, 4, 14
+	Random, nLoop, 3, 6
 	Loop % nLoop
 	{
         ;SleepRand(10000, 200000)
-		Random, n, 1, 3
-		If n = 1
+		Random, n, 1, 4
+		If n = 0
 		{   
 			Result := Unfollow() ; array(startTime, endTime, errorMsg, functionName) if Error endTime = 0
 			SleepRand()
 			response := Report(profile, Result, cell)
-			SleepRand(5000, 17000)
+			SleepRand(2000, 7000)
 		}
-		Random, n, 1, 2
+		Random, n, 1, 3
 		If n = 1
 		{
 			Result := BrowseFeed()
-			SleepRand(100,3300)
-			response := Report(profile, Result, cell)
-			SleepRand(10000,30000)
-		}
-		Random, n, 1, 2
-		If n = 1
-		{
-			SleepRand(900,2500)
-			Result := BrowseHashtags()
-			SleepRand(300,3000)
-			response := Report(profile, Result, cell)
-			SleepRand(1200,3000)
-			SleepRand(10000, 32000)
-		}
-		Random, n, 1, 2
-		If n = 1
-		{
-			SleepRand(900,1200)
-			Result := FollowFromGsheet()
 			SleepRand()
 			response := Report(profile, Result, cell)
-			SleepRand(300, 3000)
-			SleepRand(3000, 22000)
+			SleepRand(2000,7000)
+		}
+		Random, n, 1, 3
+		If n = 1
+		{
+			SleepRand(100,1500)
+			Result := BrowseHashtags(profile[2])
+			SleepRand(300,1000)
+			response := Report(profile, Result, cell)
+			SleepRand(1000, 7000)
+		}
+		Random, n, 1, 3
+		If n = 1
+		{
+			Random, l, 1, 3
+			Loop % l
+			{
+				SleepRand(900,1200)
+				Result := FollowFromGsheet(,,profile)
+				SleepRand()
+				response := Report(profile, Result, cell)
+				SleepRand(300, 3000)
+				SleepRand(3000, 22000)
+			}
 		}
         Random, n, 1, 2
 		If n = 1
         {
-            StartKardashianBot()
+			Random, l, 1, 3
+			Loop % l
+            	StartKardashianBot()
         }
-
-	SleepRand(50000, 150000)
+	CloseChrome()	
+	ToolTip, sleeping
+	;SleepRand(50000, 150000)
 	}
-
-	SleepRand(200000, 6000000)
+	Tooltip, sleeping
 	Random, n, 1, 2
-	If n = 1
+	if n = 0
+	{
+		SleepRand(200000, 6000000)
+	}
+	Random, n, 1, 3
+	If n = 0
 	{
 		SleepRand(200000,6000000)
 	}
@@ -105,9 +115,9 @@ Loop
 	}
 }
 
-FollowFromGsheet(loopN:=1, nLikes:=0) 
+FollowFromGsheet(loopN:=1, nLikes:=0, profileArray:=0) 
 {
-	
+
 	functionName = FollowFromGsheet()
 	ToolTip, FollowFromGsheet(), 0, 900
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
@@ -116,51 +126,55 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
 	outer:
 	Loop % loopN
 	{
-		range1 := "A2:A"
+		range1 := profileArray[2]"!A2:A"
+		;msgbox % range1
 		range2 := "H2:H"
 		url := "https://sheets.googleapis.com/v4/spreadsheets/" influencer_sheetkey "/values/" range1  "?access_token=" myAccessToken
 		influencerSheetData := UrlDownloadToVar(url)
+		;msgbox %influencerSheetData%
 		oArray := json.Load(influencerSheetData)
-		random, row, 2, 178
+		endRow := oArray.values.MaxIndex()
+		random, row, 2, %endRow%
+		;msgbox % "endRow " endRow " row " row 
 		targetAccount := oArray.values[row][1]
 		ToolTip, FollowFromGsheet() targetAccount %targetAccount%
 		if (targetAccount = "") || (targetAccount = )
 		{
-			SleepRand(1200,2333)
+			SleepRand()
 			errorMsg := "targetAccount is blank for row " row
 			Return % Array(functionName, startTime, errorMsg, 0,0,0) 
 		}
 		instaURL := "http://instagram.com/"targetAccount
 		OpenUrlChrome(instaURL, profile[1])
-		SleepRand(2333,7999)
+		SleepRand(4333,9999)
 		valid := CheckInstagramPage(1,1)
 		If !valid
 		{
 			If A_Index < 6
 				Continue
 			ToolTip, FollowFromGsheet() PAGE NOT VALID ,0,900
-			SleepRand(2200,3300)
+			SleepRand(1100,2300)
 			errorMsg := "page not valid for row " row " targetAccount " targetAccount
 			Return % Array(functionName, startTime, errorMsg, 0,0,0) 
 		}
 		ToolTip, FollowFromGsheet() page valid Closing other tab, 0, 900
-		SleepRand(333,999)
+		SleepRand(833,1999)
 		Send ^{tab} 
-		SleepRand()
+		SleepRand(900,1900)
 		Send ^{F4}
-		SleepRand()	
+		SleepRand(900,1900)	
 		ToolTip, FollowFromGsheet() click following btn, 0, 900
 	}
 		;OPEN FOLLOWING LIST
 		SleepRand(1800,2800)
 		PixelGetColor, pColour, 1080, 210
-		SleepRand(300,900)
+		SleepRand()
 		While pColour = 0xFAFAFA
 		{
 			If A_Index > 5
 			{
 				ToolTip, FollowFromGsheet failed to open following - reloading, 0, 900
-				SleepRand(1200,2200)
+				SleepRand(1200,4200)
 				errorMsg = failed to open following list, BG colour still 0xFAFAFA
 				Return % Array(functionName, startTime, errorMsg, 0,0,0) 
 			}
@@ -172,7 +186,7 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
                 MouseMove, %X%, %Y%
                 SleepRand()
                 Click
-                SleepRand(2000,4000)
+                SleepRand(2000,5000)
                 CoordMode, Pixel, Screen
             }
             PixelGetColor, pColour, 1080, 210
@@ -182,7 +196,7 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
 		;SCROLL THE LIST OF FOLLOWERS RANDOMLY
 		Loop
 		{
-			SleepRand(1000,2500)
+			SleepRand(1000,3500)
 			Text:="|<Follow>*189$45.zzzzzzzs3ztbzzz0TzAzzztzUtb1WADs3Ak4F074Na8W80tnAnaF9zCNaQk1DsXAl649z0Na0sXDw7AsD4TzzzzzzzU"
 			if (ok:=FindText(810-150//2, 359-300//2, 150, 300, 0, 0, Text))
 			{
@@ -204,20 +218,24 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
 			Loop %r%
 			{
 				MouseClick, WheelDown
-				SleepRand(500,1000)
+				SleepRand(500,1500)
 			}
 			toFollow := loopN
 			ToolTip, FollowFromGsheet() toFollow loop, 0, 900
 			
 			;CLICK PROFILE
+			;MouseGetPos, x, y
+			SleepRand()
+			X -= 287
+			Y -= 10
+			MouseMove, X, Y
+			SleepRand()
 			MouseGetPos, x, y
 			SleepRand()
-			x -= 287
-			y -= 10
-			MouseMove, x, y
-			SleepRand()
+			ToolTip % x " " y
+			SleepRand(1200,3300)
 			Click
-			SleepRand(1500,2500)
+			SleepRand(1500,3500)
 			;Check if story with grey background is displayed
 				PixelGetColor, pColour, 1080, 210
 				SleepRand()
@@ -229,14 +247,14 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
 					Send {Tab}
 					SleepRand()
 					Send {Enter}				
-					SleepRand(1900,2800)
+					SleepRand(1900,5800)
 					PixelGetColor, pColour, 1080, 210
 				}
 				PixelGetColor, pColour, 1080, 210
 				If pColour = 0x262626
 					SleepRand(10000,20000)
 
-			SleepRand(500,1500)
+			SleepRand(1500,3500)
 			valid := CheckInstagramPage(1,1)
 			If !valid
 			{
@@ -248,18 +266,19 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
 			Else
 				Break
 		}
+
         Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
         if (ok:=FindText(531-500//2, 733-700//2, 700, 800, 0, 0, Text))
         {
             ClickInstaPost(1)
-            SleepRand(1900,900)
+            SleepRand(1900,2900)
         }
         
         If nLikes = 0
-            Random, nLikes, 2, 9
+            Random, nLikes, 5, 13
         liked := LikePostsN(nLikes)
         
-		Send {BS}    
+		Send {ESC}    
         SleepRand(1200,2800)
 		Loop 3
 		{
@@ -267,7 +286,7 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
 			SleepRand()
 		}
         ;click follow btn
-        SleepRand(500,2500)
+        SleepRand(1500,3500)
 		Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
         if (ok:=FindText(736-400//2, 216-400//2, 400, 400, 0, 0, Text))
         {
@@ -276,21 +295,21 @@ FollowFromGsheet(loopN:=1, nLikes:=0)
             MouseMove, X, Y
             SleepRand()
             Click
-			SleepRand(1000,3000)
+			SleepRand(1000,5000)
             followed++
             CoordMode, Pixel, Screen
         }
         Else
         {
             Error := did not find follow button
-        	Return % Array(functionName, startTime, Error, 0, liked, followed)
+        	Return % Array(functionName, startTime, Error, 0, liked[1], followed)
         }
         
-        SleepRand(900,2300)
+        SleepRand(1900,5300)
         Send {BS}
-        SleepRand(900,2300)
+        SleepRand(900,5300)
     
-		SleepRand(900, 2000)
+		SleepRand(900, 4000)
 	
 	FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
 	Return % Array(functionName, startTime, endTime, 0, liked, followed)
@@ -300,9 +319,9 @@ BrowseFeed(nLikes:=0) {
 	functionName = BrowseFeed()
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
     ToolTip, %functionName% %startTime%, 0, 900
-	SleepRand(2000,3000)
+	SleepRand(3000,6000)
     if nLikes = 0
-		Random, nLikes, 1, 3
+		Random, nLikes, 1, 5
 	
     liked = 0
 
@@ -314,7 +333,7 @@ BrowseFeed(nLikes:=0) {
         MouseMove, X, Y
         SleepRand()
         Click
-        SleepRand(1500,3000)
+        SleepRand(1500,5000)
         CoordMode, Pixel, Screen
     }
 	Else
@@ -327,13 +346,13 @@ BrowseFeed(nLikes:=0) {
 	
 	While liked < nLikes
 	{
-		Random, s, 5, 20
+		Random, s, 4, 10
 			Loop % s
 			{
 				MouseClick, WheelDown
 				SleepRand()
 				MouseClick, WheelDown
-				SleepRand(500,1500)
+				SleepRand(400,1500)
 			}
 			Text:="|<White Heart>*169$24.3s7k66MM83k4E1U2E002U001U001U001U001U001k003E0028004A00A600M300k1U1U0k300M60048002E001U0U"
             if (ok:=FindText(100-700//2, 100-600//2, 700, 900, 0, 0, Text))
@@ -344,7 +363,7 @@ BrowseFeed(nLikes:=0) {
 				If Y < 330
 				{   
 					MouseMove, X, Y
-					SleepRand()
+					SleepRand(200,1200)
 					Click
 					liked++
 				}
@@ -352,11 +371,11 @@ BrowseFeed(nLikes:=0) {
 				{
 					Random, x, 30, 40
 					Random, y, 30, 180
-					SleepRand(1500,2599)
+					SleepRand(300,2599)
 					X+=x
 					Y+=y
 					MouseMove, %X%, %Y%
-					SleepRand(666,1300)
+					SleepRand(333,1300)
 					Click 2	
 					SleepRand()
 					liked++
@@ -369,201 +388,277 @@ BrowseFeed(nLikes:=0) {
 	Return % Array(functionName, startTime, endTime, 0, liked, 0)
 }
  
-BrowseHashtags() {
+BrowseHashtags(igAccount) {
+	Random,n,1,3
+	If n = 1
+	imgType := "d"
+	Else If n = 2
+	imgType := "o"
+	Else
+	imgType := "w"
+	hashtagString := GetHashtags(imgFormat, imgType, igAccount)
+	hashtagArray := StrSplit(hashtagString, "#")
+	url := "https://www.instagram.com/explore/tags/" hashtagArray[2]
+	Clipboard := url
+	OpenUrlChrome(url, profile[1])
+	SleepRand(1200,3300)
 	CoordMode, Pixel, Screen
-	; go to instagram.com or click instagram home button
-	; look for heart and click inside rectangle above
-	;foundImg := FindImg("E:\Development\instabot\assets\search.png")
 	ToolTip, BrowseHashtags() ,0,920
 	functionName = BrowseHashtags()
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
 	liked = 0
 	followed = 0
 	SleepRand(100,700)
-	;  go to my profile
-    Text:="|<my profile>*170$22.0Dk01VU0A301U604080E0U10204080M1U0kA01VU03w000000001zzsA00lU01g003U006000M001U006000M001U"
-    if (ok:=FindText(1148-150//2, 100-150//2, 1500, 1500, 0, 0, Text))
-    {
-        CoordMode, Mouse
-        X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-        MouseMove, %X%, %Y%
-        SleepRand()
-        Click
-        SleepRand(1500,3000)
-        CoordMode, Pixel, Screen
-    }
-    Else
-    {
-        FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-        errorMsg := not found myprofile.png
-        Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
-    }	
-	ToolTip, BrowseHashtags() open first post,0, 920
-    Loop 4
-        MouseClick, WheelUP
-	SleepRand(1000,2500)
-	PixelGetColor, pColour, 1180, 170    
-	While pColour = 0xFAFAFA        ; White background = no post is open
-	{
-		If A_Index > 5              ; Break loop after 5 tries
+		/* 										;  go to my profile
+		Text:="|<my profile>*170$22.0Dk01VU0A301U604080E0U10204080M1U0kA01VU03w000000001zzsA00lU01g003U006000M001U006000M001U"
+		if (ok:=FindText(1148-150//2, 100-150//2, 1500, 1500, 0, 0, Text))
+		{
+			CoordMode, Mouse
+			X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+			MouseMove, %X%, %Y%
+			SleepRand()
+			Click
+			SleepRand(1500,5000)
+			CoordMode, Pixel, Screen
+		}
+		Else
 		{
 			FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-			errorMsg := "Error: failed to open a post"
+			errorMsg := not found myprofile.png
 			Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
-		}
-        Tooltip, browsehashtags white bg,0,900
-        SleepRand()                 ; Find new location of grid icon
-        Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
-        if (ok:=FindText(531-500//2, 733-700//2, 700, 800, 0, 0, Text))
-        {                           ; Shift coordinates to first photo square
-            CoordMode, Mouse
-            X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
-            Random, r, 34, 302
-            X := X - r
-            Random, r, 60, 260
-            Y := Y + r
-            If Y > 650
-                Y = 650
-            MouseMove, %X%, %Y%
-            SleepRand()
-            Click                    ; Click in region of first photo
-            SleepRand(1500,3500)
-            CoordMode, Pixel, Screen
-        }
-        Else
-        {
-            Send {Down}
-            SleepRand()
-            Continue
-        }
-        SleepRand(500,1500)
-		PixelGetColor, pColour, 1180, 170
-	}
-	; Click in region of hashtags
-	SleepRand(1000, 2500)
-    CoordMode, Pixel, Screen
-	PixelGetColor, pColour, 1180, 170
-	SleepRand()
-	While pColour = 0x7D7D7D        ; DARK GREY - post is open
-	{
-        SleepRand(500,1500)
-        Tooltip, my post is open, 0, 900
-		If A_Index > 10              ; click next arrow to try a different post
+		}	
+		ToolTip, BrowseHashtags() open first post,0, 920
+		Loop 4
+			MouseClick, WheelUP
+		SleepRand(1000,4500)
+		PixelGetColor, pColour, 1180, 170    
+		While pColour = 0xFAFAFA       		 	; White background = no post is open
 		{
-			Text:="|<right arrow>*162$14.zzszy7zUzw7zUzw7zUzw7zUzw7zUzsDw3y1z0zUTkDs7w3y1zUzsTyDzzzs"
-            if (ok:=FindText(1163-500//2, 388-500//2, 500, 500, 0, 0, Text))
-            {
-                CoordMode, Mouse
-                X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-                SleepRand()
-                MouseMove, %X%, %Y%
-                SleepRand()
-                Click
-                SleepRand(1500,3000)
-				CoordMode, Pixel, Screen
-            }
-		}
-		If A_Index > 15             ; Give up trying to open hashtags
-		{
-			FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-			errorMsg := error clicking on hashtags
-			Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
-		}
-        Tooltip, BrowseHashtags Tab down, 0, 900
-        SleepRand()
-        Random, r, 23, 37
-        SleepRand()
-        Loop %r%
-        {
-            Send {Tab}
-            SleepRand()
-        }
-        Send {Enter}
-		SleepRand(3600,5600)
-		PixelGetColor, pColour, 1180, 170
-        Tooltip, pColour %pColour%,0,900
-        SleepRand(1000,2500)
-	}
-    SleepRand()
-
-	random, n, 10, 30
-	Loop %n%
-	{
-		MouseClick, WheelDown
-		SleepRand()
-	}
-	SleepRand()
-	ClickInstaPost(1)               ; CLICK ON A POST
-	SleepRand(1777,2770)
-	SleepRand()
-	ToolTip, BrowseHashtags tab to target profile, 0, 900
-	Send {Tab} 	; open profile by TABBING
-	SleepRand()
-	Send {Tab}
-	SleepRand()
-	Send {Enter}
-	SleepRand(1100,2200)		
-	PixelGetColor, pColour, 1180, 170
-	SleepRand()
-	While pColour = 0xFAFAFA 	; WHITE
-	{
-		outerLoopCount := A_Index
-		If outerLoopCount > 5
-		{
-			ToolTip, BrowseHashtags() failed to open following - reloading, 0, 900
-			SleepRand(1200,2200)
-			FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-			errorMsg := failed to open post on target profile
-			Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
-			;Reload
-		}
-		Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
-		if (ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text))            
-		{
-			X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
-			If Y > 600
+			If A_Index > 5              		; Break loop after 5 tries
 			{
-				Loop 3
-				MouseClick, WheelDown
-				ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text)
-				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
+				FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
+				errorMsg := "Error: failed to open a post"
+				Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
 			}
-			ClickInstaPost(1)
+			Tooltip, browsehashtags white bg,0,900
+			SleepRand()               			; Find new location of grid icon
+			Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
+			if (ok:=FindText(531-500//2, 733-700//2, 700, 800, 0, 0, Text))
+			{                           		; Shift coordinates to first photo square
+				CoordMode, Mouse
+				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
+				Random, r, 34, 302
+				X := X - r
+				Random, r, 60, 260
+				Y := Y + r
+				If Y > 650
+					Y = 650
+				MouseMove, %X%, %Y%
+				SleepRand()
+				Click              		    		  ; Click in region of first photo
+				SleepRand(1500,3500)
+				CoordMode, Pixel, Screen
+			}
+			Else
+			{
+				Send {Down}
+				SleepRand()
+				Continue
+			}
+			SleepRand(500,1500)
+			PixelGetColor, pColour, 1180, 170
 		}
-	
-		SleepRand(500, 1310)
-		PixelGetColor, pColour, 1180, 170
-	}
-	
-	SleepRand(500,2000)
-	liked := LikePostsN()
-	SleepRand(1500,3500)
-	Send {BS}
-	SleepRand(500,2500)
+		SleepRand(500,1500)
+													; Click in region of hashtags
+		MouseMove, 960, 330
+		Loop, 7
+		{
+			SleepRand()
+			MouseClick, WheelUP
+		}
+		SleepRand(500,1000)
+		Text:="|<>*162$8.4U8WzmEYzoF8G8"
+		While !(ok:=FindText(972-150000//2, 344-150000//2, 150000, 150000, 0, 0, Text))
+		{
+			Tooltip, not found hashtag,0,900
+			sleeprand(1400,2400)
+			Text1:="|<right arrow>*162$14.zzszy7zUzw7zUzw7zUzw7zUzw7zUzsDw3y1z0zUTkDs7w3y1zUzsTyDzzzs"
+				if (ok1:=FindText(1163-500//2, 388-500//2, 500, 500, 0, 0, Text1))
+				{
+					Tooltip, click right arrow ,0,900
+					sleeprand(500,2000)
+					CoordMode, Mouse
+					X:=ok1.1.1, Y:=ok1.1.2, W:=ok1.1.3, H:=ok1.1.4, Comment:=ok1.1.5, X+=W//2, Y+=H//2
+					SleepRand()
+					MouseMove, %X%, %Y%
+					SleepRand()
+					Click
+					SleepRand(500,2000)
+					CoordMode, Pixel, Screen
+					MouseMove, 960, 330
+					Loop, 7
+					{
+						SleepRand()
+						MouseClick, WheelUP
+					}
+				}
+		}
+		Tooltip, hashtag found or after while loop,0,900
 
-	Loop 5 ; scroll up to ensure we're at the top of the page again
-	{
-		MouseClick, WheelUp
+		SleepRand(1000, 2500)
+		CoordMode, Pixel, Screen
+		PixelGetColor, pColour, 1180, 170
 		SleepRand()
+		While pColour = 0x7D7D7D        			; DARK GREY - post is open
+		{
+			SleepRand(1000,2500)
+			Tooltip, my post is open, 0, 900
+			/* 
+			If A_Index > 10              ; click next arrow to try a different post
+			{
+				Text:="|<right arrow>*162$14.zzszy7zUzw7zUzw7zUzw7zUzw7zUzsDw3y1z0zUTkDs7w3y1zUzsTyDzzzs"
+				if (ok:=FindText(1163-500//2, 388-500//2, 500, 500, 0, 0, Text))
+				{
+					CoordMode, Mouse
+					X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+					SleepRand()
+					MouseMove, %X%, %Y%
+					SleepRand()
+					Click
+					SleepRand(1500,3000)
+					CoordMode, Pixel, Screen
+				}
+			}
+			
+			If A_Index > 15             ; Give up trying to open hashtags
+			{
+				FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
+				errorMsg := error clicking on hashtags
+				Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
+			}
+			Tooltip, BrowseHashtags Tab down, 0, 900
+			SleepRand()
+			Random, r, 23, 37
+			SleepRand()
+			Loop %r%
+			{
+				Send {Tab}
+				SleepRand()
+			}
+			Send {Enter}
+			SleepRand(2600,5600)
+			PixelGetColor, pColour, 1180, 170
+			Tooltip, pColour %pColour%,0,900
+			SleepRand(500,2500)
+		}
+		SleepRand()
+	 */	
+
+	Random, r, 2, 10
+	Loop %r%
+	{
+		SleepRand(900,2500)
+		random, n, 10, 30
+		Loop %n%
+		{
+			MouseClick, WheelDown
+			SleepRand()
+		}
+		SleepRand()
+		ToolTip start loop clickinstapost, 0, 900
+		SleepRand(777,1770)	
+		ClickInstaPost(1)               ; CLICK ON A POST
+		SleepRand(1777,5770)
+		SleepRand()
+		ToolTip, BrowseHashtags tab to target profile, 0, 900
+		Send {Tab} 						; open profile by TABBING
+		SleepRand()
+		Send {Tab}
+		SleepRand()
+		Send {Enter}
+		SleepRand(1100,5200)		
+		PixelGetColor, pColour, 1180, 170
+		SleepRand()
+		While pColour = 0xFAFAFA 	; WHITE
+		{
+			outerLoopCount := A_Index
+			If outerLoopCount > 8
+			{
+				ToolTip, BrowseHashtags() failed to open following - reloading, 0, 900
+				FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
+				errorMsg := failed to open post on target profile
+				Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
+				;Reload
+			}
+			;pageValid := CheckInstagramPage()
+
+			Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
+			if (ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text))            
+			{
+				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
+				If Y > 600
+				{
+					Loop 3
+					MouseClick, WheelDown
+					ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text)
+					X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
+				}
+				ClickInstaPost(1)
+			}
+			Else
+			{
+				Loop 1
+				{
+				MouseClick, WheelDown
+				}
+			}
+		
+			SleepRand(1500, 4310)
+			PixelGetColor, pColour, 1180, 170
+		}
+		
+		SleepRand(1500,3000)
+		liked := LikePostsN()
+		SleepRand(1500,3500)
+		Send {ESC}
+		SleepRand(1500,5500)
+
+		Loop 5 ; scroll up to ensure we're at the top of the page again
+		{
+			MouseClick, WheelUp
+			SleepRand()
+		}
+		SleepRand(1500,3500)
+		Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
+		if (ok:=FindText(600-400//2, 216-200//2, 500, 300, 0, 0, Text))
+		{
+			CoordMode, Mouse
+			X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+			MouseMove, X, Y
+			SleepRand()
+			Click     
+			SleepRand(1000,2000) 
+			followed++     
+			CoordMode, Pixel, Screen 
+		}        
+		
+		SleepRand(900,2700)
+		Send {ESC}
+		;msgbox % liked[3]
+		/* 
+		Loop % (liked[3]+4)
+		{
+			SleepRand(900,1400)
+			Send {BS} ; back to last hashtag page
+		}
+		*/
+		Send ^l
+		SleepRand()
+		Send ^v
+		SleepRand()
+		Send {Enter}
+		SleepRand(2600,3600)
 	}
-	SleepRand(1500,2500)
-	Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
-	if (ok:=FindText(600-400//2, 216-200//2, 500, 300, 0, 0, Text))
-	{
-		CoordMode, Mouse
-		X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-		MouseMove, X, Y
-		SleepRand()
-		Click     
-		SleepRand(1000,3000) 
-		followed++     
-		CoordMode, Pixel, Screen 
-	}        
-	
-	SleepRand(900,1700)
-	Send {BS}
-	SleepRand(900,1700)
-	Send {BS} ; back to last hashtag page
 
 	Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
     if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
@@ -579,7 +674,7 @@ BrowseHashtags() {
 	SleepRand()
 	FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
 	SleepRand()
-	Return % Array(functionName, startTime, endTime, 0, liked, followed)
+	Return % Array(functionName, startTime, endTime, 0, liked[1], followed)
 }
 
 Unfollow(nUnfollow := 1){
@@ -588,6 +683,7 @@ Unfollow(nUnfollow := 1){
 	Tooltip, unfollow, 0,900
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
 	;foundImg := FindImg("\assets\myprofile.png",,25)
+	SleepRand(1500,3500)
     Text:="|<my profile>*170$22.0Dk01VU0A301U604080E0U10204080M1U0kA01VU03w000000001zzsA00lU01g003U006000M001U006000M001U"
     if (ok:=FindText(1148-150//2, 100-150//2, 1500, 1500, 0, 0, Text))
     {
@@ -596,17 +692,18 @@ Unfollow(nUnfollow := 1){
         MouseMove, %X%, %Y%
         SleepRand()
         Click
-        SleepRand(800,1500)
+        SleepRand(1800,4500)
         CoordMode, Pixel, Screen
     }
 	Else
 	{
 		Tooltip, Unfollow() myprofile.png NOT found, 0,900
 		SleepRand()
+	    FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt	
 		errorMsg = myprofile.png NOT found
 		Return % Array(startTime, 0, errorMsg, functionName)
 	}
-	SleepRand(800,1577)
+	SleepRand(1800,4577)
 	
     Text:="|<following>*144$59.A090002000U0G000000100Y0000007XV8QEVFQ7I8WF4V2X4FcUYY4Z9491F1989+G8G2W2GEGWYEY544YUZ58V8+8991++F2EI8WF488W4FcC4VkEF48R00000000020000000048000000007Y"
     if (ok:=FindText(834-150//2, 266-150//2, 150, 150, 0, 0, Text))
@@ -616,7 +713,7 @@ Unfollow(nUnfollow := 1){
         MouseMove, %X%, %Y%
         SleepRand()
         Click
-        SleepRand(500,1500)
+        SleepRand(1500,4500)
         CoordMode, Pixel, Screen
     }
 	Else
@@ -629,9 +726,9 @@ Unfollow(nUnfollow := 1){
 	While pColour = 0xFAFAFA ; BG is still white
 	{
 		foundImg := FindImg("\assets\following.png")
-		SleepRand(600,1210)
+		SleepRand()
 		PixelGetColor, pColour, 1180, 170
-		SleepRand(100,900)
+		SleepRand(100,1900)
 		If A_Index > 5
 		{
 			errorMsg = Error bgColour did not change from 0xFAFAFA after clicking following.png
@@ -647,7 +744,7 @@ Unfollow(nUnfollow := 1){
         Random, y, 333,564
         MouseMove, %x%, %y%
 		SleepRand()
-		Random, r, 5,35
+		Random, r, 5,25
 		Loop %r%
 		{
 			MouseClick, WheelDown
@@ -685,7 +782,7 @@ Unfollow(nUnfollow := 1){
         }
 	}
     Send, {BS}
-    SleepRand(1000,1500)
+    SleepRand(1500,4500)
     Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
     if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
     {
@@ -694,7 +791,7 @@ Unfollow(nUnfollow := 1){
         MouseMove, X, Y
         SleepRand()
         Click
-        SleepRand(1000,2500)
+        SleepRand(2000,4500)
         CoordMode, Pixel, Screen
     }
     FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
@@ -802,3 +899,5 @@ GetAccessCode(client_id, client_secret, refresh_token)
     oHTTP :=
     return parsedAccessToken
 }
+
+^!r::Reload
