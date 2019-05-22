@@ -171,7 +171,8 @@ StartKardashianBot() {
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
 	cell = Sheet1!A1:G1
 	global profile := RandChromeProfilePath(myAccessToken)
-	OpenUrlChrome("",profile[1])
+	;OpenUrlChrome("",profile[1])
+
 	ToolTip, KardashianBot, 0, 900
 	SleepRand(1500,3400)
 	comments = 0
@@ -184,16 +185,33 @@ StartKardashianBot() {
 		instaURL := RandURL()
 		Clipboard := instaURL
 		SleepRand()
-		Send ^l
-		SleepRand()
-		Send ^v
-		SleepRand()
-		Send {Enter}
+
+		If WinExist("ahk_class Chrome_WidgetWin_1") 
+		{
+			WinActivate
+			SleepRand(1500,3000)
+			Send ^l
+			SleepRand(100)
+			Send ^v
+			SleepRand(100)
+			Send {Enter}
+			SleepRand(2600,4600)
+		}
+		Else
+		{
+			OpenUrlChrome(instaURL, profile[1])
+			SleepRand(3200,9300)
+		}
+		
 		Tooltip, sleeping - start(), 0, 900
 		SleepRand(2333,5999)		
 		SleepRand()
 		Random p, 1, 2
-		ClickInstaPost(p)
+		
+		clicked := ClickInstaPost(p)
+		If !clicked
+			Continue
+
         SleepRand(1000,3500)
         Random, r, 1, 3
         Loop % r
@@ -201,6 +219,8 @@ StartKardashianBot() {
             result := KardashianComment()
             If result
 				comments++
+			Else
+				Continue
 			SleepRand(1700,11000)
 			;response := Report(profile,result,cell)
         }
@@ -209,17 +229,6 @@ StartKardashianBot() {
         open := OpenCommenterProfile()
         If !open
         {
-            Tooltip, OpenCommenterProfile Private Account, 0,900
-            Send, {BS}
-            SleepRand(200,500)
-            Send, {BS}
-            SleepRand(1100,1333)
-            Send, {BS}
-            SleepRand(900,1200)
-            Send, {F5}
-            SleepRand(1500,2500)
-            FormatTime, EndTime, ,yyyy-M-d HH:mm:ss tt
-            errorMsg = page not valid
             Continue
         }
         liked := LikePostsN()
@@ -263,21 +272,12 @@ KardashianComment(loops=1)
 	Loop %loops%
 	{
 		SleepRand(100,1300)
-		bluestar := FindImg("needles\bluestar.png",3)
-		SleepRand(100,1300)
-		smallbluetick := FindImg("needles\smallbluetick.png",3)
-		If !bluestar && !smallbluetick
+
+		Text:="|<small blue tick>*183$12.2E3kDwDwzbNCQSyzDwDw3k2EU"
+		smallbluetick:=FindText(920-150//2, 137-150//2, 150, 150, 0, 0, Text)
+		If !smallbluetick
 		{
-			Send {BS}
-			SleepRand(300,1000)
-			Send {BS}
-			SleepRand(300,1000)
-			Send {BS}
-			SleepRand(300,1000)
-			Send {BS}
-			SleepRand(2500,3500)
-			ClickInstaPost(1)
-			SleepRand(350,1350)
+			Return False
 		}
 		ELSE
 		{ ; leave comment 
@@ -428,46 +428,49 @@ CheckInstagramPage(checkOwn:=1, checkBluetick:=0) {
     MouseClick, WheelUp
     SleepRand(500,1500)
 	Tooltip, CheckInstagramPage, 0,900
-    Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
-    if !(ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
-		Return False
-    Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
-    if !(ok:=FindText(531-500//2, 733-700//2, 700, 800, 0, 0, Text))
-        Return False
-    If checkBluetick
-	{
-		Text:="|<big blue tick>*188$18.0000z01zU7zs7zsDzwTzyTySTwySNyT3yTbyDzw7zs7zs1zU0z0000U"
-		if (ok:=FindText(622-300//2, 216-300//2, 300, 300, 0, 0, Text))
-			Return False
-	}
-    Text:="|<private>*153$48.z06000E0zU0000k0laqMltwQlbqMnxwyzb68UAlXz66BUQlzk66BVAlzk6673AlUk6673wwzk6671qQSU"
+
+	Text:="|<private>*153$48.z06000E0zU0000k0laqMltwQlbqMnxwyzb68UAlXz66BUQlzk66BVAlzk6673AlUk6673wwzk6671qQSU"
 	if (ok:=FindText(730-70000//2, 444-70000//2, 70000, 70000, 0, 0, Text))
 		Return False
 	
 	Text:="|<no posts>*161$71.0M00000000M01U000zk000M0300030k000k0C000A0k001k0M007k0y001U0k00M00600301U01U006006070020TU400C0C0041VU800Q0M00861UE00M0k00EM1UU00k1U00UU11001U300110220030600220440060A004408800A0M008A0kE00M0k00EA30U00k1k00UAA1003U3U010Dk200703002000400A06006000M00M0A006001U00k0Q007zzy003U0M0000000060U"
 	if (ok:=FindText(675-150000//2, 453-150000//2, 150000, 150000, 0, 0, Text))
 		Return False
+	
+	If checkBluetick
+	{
+		Text:="|<big blue tick>*188$18.0000z01zU7zs7zsDzwTzyTySTwySNyT3yTbyDzw7zs7zs1zU0z0000U"
+		if (ok:=FindText(622-300//2, 216-300//2, 300, 300, 0, 0, Text))
+			Return False
+	}
+
+    Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
+    if !(ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
+		Return False
+
+	Text:="|<followers>*159$41.0000000Y0000018000002E000004VtWAS/94N6N6MGMGQa4kYUYd89191BKTm2G2+sU44a4QlU894MlV6EG7VX1sU0000002"
+	if !(ok:=FindText(715-500//2, 265-500//2, 500, 500, 0, 0, Text))
+		Return False
+
 	If checkOwn = 1
 	{
 		ToolTip, checkOwn is 2 , 0, 930
 		SleepRand(1200,3300)
-		; isThomas := FindImg("E:\Development\instabot\assets\thomasthomas.png",3)
-		Text:="|<>*151$57.3s0DU0600Nzk7z00k03Q71kQ0S01v0QA1k7k0Tk1X063y0Dy0AM0kwk3n01U06660MM0A00k0k030300A0600M0M01U0k030600M0600M1U0600k030M01U0600M600M00k031U0600600Ms03U00k03A00k00600P00A000k03zzXzy0600Q"
-		if (ok:=FindText(742-150000//2, 216-150000//2, 150000, 150000, 0, 0, Text))
-			Return False
-	
-		; phil
-		Text:="|<>*158$71.1z00000000003y00000000007s0000000000DU0000000000C00000000000A00000000000M00000000000k00000008001U000000Ds0030000000zk0060000007zU00A000000Tzz00M000000zzz00k000003zzzo1U000007zzzs300001sTzzzk600007xzzztUA0000Dzzzzs0A0000zzzzzy0M0001zzzzzw0k0007zzzzzs1U000Dzzzzzk30000TzzzzzU60000zzzzzz0A0000zzzzzz"
-		if (ok:=FindText(357-150000//2, 218-150000//2, 150000, 150000, 0, 0, Text))
+
+		Text:="|<THOMAS>*156$60.00000000001y07s01U067zUTy03U0C73kQD07U0SC1ks70DU0yA0kk30zU3yQ0tk3VvU7i00k031XU6C01k0703U0C01k0703U0C03U0C03U0C0700Q03U0C0C00s03U0C0w03k03U0C1s07U03U0C3k0D003U0C7U0S003U0CD00w003U0CC00s003U0CTztzzU3U0CTztzzU3U0C0000000000U"
+		if (ok:=FindText(743-120//2, 217-115//2, 110, 135, 0, 0, Text))
 			Return False
 
-		; isNPS
-		Text:="|<>*149$71.00000001U0000000000300000000000600000000000A00000000000M000Nw0DUAy0k7k0ry1zkPz1Vzs7sA71kw6330sTUAA1Vk66A0kq0Mk1X04A01XA0lU360AM0D6M1X06A0MkDyAk360AM0lVyANU6A0Mk1X30Mn0AM0lU36A0la0Mk1X04AM1XA0kk670MMk73M1VkQD1UlkS7k31zkPy1Vzg7U60y0nk31wA000001U000000000030000008"
-		if (ok:=FindText(566-150000//2, 218-150000//2, 150000, 150000, 0, 0, Text))
+		Text:="|<PHIL>*158$71.1z00000000003y00000000007s0000000000DU0000000000C00000000000A00000000000M00000000000k00000008001U000000Ds0030000000zk0060000007zU00A000000Tzz00M000000zzz00k000003zzzo1U000007zzzs300001sTzzzk600007xzzztUA0000Dzzzzs0A0000zzzzzy0M0001zzzzzw0k0007zzzzzs1U000Dzzzzzk30000TzzzzzU60000zzzzzz0A0000zzzzzz"
+		if (ok:=FindText(600-900//2, 217-350//2, 300, 350, 0, 0, Text))
 			Return False
-		; bliss
-		Text:="|<>*148$71.k03300000001U0660000000300A00000000600M00000000A00k00000000Mw1VUT07k6T3ry333zUzsBzDsA66C33UkS7nUAAAM360ks7608MMk0A01UAA0Mkls0S030MM0lVVz0Tk60kk1X31zUTsA1VU3660DU3sM3306AA03U0sk660MMMk3A0lUAC0kklk6Q1X0MS31VVkMQ660krw331zkTwA1Vbk661y0TUM32"
-		if (ok:=FindText(566-150000//2, 217-150000//2, 150000, 150000, 0, 0, Text))
+
+		Text:="|<NPS>*149$71.00000001U0000000000300000000000600000000000A00000000000M000Nw0DUAy0k7k0ry1zkPz1Vzs7sA71kw6330sTUAA1Vk66A0kq0Mk1X04A01XA0lU360AM0D6M1X06A0MkDyAk360AM0lVyANU6A0Mk1X30Mn0AM0lU36A0la0Mk1X04AM1XA0kk670MMk73M1VkQD1UlkS7k31zkPy1Vzg7U60y0nk31wA000001U000000000030000008"
+		if (ok:=FindText(566-300//2, 218-300//2, 300, 300, 0, 0, Text))
+			Return False
+
+		Text:="|<BLISS>*148$71.k03300000001U0660000000300A00000000600M00000000A00k00000000Mw1VUT07k6T3ry333zUzsBzDsA66C33UkS7nUAAAM360ks7608MMk0A01UAA0Mkls0S030MM0lVVz0Tk60kk1X31zUTsA1VU3660DU3sM3306AA03U0sk660MMMk3A0lUAC0kklk6Q1X0MS31VVkMQ660krw331zkTwA1Vbk661y0TUM32"
+		if (ok:=FindText(566-200//2, 217-200//2, 300, 300, 0, 0, Text))
 			Return False	
 	}
 	Return True
@@ -631,6 +634,7 @@ OpenUrlChrome(URL, profile){
 }
 
 ClickInstaPost(n){
+	ToolTip, CLICK INSTA POST,0,930
 	MouseMove, 650, 450
 	SleepRand(100,1500)
 	MouseClick, WheelDown
@@ -901,7 +905,7 @@ RandComment(){
 		 }
 		 Else If commentNumber = 8
 		 {
-			commentText := "lb "
+			commentText := "lb"
 		 }
 		 Else If commentNumber = 9
 		 {
@@ -925,7 +929,7 @@ RandComment(){
 		 }
 		Else If commentNumber = 14
 		{
-			commentText := "lb please "
+			commentText := "lb please"
 		}	
 		Else If commentNumber = 15
 		{
@@ -933,19 +937,19 @@ RandComment(){
 		}
 		Else If commentNumber = 16
 		{
-			commentText := "LB  ☯"	
+			commentText := "LB"	
 		}
 		Else If commentNumber = 17
 		{
-			commentText := "FIRST ☯"
+			commentText := "FIRST"
 		}
 		Else If commentNumber = 18
 		{
-			commentText := "lb cb first ☯"
+			commentText := "lb cb first"
 		}
 		Else If commentNumber = 19
 		{
-			commentText := "ROW" 
+			commentText := "ROW"
 		}
 		Else If commentNumber = 20
 		{
@@ -961,31 +965,31 @@ RandComment(){
 		}
 		Else If commentNumber = 23
 		{
-			commentText := " lb ☯"
+			commentText := " lb"
 		}
 		Else If commentNumber = 24
 		{
-			commentText := "LB  ☯"
+			commentText := "LB"
 		}
 		Else If commentNumber = 25
 		{ 
-			commentText := "ROW. ☯ NOW"
+			commentText := "ROW"
 		}
 		Else If commentNumber = 26
 		{
-			commentText := "lb FB F4F ☯"
+			commentText := "lb FB F4F"
 		}
 		Else If commentNumber = 27
 		{
-			commentText := "FB LF ☯"
+			commentText := "FB LF"
 		}
 		Else If commentNumber = 28
 		{
-			commentText := "FIRST LB ☯"
+			commentText := "FIRST LB"
 		}
 		Else If commentNumber = 29
 		{
-			commentText := " LB CB ☯"
+			commentText := " LB CB"
 		}
 		Else If commentNumber = 30
 		{
@@ -1001,19 +1005,19 @@ RandComment(){
 		}
 		Else If commentNumber = 33
 		{
-			commentText := "LB ☯"
+			commentText := "LB"
 		}
 		Else If commentNumber = 34
 		{
-			commentText := "LB CB ☯"
+			commentText := "LB CB"
 		}
 		Else If commentNumber = 35
 		{
-			commentText := "lb now ☯"
+			commentText := "lb now"
 		}
 		Else If commentNumber = 36
 		{
-			commentText := "ROW ☯"
+			commentText := "ROW"
 		}
 		Else If commentNumber = 37
 		{

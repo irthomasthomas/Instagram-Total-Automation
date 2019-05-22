@@ -5,15 +5,53 @@ SetTitleMatchMode, 2
 #include JSON.ahk
 #include CLR.ahk
 #include control.ahk
-; #include googleSheets.ahk
+#include Socket.ahk
+#include RemoteObj.ahk
 #include instagramAutomation.ahk
+#include Jxon.ahk
 
 Start()
 
 Start() {
 Loop
 {
+	serverAddress := "192.168.0.26"
+	serverPort := 1337
+	Remote := new RemoteObjClient([serverAddress, serverPort])
+	loop
+	{
+		active1 := Remote.check_active("instaLikeBot","start")
+		Remote.print_to_python("active1: " active1)
+
+		if (active1 != "instaLikeBot") && (active1 != instaLikeBot)
+		{
+			Remote.print_to_python("instaLikeBot: connection 1 refused")
+			Sleep 25000
+		}
+		Else
+		{
+			Sleep 25000
+			active2 := Remote.check_active("instaLikeBot","start")
+			Remote.print_to_python("active2: " active2)
+			if (active2 != "instaLikeBot") && (active2 != instaLikeBot)
+			{
+				Remote.print_to_python("instaLikeBot: connection 2 refused")
+				Sleep 25000
+			}
+			Else
+			{
+				Remote.print_to_python("instalikeBot: CONNECTED")
+				break
+			}
+		}
+	}
 	;SleepRand(200000, 5000000)
+	msgbox,,,ACTIVE,60
+	Sleep 1000
+	Remote.check_active("instaLikeBot","end")
+	Sleep 220000
+	Reload
+
 	cell = Sheet1!A1:G1
 	global profile := RandChromeProfilePath(myAccessToken)
 	instaURL := "http://instagram.com/"
@@ -46,12 +84,12 @@ Loop
 		SleepRand(1300,2500)
 		 */
 	SleepRand()
-	Random, nLoop, 3, 6
+	Random, nLoop, 2, 4
 	Loop % nLoop
 	{
         ;SleepRand(10000, 200000)
 		Random, n, 1, 4
-		If n = 0
+		If n = 1
 		{   
 			Result := Unfollow() ; array(startTime, endTime, errorMsg, functionName) if Error endTime = 0
 			SleepRand()
@@ -89,28 +127,32 @@ Loop
 				SleepRand(3000, 22000)
 			}
 		}
-        Random, n, 1, 2
+        Random, n, 1, 3
 		If n = 1
         {
-			Random, l, 1, 3
+			Random, l, 2, 4
 			Loop % l
             	StartKardashianBot()
         }
 	CloseChrome()	
+	Remote.check_active("instaLikeBot","end")
+	Sleep 60000
 	ToolTip, sleeping
-	;SleepRand(50000, 150000)
+	;SleepRand(40000, 150000)
 	}
 	Tooltip, sleeping
-	Random, n, 1, 2
+	Random, n, 1, 3
 	if n = 0
 	{
-		SleepRand(200000, 6000000)
+		SleepRand(100000, 6000000)
 	}
 	Random, n, 1, 3
 	If n = 0
 	{
-		SleepRand(200000,6000000)
+		SleepRand(100000,6000000)
 	}
+	Remote.check_active("instaLikeBot","end")
+	Sleep 160000
 	Reload
 	}
 }
@@ -389,6 +431,8 @@ BrowseFeed(nLikes:=0) {
 }
  
 BrowseHashtags(igAccount) {
+	
+	SleepRand(1000,4000)
 	Random,n,1,3
 	If n = 1
 	imgType := "d"
@@ -396,18 +440,19 @@ BrowseHashtags(igAccount) {
 	imgType := "o"
 	Else
 	imgType := "w"
+
 	hashtagString := GetHashtags(imgFormat, imgType, igAccount)
 	hashtagArray := StrSplit(hashtagString, "#")
 	url := "https://www.instagram.com/explore/tags/" hashtagArray[2]
 	Clipboard := url
-	OpenUrlChrome(url, profile[1])
-	SleepRand(1200,3300)
+	
+	
 	CoordMode, Pixel, Screen
 	ToolTip, BrowseHashtags() ,0,920
 	functionName = BrowseHashtags()
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
-	liked = 0
-	followed = 0
+	likedTotal = 0
+	followedTotal = 0
 	SleepRand(100,700)
 		/* 										;  go to my profile
 		Text:="|<my profile>*170$22.0Dk01VU0A301U604080E0U10204080M1U0kA01VU03w000000001zzsA00lU01g003U006000M001U006000M001U"
@@ -554,43 +599,82 @@ BrowseHashtags(igAccount) {
 		SleepRand()
 	 */	
 
-	Random, r, 2, 10
-	Loop %r%
+	Random, r, 2, 3
+	Loop % r
 	{
-		SleepRand(900,2500)
-		random, n, 10, 30
-		Loop %n%
+		If WinExist("ahk_class Chrome_WidgetWin_1") 
+		{
+			WinActivate
+			SleepRand(1500,3000)
+			Send ^l
+			SleepRand(100)
+			Send ^v
+			SleepRand(100)
+			Send {Enter}
+			SleepRand(2600,4600)
+		}
+		Else
+		{
+			OpenUrlChrome(url, profile[1])
+			SleepRand(3200,9300)
+		}
+		Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
+		If !(ok:=FindText(600-400//2, 216-200//2, 500, 300, 0, 0, Text))
+		{
+			Random, n, 3, 9
+			url := "https://www.instagram.com/explore/tags/" hashtagArray[%n%]
+			Continue
+
+		}
+
+		;liked = 0
+		followed = 0
+		SleepRand(1900,3500)
+		random, n, 5, 35
+		Loop % n
 		{
 			MouseClick, WheelDown
 			SleepRand()
 		}
 		SleepRand()
 		ToolTip start loop clickinstapost, 0, 900
-		SleepRand(777,1770)	
-		ClickInstaPost(1)               ; CLICK ON A POST
+		SleepRand(777,1770)
+
+		clicked := ClickInstaPost(1)               ; CLICK ON A POST
+		If !clicked
+			Continue
+		
 		SleepRand(1777,5770)
-		SleepRand()
+		
 		ToolTip, BrowseHashtags tab to target profile, 0, 900
+
+		;THIS IS WHERE FOLLOWING HASHTAG BUTTON
 		Send {Tab} 						; open profile by TABBING
 		SleepRand()
 		Send {Tab}
 		SleepRand()
 		Send {Enter}
-		SleepRand(1100,5200)		
+		SleepRand(1100,5200)
 		PixelGetColor, pColour, 1180, 170
 		SleepRand()
+
+		pageValid := CheckInstagramPage()
+		If !pageValid
+			Continue
+
 		While pColour = 0xFAFAFA 	; WHITE
 		{
 			outerLoopCount := A_Index
 			If outerLoopCount > 8
 			{
+				Continue
+				/* 
 				ToolTip, BrowseHashtags() failed to open following - reloading, 0, 900
 				FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
 				errorMsg := failed to open post on target profile
 				Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
-				;Reload
+				 */
 			}
-			;pageValid := CheckInstagramPage()
 
 			Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
 			if (ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text))            
@@ -609,26 +693,30 @@ BrowseHashtags(igAccount) {
 			{
 				Loop 1
 				{
-				MouseClick, WheelDown
+					MouseClick, WheelDown
 				}
 			}
-		
 			SleepRand(1500, 4310)
 			PixelGetColor, pColour, 1180, 170
 		}
 		
 		SleepRand(1500,3000)
+		
 		liked := LikePostsN()
+		likedTotal += liked[1]
+		;msgbox % "liked[1] " liked[1] " liked[2] " liked[2] " liked[3] " liked[3] " followed " followedTotal " likedTotal " likedTotal
+
 		SleepRand(1500,3500)
 		Send {ESC}
 		SleepRand(1500,5500)
 
-		Loop 5 ; scroll up to ensure we're at the top of the page again
-		{
-			MouseClick, WheelUp
-			SleepRand()
-		}
+		Send {Home}
 		SleepRand(1500,3500)
+
+		pageValid := CheckInstagramPage()
+			If !pageValid
+				Continue
+		
 		Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
 		if (ok:=FindText(600-400//2, 216-200//2, 500, 300, 0, 0, Text))
 		{
@@ -639,11 +727,12 @@ BrowseHashtags(igAccount) {
 			Click     
 			SleepRand(1000,2000) 
 			followed++     
+			followedTotal += followed
 			CoordMode, Pixel, Screen 
 		}        
 		
 		SleepRand(900,2700)
-		Send {ESC}
+		
 		;msgbox % liked[3]
 		/* 
 		Loop % (liked[3]+4)
@@ -673,7 +762,7 @@ BrowseHashtags(igAccount) {
     }
 	SleepRand()
 	FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-	SleepRand()
+	;msgbox % "liked[1] " liked[1] " liked[2] " liked[2] " liked[3] " liked[3] " followed " followedTotal " likedTotal " likedTotal
 	Return % Array(functionName, startTime, endTime, 0, liked[1], followed)
 }
 
@@ -901,3 +990,5 @@ GetAccessCode(client_id, client_secret, refresh_token)
 }
 
 ^!r::Reload
+
+#p::Pause ; Pressing Win+P once will pause the script. Pressing it again will unpause.

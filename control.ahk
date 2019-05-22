@@ -140,24 +140,24 @@ CenterImgSrchCoords(File, ByRef CoordX, ByRef CoordY){
 	ErrorLevel := LastEL
 }
 
-SleepRand(x:=0,y:=0, debug:=False) {
-	If x = 0
+SleepRand(s:=0,e:=0, debug:=False) {
+	If s = 0
 	{
-		Random, x, 1, 11
+		Random, s, 1, 11
 	}
-	If y  = 0
+	If e  = 0
 	{		
-		Random, y, %x%, (x+200)
+		Random, e, (s+10), (s+200)
 	}
-	Random, rand, %x%, %y%
+	Random, rand, %s%, %e%
 	If debug
 	{
 		MsgBox % rand
 	}
-    If x > 100000
+    If s > 100000
     {
 	    cell = Sheet1!A1:G1
-        aReport := Array("sleep", x)
+        aReport := Array("sleep", s)
 		response := Report("", aReport, cell)
     }
 	Sleep, %rand%
