@@ -299,7 +299,7 @@ KardashianComment(loops=1)
 			;Return % Array(functionName, StartTime, 0, 0, 0, 0)
 	}
 }
-
+/* 
 FindImgCoords(img, lp:=5, sx:=180, sy:=65, ex:=1178, ey:=711, Debug:=False ) 
 {
 	Loop % lp
@@ -321,6 +321,8 @@ FindImgCoords(img, lp:=5, sx:=180, sy:=65, ex:=1178, ey:=711, Debug:=False )
 	}
 	SleepRand()
 }
+
+ */
 
 OpenCommenterProfile() {
 	FormatTime, StartTime, ,yyyy-M-d HH:mm:ss tt
@@ -627,11 +629,6 @@ PostComment(cText){
 	Return True
 }
 
-OpenUrlChrome(URL, profile){
-	;msgbox % "profile " profile " url " URL
-	run, %profile% %URL%, , max
-		  
-}
 
 ClickInstaPost(n){
 	ToolTip, CLICK INSTA POST,0,930
@@ -826,22 +823,7 @@ RandChromeProfilePath()
 }
  */
 
-RandChromeProfilePath(accessToken, profile:=0)
-{
-	if not profile
-		Random, row, 2, 5
-    sheetId := "1LBsGtFQu_G8h5_RHX96W36iRDPwn9si9FyUOwf_B4dU"
-	range1 := "A" . row ":C" . row
-	url := "https://sheets.googleapis.com/v4/spreadsheets/" sheetId "/values/" range1  "?access_token=" accessToken
-	sheetData := UrlDownloadToVar(url)
-    Sleep 100
-	oArray := json.Load(sheetData)
-    userAccount := oArray.values[1][1]
-    Sleep 100
-    chromePath := oArray.values[1][2]
-	sheetId := oArray.values[1][3]
-    Return % Array(chromePath, userAccount,sheetId)
-}
+
 
 CloseChrome() {
 	Sleep, 1000

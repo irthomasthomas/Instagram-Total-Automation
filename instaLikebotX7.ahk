@@ -4,18 +4,55 @@ SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
 #include JSON.ahk
 #include CLR.ahk
-#include control.ahk
+;#include control1.ahk
 #include Socket.ahk
 #include RemoteObj.ahk
 #include instagramAutomation.ahk
 #include Jxon.ahk
+
+
+if FileExist( "settings.dll" ) {
+	FileCopy, settings.dll, c:\instasettings.dll
+	Sleep 2000
+	asm := CLR_LoadLibrary("c:\instasettings.dll")
+    obj := CLR_CreateObject(asm, "Settings")
+    global client_id := obj.gcc()
+	global client_secret := obj.gcs()
+    global refresh_token := obj.grt()
+	global influencer_sheetkey := obj.gis()
+	global status_sheetkey:= obj.gss()
+	;msgbox % "yep client_id " client_id " ig_name " ig_name " status_sheetkey " status_sheetkey
+}
+else
+{
+	MsgBox setting.dll not found
+    ErrorGui("setting.dll file not found. Exiting...")
+    ExitApp
+}
+if FileExist( "settings.ini" ) {	
+    IniRead, influencer_hotkey, settings.ini, General, influencer_hotkey
+	IniRead, login_type, settings.ini, General, login_type
+    IniRead, e_session_id, settings.ini, Session, session_id
+	if (e_session_id) && (e_session_id <> "ERROR")
+    {
+        session_id := e_session_id
+    }
+}
+else
+{
+	msgbox settings.ini not found
+    ErrorGui("setting.ini file not found. Exiting...")
+    ExitApp
+}
+
+global myAccessToken := GetAccessCode(client_id, client_secret, refresh_token)
 
 Start()
 
 Start() {
 Loop
 {
-	serverAddress := "192.168.0.26"
+	serverAddress := "10.0.2.15"
 	serverPort := 1337
 	Remote := new RemoteObjClient([serverAddress, serverPort])
 	loop
@@ -46,18 +83,20 @@ Loop
 		}
 	}
 	;SleepRand(200000, 5000000)
-	msgbox,,,ACTIVE,60
+	;msgbox,,,ACTIVE,60
 	Sleep 1000
 	Remote.check_active("instaLikeBot","end")
-	Sleep 220000
-	Reload
+	;Sleep 220000
+	;Reload
 
 	cell = Sheet1!A1:G1
+	Remote.print_to_python("access token: "+ myAccessToken)
 	global profile := RandChromeProfilePath(myAccessToken)
 	instaURL := "http://instagram.com/"
 	;instaURL := RandURL()
 	CloseChrome()
 	SleepRand(1900,3100)
+	
 	OpenUrlChrome(instaURL, profile[1])
 	Tooltip, sleeping - start(), 0, 900
 	SleepRand(2333,5999)
@@ -155,6 +194,115 @@ Loop
 	Sleep 160000
 	Reload
 	}
+}
+
+
+OpenUrlChrome(URL, profile){
+	;msgbox % "profile " profile " url " URL
+	run, %profile% %URL%, , max
+		  
+}
+
+ErrorGui(string="Error while processing. Try again.")
+{
+    Gui, Destroy
+            
+    Gui, +lastFound +Owner +AlwaysOnTop -border -caption -ToolWindow
+    Gui, Color, 000000
+    Gui, margin, 40,20
+    Gui, font, s18 cwhite
+    Gui, Add, Text, center cWhite, %string%
+    WinSet, TransColor, EE0000 175
+    Gui, show, autosize
+
+    ;showAndBreak(status_hotkey, operations_hotkey, wing_enter_hotkey, all_wings_hotkey)
+    
+    Gui, Destroy
+    Suspend, Off
+    Return
+}
+
+CenterImgSrchCoords(File, ByRef CoordX, ByRef CoordY){
+	; Tooltip, CenterImgSrchCoords, 0,1000
+	; SleepRand(600,1100)
+	static LoadedPic
+	LastEL := ErrorLevel
+	Gui, Pict:Add, Pic, vLoadedPic, %File%
+	GuiControlGet, LoadedPic, Pict:Pos
+	Gui, Pict:Destroy
+	CoordX += LoadedPicW // 2
+	CoordY += LoadedPicH // 2
+	ErrorLevel := LastEL
+}
+
+FindImg(img, action:=1, lp:=5, sx:=180, sy:=70, ex:=1190, ey:=710, rand:=1, xr:=0, yr:=0,Debug:=False)
+{
+    Loop % lp
+    {
+        CoordMode, Pixel, Window
+        ImageSearch, FoundX, FoundY, %sx%, %sy%, %ex%, %ey%, %img%
+        CenterImgSrchCoords(img, FoundX, FoundY)	
+        SleepRand(100,300)
+        If rand
+        {
+            If xr = 0
+                xr := 11
+            If yr = 0
+                yr := 11
+            Random, FoundX, (FoundX-xr), (FoundX+xr)
+            Sleep 10	
+            Random, FoundY, (FoundY-yr), (FoundY+yr)
+            Sleep 10
+        }
+    }
+    Until ErrorLevel = 0
+    If ErrorLevel = 0
+    {
+	If Debug = True
+		msgbox % FoundX, FoundY
+	If action = 1
+	{
+		MouseMove, %FoundX%, %FoundY%
+		SleepRand()
+		Click
+	}
+	Else If action = 2
+	{
+		MouseMove, %FoundX%, %FoundY%
+		SleepRand()
+		Click 2
+	}
+	Else If action = 3
+	{
+		MouseMove, %FoundX%, %FoundY%
+	}
+	SleepRand()
+	Return True
+    }
+    Else
+    {
+        Return False
+    }
+    SleepRand()
+}
+
+
+RandChromeProfilePath(accessToken, profile:=0)
+{
+	if not profile
+		Random, row, 2, 5
+    sheetId := "1LBsGtFQu_G8h5_RHX96W36iRDPwn9si9FyUOwf_B4dU"
+	range1 := "A" . row ":C" . row
+	url := "https://sheets.googleapis.com/v4/spreadsheets/" sheetId "/values/" range1  "?access_token=" accessToken
+	sheetData := UrlDownloadToVar(url)
+    Sleep 100
+	oArray := json.Load(sheetData)
+    userAccount := oArray.values[1][1]
+    Sleep 100
+    chromePath := oArray.values[1][2]
+	sheetId := oArray.values[1][3]
+	
+    Return % Array(chromePath, userAccount,sheetId)
 }
 
 FollowFromGsheet(loopN:=1, nLikes:=0, profileArray:=0) 
@@ -901,6 +1049,36 @@ FindHeartClick() {
 
 }
 
+SleepRand(x:=0,y:=0, debug:=False) {
+	If x = 0
+	{
+		Random, x, 1, 11
+	}
+	If y  = 0
+	{		
+		Random, y, %x%, (x+200)
+	}
+	Random, rand, %x%, %y%
+	If debug
+	{
+		MsgBox % rand
+	}
+	Sleep, %rand%
+}
+
+/* 
+GsheetAppendRow(SheetKey, accessToken, cell, values)
+{ 
+    url =
+    url .= "https://sheets.googleapis.com/v4/spreadsheets/" SheetKey
+    url .= "/values/" cell  ":append?includeValuesInResponse=true&"
+    url .= "valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS&access_token=" accessToken
+    data = {"majorDimension":"ROWS","range":"%cell%","values":[[%values%]]}
+    return PutURL(url, data, "post")
+}
+
+ */
+
 GsheetAppendRow(SheetKey, accessToken, cell, values)
 {
  
@@ -934,8 +1112,8 @@ GetWorksheetRange(SheetKey, accessToken, ranges)
     sheetBatch := URLDownloadToVar(url)
 	return sheetBatch
 }
-
-URLDownloadToVar(url) {
+URLDownloadToVar(url) 
+{
     if url <> ""
     {
         hObject:=ComObjCreate("WinHttp.WinHttpRequest.5.1")
@@ -972,18 +1150,20 @@ PutURL(url, data, method:="put") {
 
 GetAccessCode(client_id, client_secret, refresh_token) 
 {
-	;msgbox client_id %client_id% client_secret %client_secret% refresh_token %refresh_token% 
-    StringReplace, client_id, client_id, %A_SPACE%,, All
+    
+	StringReplace, client_id, client_id, %A_SPACE%,, All
     StringReplace, client_secret, client_secret, %A_SPACE%,, All
     StringReplace, refresh_token, refresh_token, %A_SPACE%,, All
-    aURL := "https://www.googleapis.com/oauth2/v3/token"
+	;msgbox client_id %client_id% client_secret %client_secret% refresh_token %refresh_token% 
+    
+	aURL := "https://www.googleapis.com/oauth2/v3/token"
     aPostData := "client_id=" client_id "&client_secret=" client_secret "&refresh_token=" refresh_token "&grant_type=refresh_token"
     oHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
     oHTTP.Open("POST", aURL , False)
     oHTTP.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     oHTTP.Send(aPostData)
     data1 := oHTTP.ResponseText
-    parsedAToken := JSON.Load(data1, true)
+	parsedAToken := JSON.Load(data1, true)
     parsedAccessToken := parsedAToken.access_token
     oHTTP :=
     return parsedAccessToken
