@@ -264,65 +264,42 @@ Report(profile, result, cell) {
 	return response
 }
 	
-KardashianComment(loops=1)
-{
-	functionName = KardashianComment
-	Tooltip, KardashianComment, 0,900
-	FormatTime, StartTime, ,yyyy-M-d HH:mm:ss tt
-	Loop %loops%
-	{
-		SleepRand(100,1300)
+; KardashianComment(loops=1)
+; {
+; 	functionName = KardashianComment
+; 	Tooltip, KardashianComment, 0,900
+; 	FormatTime, StartTime, ,yyyy-M-d HH:mm:ss tt
+; 	Loop %loops%
+; 	{
+; 		SleepRand(100,1300)
 
-		Text:="|<small blue tick>*183$12.2E3kDwDwzbNCQSyzDwDw3k2EU"
-		smallbluetick:=FindText(920-150//2, 137-150//2, 150, 150, 0, 0, Text)
-		If !smallbluetick
-		{
-			Return False
-		}
-		ELSE
-		{ ; leave comment 
-			Random p, 1, 2
-			ClickInstaPost(p)
-			SleepRand(699, 1999)
-		}
-		commentText := RandComment()
-		posted := PostComment(commentText)
-		FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-		If posted
-		{
-			; array(StartTime, EndTime, errorMsg, functionName) if Error endTime = 0
-			;Return % Array(functionName, StartTime, endTime, 0, 0, 0, 1)
-			Return True
-		}
-		Else
-			Return False
-			;Return % Array(functionName, StartTime, 0, 0, 0, 0)
-	}
-}
-/* 
-FindImgCoords(img, lp:=5, sx:=180, sy:=65, ex:=1178, ey:=711, Debug:=False ) 
-{
-	Loop % lp
-	{
-		CoordMode, Pixel, Window
-		ImageSearch, FoundX, FoundY, %sx%, %sy%, %ex%, %ey%, %img%
-		CenterImgSrchCoords(img, FoundX, FoundY)	
-	}
-	Until ErrorLevel = 0
-	If ErrorLevel = 0
-	{
-		If Debug = True
-			msgbox % FoundX, FoundY
-		Return True
-	}
-	Else
-	{
-		Return False
-	}
-	SleepRand()
-}
+; 		Text:="|<small blue tick>*183$12.2E3kDwDwzbNCQSyzDwDw3k2EU"
+; 		smallbluetick:=FindText(920-150//2, 137-150//2, 150, 150, 0, 0, Text)
+; 		If !smallbluetick
+; 		{
+; 			Return False
+; 		}
+; 		ELSE
+; 		{ ; leave comment 
+; 			Random p, 1, 2
+; 			ClickInstaPost(p)
+; 			SleepRand(699, 1999)
+; 		}
+; 		commentText := RandComment()
+; 		posted := PostComment(commentText)
+; 		FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
+; 		If posted
+; 		{
+; 			; array(StartTime, EndTime, errorMsg, functionName) if Error endTime = 0
+; 			;Return % Array(functionName, StartTime, endTime, 0, 0, 0, 1)
+; 			Return True
+; 		}
+; 		Else
+; 			Return False
+; 			;Return % Array(functionName, StartTime, 0, 0, 0, 0)
+; 	}
+; }
 
- */
 
 OpenCommenterProfile() {
 	FormatTime, StartTime, ,yyyy-M-d HH:mm:ss tt
@@ -584,50 +561,50 @@ ClickInstaCommentBox(){
 		Return False
 }
 
-PostComment(cText){
-	clicked := ClickInstaCommentBox()
-	If !clicked
-	{
-		Send {BS}
-		SleepRand(299,755)
-		foundLoginBtn := FindImg("needles\login2.png",,20)
-		If !foundLoginBtn {
-			foundLoginBtn := FindImg("needles\login4.png")
-		}
-		If foundLoginBtn 
-		{
-			Tooltip, login btn found, 0,900
-			SleepRand(2800,3500)
-			foundLoginBtn2 := FindImg("needles\login3.png")
-			SleepRand(450,900)
-			If foundLoginBtn2 
-			{
-				SleepRand(650, 1500)
-				Send {BS}
-				SleepRand(444,600)
-				Send {BS}
-				SleepRand(333,400)
-				Send {BS}
-				SleepRand(1300,2200)
-			}
-		}
-		Random,r,1,2
-		ClickInstaPost(r)
-		SleepRand(1000,1955)
-		clicked := ClickInstaCommentBox()
-		If !clicked
-			Return False
-	}
-	SleepRand()
-	clipboard := % cText
-	SleepRand(1000, 2322)
-	send ^v
-	SleepRand(1100, 3222)
-	send {return}
-	SleepRand(1323,2563)
-	Tooltip, END PostComment, 0,900
-	Return True
-}
+; PostComment(cText){
+; 	clicked := ClickInstaCommentBox()
+; 	If !clicked
+; 	{
+; 		Send {BS}
+; 		SleepRand(299,755)
+; 		foundLoginBtn := FindImg("needles\login2.png",,20)
+; 		If !foundLoginBtn {
+; 			foundLoginBtn := FindImg("needles\login4.png")
+; 		}
+; 		If foundLoginBtn 
+; 		{
+; 			Tooltip, login btn found, 0,900
+; 			SleepRand(2800,3500)
+; 			foundLoginBtn2 := FindImg("needles\login3.png")
+; 			SleepRand(450,900)
+; 			If foundLoginBtn2 
+; 			{
+; 				SleepRand(650, 1500)
+; 				Send {BS}
+; 				SleepRand(444,600)
+; 				Send {BS}
+; 				SleepRand(333,400)
+; 				Send {BS}
+; 				SleepRand(1300,2200)
+; 			}
+; 		}
+; 		Random,r,1,2
+; 		ClickInstaPost(r)
+; 		SleepRand(1000,1955)
+; 		clicked := ClickInstaCommentBox()
+; 		If !clicked
+; 			Return False
+; 	}
+; 	SleepRand()
+; 	clipboard := % cText
+; 	SleepRand(1000, 2322)
+; 	send ^v
+; 	SleepRand(1100, 3222)
+; 	send {return}
+; 	SleepRand(1323,2563)
+; 	Tooltip, END PostComment, 0,900
+; 	Return True
+; }
 
 
 ClickInstaPost(n){
