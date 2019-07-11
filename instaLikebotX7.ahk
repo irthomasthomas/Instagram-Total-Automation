@@ -21,22 +21,16 @@ setupConfigs()
 
 global myAccessToken := GetAccessCode(client_id, client_secret, refresh_token)
 
-range1 := profileArray[2]"!A2:A"
-url := "https://sheets.googleapis.com/v4/spreadsheets/" influencer_sheetkey "/values/" range1  "?access_token=" myAccessToken
-oArray := json.Load(UrlDownloadToVar(url))
-random, row, 2, oArray.values.MaxIndex()
-targetAccount := oArray.values[row][1]
-results := follow(targetAccount)
-SleepRand()
-response := Report(profile, results, cell)
+Start()
 
 Start() {
 Loop
 {
-	serverAddress := "10.0.2.15"
-	serverPort := 1337
+	serverAddress := "192.168.0.30"
+	serverPort := 1338
 	Remote := new RemoteObjClient([serverAddress, serverPort])
 	Remote.print_to_python("active1: " active1)
+	
 	/* 
 		loop
 		{
@@ -76,8 +70,6 @@ Loop
 	global instaURL := "https://instagram.com/"
 	;instaURL := RandURL()
 	CloseChrome()
-	SleepRand(1200,2100)
-	
 	Tooltip, sleeping - start(), 0, 900
 	SleepRand(1333,2999)
 
@@ -120,33 +112,34 @@ Loop
 		Random, n, 1, 3
 		If n = 0
 		{
+			Tooltip, >BrowseFeed- start(), 0, 900
 			Result := BrowseFeed()
 			SleepRand()
 			response := Report(profile, Result, cell)
-			SleepRand(2000,7000)
+			SleepRand(100,3000)
 		}
 		Random, n, 1, 3
-		If n = 0
+		If n = 1
 		{
 			Result := BrowseHashtags(profile[2])
 			response := Report(profile, Result, cell)
 		}
 		Random, n, 1, 3
-		; If n = 0
+		If n = 1 ;follow from gsheet
 		{
-			Random, l, 1, 3
-			Loop % l
-			{
-				SleepRand(900,1200)
-				Result := FollowFromGsheet(,,profile)
-				SleepRand()
-				response := Report(profile, Result, cell)
-				SleepRand(300, 3000)
-				SleepRand(3000, 22000)
-			}
+			range1 := profile[2]"!A2:A"
+			url := "https://sheets.googleapis.com/v4/spreadsheets/" influencer_sheetkey "/values/" range1  "?access_token=" myAccessToken
+			oArray := json.Load(UrlDownloadToVar(url))
+			random, row, 2, oArray.values.MaxIndex()
+			targetAccount := oArray.values[row][1]
+
+			results := follow(targetAccount, profile)
+			SleepRand()
+			response := Report(profile, results, cell)
+
 		}
         Random, n, 1, 3
-		If n = 0
+		If n = 1
         {
 			Random, l, 2, 4
 			Loop % l
@@ -154,17 +147,21 @@ Loop
         }
 	CloseChrome()	
 	Remote.check_active("instaLikeBot","end")
-	Sleep 60000
 	ToolTip, sleeping
-	;SleepRand(40000, 150000)
+	SleepRand(10000, 30000)
 	}
 	Tooltip, sleeping
-	Random, n, 1, 3
+	Random, n, 1, 2
+	if n = 1
+	{
+		SleepRand(10000, 30000)
+	}
+	Random, n, 1, 6
 	if n = 0
 	{
 		SleepRand(100000, 6000000)
 	}
-	Random, n, 1, 3
+	Random, n, 1, 6
 	If n = 0
 	{
 		SleepRand(100000,6000000)
@@ -253,6 +250,167 @@ RandURL(){
 	return, URL
 }
 
+ClickPost2(n){
+	ToolTip, CLICK INSTA POST,0,930
+	MouseMove, 650, 450
+	SleepRand(100,1500)
+	MouseClick, WheelDown
+	SleepRand(100,1500)
+	postN := n
+	;posts 400
+	; 638
+	/* 
+	Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
+	if (ok:=FindText(531-500//2, 733-900//2, 700, 800, 0, 0, Text))
+	{
+		CoordMode, Mouse
+        X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+		Y2 := Round((Y/40))
+		If Y2 <= 10
+		{
+			Sleep 500
+			moveY := 10-Y2
+			Loop %moveY%
+			{
+				Send {Up}
+				Sleep 400
+			}
+		}
+		Else
+		{   
+			Sleep 500
+			moveY := Y2-10
+			Loop %moveY%
+			{
+				Send {Down}
+				Sleep 400
+			}
+		}
+	}
+ */
+	PixelGetColor, pColour, 1180, 170
+	While pColour = 0xFAFAFA 	; WHITE
+		{
+
+			Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
+			if (ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text))            
+			{
+				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
+				If Y > 600
+				{
+					Loop 3
+						MouseClick, WheelDown
+					
+					ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text)
+					X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2 
+					
+				}
+				ClickPost(1)
+			}
+			Else
+			{
+				MouseClick, WheelDown
+			}
+			SleepRand(1500, 3310)
+			PixelGetColor, pColour, 1180, 170
+			If A_Index > 8
+				break
+		}
+
+
+	If postN = 1
+	{
+        Random,x,220,480
+        Random,y,465,700
+		SleepRand()
+        MouseMove, %x%, %y%
+        SleepRand(150,1100)
+        Click
+        SleepRand(1500,2933)
+		Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
+		if (ok:=FindText(789-900//2, 674-900//2, 900, 900, 0, 0, Text))
+		{
+			CoordMode, Mouse
+			X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+			;Click, %X%, %Y%
+			Return True
+		}
+		Else Return False
+		
+	}
+	Else If postN = 2
+	{
+        Loop 3
+        {
+            Random,x,545,800
+	        Random,y,465,700
+            MouseMove, %x%, %y%
+            SleepRand(100,800)
+            Click
+            SleepRand(1600,2600)
+            Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
+			if (ok:=FindText(789-900//2, 674-900//2, 900, 900, 0, 0, Text))
+			{
+				CoordMode, Mouse
+				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+				;Click, %X%, %Y%
+				Return True
+			}
+			Else Return False
+        }
+	}
+	/* 
+	Else If postN = 3
+	{
+		Random,x,880,1220
+		Random,y,465,700
+		MouseMove, %x%, %y%
+		SleepRand()
+		Click
+		SleepRand(1000,3500)
+		foundImg := FindImg("needles\comment3.png",3)
+		If !foundImg
+		{
+			SleepRand(300,900)
+			foundImg := FindImg("needles\comment3.png",3)
+		}
+		If !foundImg
+		{
+			Random,y,795,925
+			SleepRand(200,500)
+			MouseMove, %x%, %y%
+			SleepRand(233,333)
+			Click
+			SleepRand(433,733)
+			If !foundImg
+			{
+				Return False
+			}
+			Else Return True
+		}
+		Else Return True
+	}
+	 */
+
+	Else If postN = 4
+	{
+		MouseMove, 380, 810
+		SleepRand(200,499)
+		Click
+		SleepRand(100,200)
+		Click
+		SleepRand(200,400)
+	}
+	Else If postN = 5
+	{
+		MouseMove, 650, 810
+		Sleep 200
+		Click
+		Sleep 200
+	}
+}
+
+
 ClickPost(n){
 	ToolTip, CLICK INSTA POST,0,930
 	MouseMove, 650, 450
@@ -295,7 +453,7 @@ ClickPost(n){
         Random,y,465,700
 		SleepRand()
         MouseMove, %x%, %y%
-        SleepRand(100,1100)
+        SleepRand(150,1100)
         Click
         SleepRand(1500,2933)
 		Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
@@ -586,20 +744,21 @@ OpenCommenterProfile() {
 }
 
 LikePostsN(n:=0) {
-
+	clicked = 0
     liked = 0
 	Tooltip, LikePostsN, 0,900
 	SleepRand(500,1700)
 	If n > 0
-		nLikes := %n%
+		nLikes := n
 	else
 		random, nLikes, 3, 8
-	
-	ClickPost(1)
+	While !clicked
+	{
+		clicked := ClickPost2(1)
+	}
 	Text:="|<WHITE HEART>*169$24.3s7k66MM83k4E1U2E002U001U001U001U001U001k003E0028004A00A600M300k1U1U0k300M60048002E001U0U"
     if !(ok:=FindText(776-300//2, 631-900//2, 350, 600, 0, 0, Text))
     {
-		msgbox no white heart
         Return False
     }
     ELse
@@ -873,7 +1032,7 @@ PostComment(cText){
 	Return True
 }
 
-CheckPage(checkOwn:=1, checkBluetick:=0) {
+CheckPage(checkOwn:=0, checkBluetick:=0) {
     MouseMove, 400, 400
     SleepRand(500,900)
     MouseClick, WheelUp
@@ -896,9 +1055,11 @@ CheckPage(checkOwn:=1, checkBluetick:=0) {
 			Return False
 	}
 
-    Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
-    if !(ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
+    Text:="|<>*160$30.7zzzsD000wQ000CQ003Cs007bs0S7bs1zX7s3zk7s7Vs7sD0w7sC0Q7sQ0C7sQ0C7sQ0C7sQ0C7sC0Q7sD0w7s7Vs7s3zk7s1zU7s0S07s0007Q000CQ000CD000wU"
+	if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
+	{
 		Return False
+	}
 
 	Text:="|<followers>*159$41.0000000Y0000018000002E000004VtWAS/94N6N6MGMGQa4kYUYd89191BKTm2G2+sU44a4QlU894MlV6EG7VX1sU0000002"
 	if !(ok:=FindText(715-500//2, 265-500//2, 500, 500, 0, 0, Text))
@@ -1153,7 +1314,7 @@ RandChromeProfilePath(accessToken, profile:=0)
     Return % Array(chromePath, userAccount,sheetId)
 }
 
-follow(target)
+follow(target, profile)
 {
 	; Follow a target profile 
 	; Like n posts
@@ -1186,15 +1347,21 @@ follow(target)
 	instaURL := "https://instagram.com/"target
 	OpenUrlChrome(instaURL, profile[1])
 	SleepRand(4333,9999)
-	valid := CheckPage(1,1)
-
-	If nLikes = 0
-		Random, nLikes, 5, 25
+	; valid := CheckPage(1,1)
+	pageValid := CheckPage()
+	If !pageValid 
+	{
+		Error := "NOT FOUND: " target
+		Return % Array(functionName, startTime, Error, 0, liked[1], followed)
+	}
+		
+	
+	; If nLikes = 0
+	Random, nLikes, 5, 25
 	liked := LikePostsN(nLikes)
 	SleepRand(500,1500)
 
 	Text:="|<Follow>*188$45.0DzAzzzs1ztbzzzDw7AsAlVz0Na0W80MnAlaF03C9aQG1DtlAnW49z6NaAkVDs3Ak74NzUtb1sXU"
-
 	if (ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))
 	{
 		CoordMode, Mouse
@@ -1418,12 +1585,30 @@ FollowFromGsheet(loopN:=1, nLikes:=0, profileArray:=0)
 }
 
 BrowseFeed(nLikes:=0) {
+	global profile
+	global instaURL
 	functionName = BrowseFeed()
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
     ToolTip, %functionName% %startTime%, 0, 900
+	If WinExist("ahk_class Chrome_WidgetWin_1") 
+	{
+		WinActivate
+		SleepRand(2200,3700)
+		Send ^l
+		SleepRand(100)
+		Send ^v
+		SleepRand(100)
+		Send {Enter}
+		SleepRand(2600,4600)
+	}
+	Else
+	{
+		OpenUrlChrome(instaURL, profile[1])
+		SleepRand(4200,6300)
+	}
 	SleepRand(3000,6000)
     if nLikes = 0
-		Random, nLikes, 1, 5
+		Random, nLikes, 2, 8
 	
     liked = 0
 
