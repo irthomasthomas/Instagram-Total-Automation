@@ -26,7 +26,7 @@ Start()
 Start() {
 Loop
 {
-	serverAddress := "192.168.0.30"
+	serverAddress := A_IPAddress1
 	serverPort := 1338
 	Remote := new RemoteObjClient([serverAddress, serverPort])
 	Remote.print_to_python("active1: " active1)
@@ -110,7 +110,7 @@ Loop
 			SleepRand(2000, 7000)
 		}
 		Random, n, 1, 3
-		If n = 0
+		If n = 1
 		{
 			Tooltip, >BrowseFeed- start(), 0, 900
 			Result := BrowseFeed()
@@ -156,13 +156,13 @@ Loop
 	{
 		SleepRand(10000, 30000)
 	}
-	Random, n, 1, 6
-	if n = 0
+	Random, n, 1, 5
+	if n = 1
 	{
 		SleepRand(100000, 6000000)
 	}
-	Random, n, 1, 6
-	If n = 0
+	Random, n, 1, 5
+	If n = 1
 	{
 		SleepRand(100000,6000000)
 	}
