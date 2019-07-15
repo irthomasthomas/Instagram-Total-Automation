@@ -1,5 +1,6 @@
 #include InstaFunctions.ahk
 
+
 class KardashianBot {
 
     __New(account){
@@ -13,6 +14,7 @@ class KardashianBot {
     {
         closeChrome()
         OpenUrlChrome(this.url, this.chrome)
+        SleepRand(1000,3000)
         Random p, 1, 2
         clicked := ClickPost(p)
         ; clicked := True
