@@ -5,7 +5,8 @@ BrowseFeed() {
 	    OpenUrlChrome(instaURL, profile[1])
 	Random, nLikes, 2, 8
     liked = 0
-
+    Send {Esc}
+    SleepRand(100,500)
     Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
     if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
     {

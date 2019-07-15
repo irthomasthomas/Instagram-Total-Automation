@@ -4,13 +4,14 @@
 
 serverAddr := "192.168.0.31"
 serverPort := 8337
-Remote := new RemoteObjClient([serverAddr, serverPort])
+Bot := new RemoteObjClient([serverAddr, serverPort])
+Bot.session("noplacetosit")
+Bot.reload()
+Sleep 1500
+Bot.kdComment()
 
+Bot.browseFeed()
 ; server := new Remote("noplacetosit")
-Loop 3
-{
-    Remote.LB("blissmolecule")
-}
 
 ; bot := new KardashianBot("blissmolecule")
 

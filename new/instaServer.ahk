@@ -4,26 +4,21 @@
 #include Socket.ahk
 #include RemoteObj.ahk
 
-ObjToPublish := new instaServer()
+ObjToPublish := new InstaServer()
 Bind_Addr := A_IPAddress1
 Bind_Port := 8337
-; MsgBox, , Title, %Bind_Addr%, 3
-
 Server := new RemoteObj(ObjToPublish, [Bind_Addr,Bind_Port])
-; Call kardashian post comment "blissmolecule"
+msgbox
 
-; __New(account){
-;         this.account := account
-;         this.url := KardashianURL()
-;         this.chrome := chromeProfilePath(account)
-;         this.comments := kComments()
-;     }
-
-class instaServer {
-        
-        LB(account) {
-            this.bot := new KardashianBot(account)
-
+class InstaServer {
+        session(account) {
+            this.account := account
+            this.url := KardashianURL()
+            this.chrome := chromeProfilePath(account)
+            this.comments := kComments()
+        }
+        kdComment() {
+            this.bot := new KardashianBot(this.account)
                 try {
                     this.bot.commentLB(this.account)
                 }
@@ -35,15 +30,21 @@ class instaServer {
             OpenCommenterProfile()
         }
         browseFeed() {
-            BrowseFeed()
+            try {
+                BrowseFeed()            
+            }
+            catch e {
+                LogError(e)
+            }
         }
         followTarget(target){
             return follow(target, this.account)
         }
+        reload(){
+            Reload
+        }
+    
 }
-
-
-
 
 ; OpenCommenterProfile()
 ; ; BrowseFeed()

@@ -452,7 +452,6 @@ follow(target, account)
 	return liked	
 }
 
-
 LikePostsN(n:=0) {
 	clicked = 0
     liked = 0
