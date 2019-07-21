@@ -1,12 +1,17 @@
-BrowseFeed() {
-	global profile
-	global instaURL
+BrowseFeed(chromeProfile,nlikes:=0) {
+	instaURL = "https://instagram.com"
+    tooltip, browsefeed, 900, 0
+    SleepRand(1000,3000)
 	If !WinExist("ahk_class Chrome_WidgetWin_1") 
-	    OpenUrlChrome(instaURL, profile[1])
-	Random, nLikes, 2, 8
+    {
+	    OpenUrlChrome(instaURL, chromeProfile)
+        SleepRand(2900,7100)
+    }
+    if !nlikes
+	    Random, nLikes, 2, 8
     liked = 0
     Send {Esc}
-    SleepRand(100,500)
+    SleepRand(500,1500)
     Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
     if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
     {
@@ -23,8 +28,7 @@ BrowseFeed() {
         throw { msg: "BrowseFeed: homebtn not found ", account:"" } 
     }
 	MouseMove, 350, 350
-	SleepRand()
-	
+	SleepRand()	
 	While liked < nLikes
 	{
 		Random, s, 5, 10

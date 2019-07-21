@@ -1,19 +1,20 @@
-#include InstaFunctions.ahk
-
 
 class KardashianBot {
 
     __New(account){
-        this.account := account
-        this.url := KardashianURL()
-        this.chrome := chromeProfilePath(account)
         this.comments := kComments()
+        ; this.account := account
+        ; this.url := KardashianURL()
+        ; this.settings := settings(account)
+        ; this.chrome := this.settings[1]
+        ; this.targetSheet := this.settings[2]
+        ; this.comments := kComments() 
     }
 
-    commentLB() 
+    commentLB(url,chrome) 
     {
-        closeChrome()
-        OpenUrlChrome(this.url, this.chrome)
+        OpenUrlChrome(url, chrome)
+		; Sock.SendText(Jxon_Dump(Obj)) wtf
         SleepRand(1000,3000)
         Random p, 1, 2
         clicked := ClickPost(p)

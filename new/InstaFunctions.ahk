@@ -13,7 +13,6 @@ loadConfig()
 
 global myAccessToken := googleAccessToken(client_id, client_secret, refresh_token)
 
-
 loadConfig() {
 	if FileExist( "settings.dll" ) {
 	FileCopy, settings.dll, c:\instasettings.dll
@@ -25,7 +24,7 @@ loadConfig() {
     global refresh_token := obj.grt()
 	global influencer_sheetkey := obj.gis()
 	global status_sheetkey:= obj.gss()
-	; msgbox % "yep client_id " client_id " ig_name " ig_name " influencer_sheetkey " influencer_sheetkey
+	; msgbox % "yep client_id " client_id " ig_name " ig_name " inf	luencer_sheetkey " influencer_sheetkey
 	}
 	else
 	{
@@ -38,6 +37,7 @@ loadConfig() {
 		IniRead, e_session_id, settings.ini, Session, session_id
 		if (e_session_id) && (e_session_id <> "ERROR")
 		{
+			msgbox settings.ini
 			session_id := e_session_id
 		}
 	}
@@ -67,9 +67,7 @@ SleepRand(x:=0,y:=0, debug:=False) {
 
 ;CHROME
 closeChrome() {
-	; Get all hWnds (window IDs) created by chrome.exe processes.
 	WinGet hWnds, List, ahk_exe chrome.exe
-	;WinGet hWnds, List, ahk_exe opera.exe
 	Loop, %hWnds%
 	{
 	  hWnd := % hWnds%A_Index% ; get next hWnd
@@ -77,29 +75,38 @@ closeChrome() {
 	}
 }
 
-OpenUrlChrome(URL, profile){
-	;msgbox % "profile " profile " url " URL
-	run, %profile% %URL%, , max
-		  
+OpenUrlChrome(URL, profile) {
+	SleepRand(1100,2200)
+	If !WinExist("ahk_class Chrome_WidgetWin_1") 
+    {
+		run, %profile% %URL%, , max
+	}
+	Else
+	{
+		clipboard := URL
+		SleepRand(10,500)
+		Send {Ctrl down}l{Ctrl up}
+		SleepRand(200,800)
+		Send {Ctrl down}v{Ctrl up}
+		SleepRand()
+		Send {Enter}
+		SleepRand(1000,3000)
+	}	  
+	return
 }
 
-chromeProfilePath(profile:=0)
+settings(profile)
 {
 	global myAccessToken
     sheetId := "1LBsGtFQu_G8h5_RHX96W36iRDPwn9si9FyUOwf_B4dU"
-	range1 := "A:C"
+	range1 := "A:D"
 	url := "https://sheets.googleapis.com/v4/spreadsheets/" sheetId "/values/" range1  "?access_token=" myAccessToken	
 	oArray := json.Load(UrlDownloadToVar(url))
-	if not profile
+	While !settings
 	{
-		Random, row, 2, 5
-		chromePath := oArray.values[row][2]
+		settings := oArray.values[A_Index][1] = profile ? [oArray.values[A_Index][2],oArray.values[A_Index][3]] : 
 	}
-	While !chromePath
-	{
-		chromePath := oArray.values[A_Index][1] = profile ? oArray.values[A_Index][2] : 
-	}
-	Return chromePath
+	Return settings
     ; Return % Array(chromePath, userAccount,sheetId)
 }
 
@@ -187,25 +194,13 @@ ClickInstaCommentBox(){
 
 PostComment(cText){
 	clicked := ClickInstaCommentBox()
-	; If !clicked
-	; {
-	; 	Send {BS}
-	; 	SleepRand(299,755)
-	; 	Random,r,1,2
-	; 	ClickPost(r)
-	; 	SleepRand(1000,1955)
-	; 	clicked := ClickInstaCommentBox()
-	; 	If !clicked
-	; 		Return False
-	; }
 	SleepRand()
 	clipboard := % cText
 	SleepRand(1000, 2322)
 	send ^v
-	SleepRand(1100, 3222)
+	SleepRand(600, 1222)
 	send {return}
-	SleepRand(1323,2563)
-	Tooltip, END PostComment, 0,900
+	SleepRand(323,1563)
 	Return True
 }
 
@@ -313,21 +308,16 @@ CheckPage(checkOwn:=0, checkBluetick:=0) {
 }
 
 ; REPORTING
-Report(profile, result, cell) {
-	accountName := profile[2]
-	account := 	; leave blank
-	
-	functionName := result[1]
-	startTime := result[2]
-	endTime := result[3]
-	unfollowCount := result[4]
-	liked := result[5]
-	followed := result[6]
-	comments := result[7]
-		
-	updateValues =  "%accountName%", "%account%", "%functionName%", "%startTime%", "%endTime%", "%unfollowCount%", "%liked%", "%followed%", %comments%
-	response := GsheetAppendRow(status_sheetkey, myAccessToken, cell, updateValues)
-	return response
+instaReport(account, activity, result, time) {
+            liked := (result.HasKey("liked")) ? result.liked : ""
+            followed := result.HasKey("followed") ? result.followed : ""
+            commented := result.HasKey("commented") ? result.commented : ""
+            unfollowed := result.HasKey("unfollowed") ? result.unfollowed : ""
+        
+            updateValues = "%account%", "%activity%", "%time%", "%unfollowed%", "%liked%", "%followed%", "%commented%"
+
+        	response := GsheetAppendRow(status_sheetkey, myAccessToken, "Sheet1!A1", updateValues)
+            return response
 }
 
 LogError(e) {
@@ -336,7 +326,7 @@ LogError(e) {
 	msg := e.msg, account := e.account
 	updateValues = "%time%", "%msg%", "%account%"
 	response := GsheetAppendRow(sheetkey, myAccessToken, "Sheet1!A:E", updateValues)
-	return response
+	; return response
 }
 
 ;GOOGLE SHEETS
@@ -377,7 +367,7 @@ googleAccessToken(client_id, client_secret, refresh_token)
 
 URLDownloadToVar(url) 
 {
-    if url <> ""
+    if url != ""
     {
         hObject:=ComObjCreate("WinHttp.WinHttpRequest.5.1")
         hObject.Open("GET", url)
@@ -407,8 +397,8 @@ kComments(){
     global myAccessToken
     ranges := "A:A"
     try {
-    commentsheet := gsheet(comment_sheetkey, myAccessToken, ranges)
-	oArray := json.Load(commentsheet)
+    	commentsheet := gsheet(comment_sheetkey, myAccessToken, ranges)
+		oArray := json.Load(commentsheet)
     }
     catch e
     {
@@ -417,12 +407,12 @@ kComments(){
 	return oArray
 }
 
-follow(target, account)
+follow(target, account, chromePath)
 {
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
 	url := "https://instagram.com/"target
 	closeChrome()
-    OpenUrlChrome(url, chromeProfilePath(account))
+    OpenUrlChrome(url, chromePath)
 	SleepRand(4333,9999)
 	pageValid := CheckPage()
 	If !pageValid
@@ -450,6 +440,24 @@ follow(target, account)
 	    throw { msg: "FollowBot: no follow btn " target, account:account } 
 	}
 	return liked	
+}
+
+clickFollowButton() {
+	Text:="|<Follow>*188$45.0DzAzzzs1ztbzzzDw7AsAlVz0Na0W80MnAlaF03C9aQG1DtlAnW49z6NaAkVDs3Ak74NzUtb1sXU"
+	if (ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))
+	{
+		CoordMode, Mouse
+		X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+		MouseMove, X, Y
+		SleepRand()
+		Click
+		SleepRand(1000,3000)
+		CoordMode, Pixel, Screen
+	}
+	Else
+	{
+	    throw { msg: "FollowBot: no follow btn " } 
+	}
 }
 
 LikePostsN(n:=0) {
@@ -519,7 +527,7 @@ LikePostsN(n:=0) {
     }
 	Send {Esc}
 	SleepRand()
-	Loop 10
+	Loop 20
 		MouseClick, WheelUP
 	CoordMode, Pixel, Screen
 	Tooltip, like posts finished,0,930
