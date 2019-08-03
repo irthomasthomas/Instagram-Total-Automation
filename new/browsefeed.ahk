@@ -1,3 +1,4 @@
+
 BrowseFeed(chromeProfile,nlikes:=0) {
 	instaURL = "https://instagram.com"
     tooltip, browsefeed, 900, 0
@@ -12,21 +13,9 @@ BrowseFeed(chromeProfile,nlikes:=0) {
     liked = 0
     Send {Esc}
     SleepRand(500,1500)
-    Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
-    if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
-    {
-        CoordMode, Mouse
-        X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-        MouseMove, X, Y
-        SleepRand()
-        Click
-        SleepRand(1500,5000)
-        CoordMode, Pixel, Screen
-    }
-	Else
-    {
-        throw { msg: "BrowseFeed: homebtn not found ", account:"" } 
-    }
+    
+    clickInstaHomeBtn()
+
 	MouseMove, 350, 350
 	SleepRand()	
 	While liked < nLikes

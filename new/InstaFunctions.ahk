@@ -1,6 +1,7 @@
 #include CLR.ahk
 #include JSON.ahk
 #include FindTextFunctions.ahk
+#include googlesheets.ahk
 
 global client_id :=
 global client_secret :=
@@ -307,6 +308,31 @@ CheckPage(checkOwn:=0, checkBluetick:=0) {
 	Return True
 }
 
+clickInstaHomeBtn() {
+	Send {Esc}
+	Loop 10
+	{
+		MouseClick, WheelUp
+		SleepRand(170,770)
+	}
+	Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"
+    if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
+    {
+        CoordMode, Mouse
+        X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+        MouseMove, X, Y
+        SleepRand()
+        Click
+        SleepRand(1500,5000)
+        CoordMode, Pixel, Screen
+		Return True
+    }
+	Else
+    {
+        throw { msg: "BrowseFeed: homebtn not found ", account:"" } 
+    }
+}
+
 ; REPORTING
 instaReport(account, activity, result, time) {
             liked := (result.HasKey("liked")) ? result.liked : ""
@@ -327,42 +353,6 @@ LogError(e) {
 	updateValues = "%time%", "%msg%", "%account%"
 	response := GsheetAppendRow(sheetkey, myAccessToken, "Sheet1!A:E", updateValues)
 	; return response
-}
-
-;GOOGLE SHEETS
-gsheet(SheetKey, accessToken, ranges)
-{
-	url := "https://sheets.googleapis.com/v4/spreadsheets/" sheetkey "/values/" ranges "?access_token=" accessToken
-    sheetBatch := URLDownloadToVar(url)
-	return sheetBatch
-}
-
-GsheetAppendRow(SheetKey, accessToken, cell, values)
-{
-	url := "https://sheets.googleapis.com/v4/spreadsheets/" SheetKey "/values/" cell  ":append?includeValuesInResponse=true&valueInputOption=USER_ENTERED&access_token=" accessToken
-	data = {"majorDimension":"ROWS","range":"%cell%","values":[[%values%]]}
-	Return PutURL(url, data, "post")
-}
-
-googleAccessToken(client_id, client_secret, refresh_token) 
-{
-	StringReplace, client_id, client_id, %A_SPACE%,, All
-    StringReplace, client_secret, client_secret, %A_SPACE%,, All
-    StringReplace, refresh_token, refresh_token, %A_SPACE%,, All
-	aURL := "https://www.googleapis.com/oauth2/v3/token"
-    aPostData := "client_id=" client_id 
-	aPostData .= "&client_secret=" client_secret 
-	aPostData .= "&refresh_token=" refresh_token 
-	aPostData .= "&grant_type=refresh_token"
-    oHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-    oHTTP.Open("POST", aURL , False)
-    oHTTP.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-    oHTTP.Send(aPostData)
-    response := oHTTP.ResponseText
-	parsedAToken := JSON.Load(response, true)
-    parsedAccessToken := parsedAToken.access_token
-    oHTTP :=
-    return parsedAccessToken
 }
 
 URLDownloadToVar(url) 
@@ -485,6 +475,7 @@ LikePostsN(n:=0) {
         Loop %nLikes%
 		{
 			Random, r, 1, 3
+			SleepRand(1000,12000)
 			If r = 1 ; click heart
 			{
 				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
@@ -532,4 +523,96 @@ LikePostsN(n:=0) {
 	CoordMode, Pixel, Screen
 	Tooltip, like posts finished,0,930
     Return % Array(liked,nLikes,count)
+}
+
+clickMyProfileButton() {
+	Text:="|<my profile>*170$22.0Dk01VU0A301U604080E0U10204080M1U0kA01VU03w000000001zzsA00lU01g003U006000M001U006000M001U"
+    if (ok:=FindText(1148-150//2, 100-150//2, 1500, 1500, 0, 0, Text))
+    {
+        CoordMode, Mouse
+        X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+        MouseMove, %X%, %Y%
+        SleepRand()
+        Click
+        SleepRand(1800,4500)
+        CoordMode, Pixel, Screen
+		return True
+    }
+	Else
+	{ 
+		return False
+	}
+}
+
+clickFollowingButton() {
+	Text:="|<following>*144$59.A090002000U0G000000100Y0000007XV8QEVFQ7I8WF4V2X4FcUYY4Z9491F1989+G8G2W2GEGWYEY544YUZ58V8+8991++F2EI8WF488W4FcC4VkEF48R00000000020000000048000000007Y"
+    if (ok:=FindText(834-150//2, 266-150//2, 150, 150, 0, 0, Text))
+    {
+        CoordMode, Mouse
+        X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+        MouseMove, %X%, %Y%
+        SleepRand()
+        Click
+        SleepRand(1500,4500)
+        CoordMode, Pixel, Screen
+		Return True
+    }
+	Else
+    {
+		Return False
+	}
+}
+
+scrollFollowerList(scroll:=False) {
+	If !scroll 
+		Random, scroll, 5, 25	
+	Random, X, 531, 818
+	Random, Y, 333, 564
+	MouseMove, X, Y
+	SleepRand()
+	Loop %scroll% 
+	{
+		MouseClick, WheelDown
+		SleepRand(150,750)
+	}
+}
+
+UnfollowRandomAccount() {
+	SleepRand()
+	clickedMyProfile := clickMyProfileButton()
+	SleepRand(1500,5000)
+	clickedFollowing := clickFollowingButton()
+
+	SleepRand(1500,5000)
+	scrollFollowerList()
+	SleepRand(500,2300)
+	Text:="|<unfollow>*158$66.zU0n0003000zU0n0000000k1kn3X4PBkvk3sn7lCHDtzzaAnANCHANXzaAnANenANXk6AnANenANXk6AnAMvXANXk3sn7klXANzk1kn3UlXAMv000000000030000000001z0000000000yU"
+	if (ok:=FindText(675-150000//2, 484-150000//2, 150000, 150000, 0, 0, Text))
+	{
+		CoordMode, Mouse
+		X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+		MouseMove, X, Y
+		SleepRand()
+		Click
+		SleepRand(700,2100)
+		Text:="|<unfollow confirm>*195$60.kk0C06M000kk0M06M000knQyD6MSNnknyyzaNzNnknaMlaNXBqkn6MlaNXBKkn6MlaNXBKsn6MlaNX7Qzn6MzaNz7QDX6MD6MS6AU"
+		if (ok:=FindText(675-150000//2, 484-150000//2, 150000, 150000, 0, 0, Text))
+		{
+			X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+			MouseMove, X, Y
+			SleepRand()
+			Click
+			SleepRand(700,2100)
+		}
+		CoordMode, Pixel, Screen
+		clicked := True
+	}
+	
+	else
+		clicked := False
+	SleepRand(500,1400)
+	clickInstaHomeBtn()
+
+	return clicked
+
 }

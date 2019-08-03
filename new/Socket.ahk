@@ -41,7 +41,7 @@ class Socket
 				if (DllCall("Ws2_32\WSAConnect", "UInt", this.Socket, "Ptr", ai_addr
 					, "UInt", ai_addrlen, "Ptr", 0, "Ptr", 0, "Ptr", 0, "Ptr", 0, "Int") == 0)
 				{
-					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) ; TODO: Error Handling
+					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) 
 					return this.EventProcRegister(this.FD_READ | this.FD_CLOSE)
 				}
 				this.Disconnect()
@@ -66,7 +66,7 @@ class Socket
 				if (DllCall("Ws2_32\bind", "UInt", this.Socket, "Ptr", ai_addr
 					, "UInt", ai_addrlen, "Int") == 0)
 				{
-					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) ; TODO: ERROR HANDLING
+					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) 
 					return this.EventProcRegister(this.FD_READ | this.FD_ACCEPT | this.FD_CLOSE)
 				}
 				this.Disconnect()
@@ -165,7 +165,7 @@ class Socket
 	
 	GetAddrInfo(Address)
 	{
-		; TODO: Use GetAddrInfoW
+		
 		Host := Address[1], Port := Address[2]
 		VarSetCapacity(Hints, 16+(4*A_PtrSize), 0)
 		NumPut(this.SocketType, Hints, 8, "Int")

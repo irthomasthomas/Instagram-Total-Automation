@@ -1,6 +1,7 @@
 #include InstaFunctions.ahk
 #include kardashian.ahk
 #include browsefeed.ahk
+#include browsehashtags.ahk
 
 #include Jxon.ahk
 #include Socket.ahk
@@ -14,7 +15,8 @@ tooltip, started, 0, 920
 
 class InstaServer {
 
-        session(account) {
+        session(account) 
+        {
             closeChrome()
             this.account := account
             this.kardashianUrl := KardashianURL()
@@ -22,17 +24,22 @@ class InstaServer {
             this.chrome := this.settings[1]
             this.targetSheet := this.settings[2]
             this.kbot := new KardashianBot(account)
-            OpenUrlChrome("https://instagram.com",this.chrome)
+            OpenUrlChrome("https://instagram.com", this.chrome)
+            this.targetsArray := this.targetAccounts()
         }
 
-        targets() {
+        targetAccounts() {
+            if this.targetsArray
+            {
+                return this.targetsArray
+            }
             range := "A:A"
             url := "https://sheets.googleapis.com/v4/spreadsheets/" this.targetSheet "/values/" range  "?access_token=" myAccessToken
-            this.targetsArray := json.Load(UrlDownloadToVar(url))
-            return this.targetsArray
+            targetsArray := json.Load(UrlDownloadToVar(url))
+            return targetsArray
         }
         
-        kdComment() {
+        kardashianComment() {
                 try {
                     this.kbot.commentLB(this.kardashianUrl,this.chrome)
                 }
@@ -51,6 +58,10 @@ class InstaServer {
             LikePostsN(n)
         }
 
+        browseRandomHashtagFeed() {
+            BrowseHashtags(this.account)
+        }
+
         browseFeed(nlikes:=0) {
             try {
                 liked := BrowseFeed(this.chrome,nlikes)          
@@ -63,16 +74,19 @@ class InstaServer {
             }
         }
 
-        followTarget(target){
-            try{
-                return follow(target, this.account, this.chrome)
+        followTarget(target) {
+            try {
+            	FormatTime, time, ,yyyy-M-d HH:mm:ss tt  
+                liked := follow(target, this.account, this.chrome)
+                result := {liked: liked}
+                instaReport(this.account, "follow_target " + target, result, time )
             }
             catch e {
                 LogError(e)
             }
         }
 
-        followBtn(){
+        followBtn() {
             try {
                 clickFollowButton()
                 return True
@@ -83,10 +97,29 @@ class InstaServer {
             }
         }
 
-        reload(){
+        reload() {
             Reload
+        }
+
+        unfollow() {
+            SleepRand(3000, 5500)
+            FormatTime, time, ,yyyy-M-d HH:mm:ss tt  
+            try {
+                unfollowed := UnfollowRandomAccount()
+                result := {unfollowed: 1}
+                instaReport(this.account, "unfollow ", result, time )
+            }
+            catch e {
+                LogError(e)
+            }
+
         }
     
 }
 
 ^!r::Reload
+
+; TODO: Unfollow()
+; TODO: Kardashian Log
+; TODO: LOG browse hashtag
+
