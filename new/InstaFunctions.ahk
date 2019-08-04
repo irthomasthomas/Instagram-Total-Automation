@@ -1,3 +1,4 @@
+#singleInstance force
 #include CLR.ahk
 #include JSON.ahk
 #include FindTextFunctions.ahk
@@ -49,7 +50,31 @@ loadConfig() {
 	}
 }
 
-SleepRand(x:=0,y:=0, debug:=False) {
+SleepRand(x:=0,y:=0) {
+	ToolTip, SLEEP RAND ,0,930	
+
+	; TODO: Interrupt check FileSelectFile
+	try
+	{
+		file := FileOpen("INTERRUPT", "r")
+	}
+	catch e
+	{
+		
+	}
+	ToolTip, SLEEP RAND FILEOPEN,0,930	
+	Sleep 2000
+	if IsObject(file)
+	{
+		FileSetAttrib, -R, INTERRUPT
+		ToolTip, SLEEP RAND ISOBJECT,0,930	
+		sleep 1000
+	 	FileDelete INTERRUPT
+	 	Sleep 1400
+	 	Reload
+	}
+	ToolTip, SLEEP RAND MID ,0,930	
+
 	If x = 0
 	{
 		Random, x, 1, 11
@@ -59,11 +84,9 @@ SleepRand(x:=0,y:=0, debug:=False) {
 		Random, y, %x%, (x+200)
 	}
 	Random, rand, %x%, %y%
-	If debug
-	{
-		MsgBox % rand
-	}
 	Sleep, %rand%
+	ToolTip, SLEEP RAND END,0,930	
+
 }
 
 ;CHROME
@@ -78,6 +101,7 @@ closeChrome() {
 
 OpenUrlChrome(URL, profile) {
 	SleepRand(1100,2200)
+
 	If !WinExist("ahk_class Chrome_WidgetWin_1") 
     {
 		run, %profile% %URL%, , max
@@ -103,12 +127,14 @@ settings(profile)
 	range1 := "A:D"
 	url := "https://sheets.googleapis.com/v4/spreadsheets/" sheetId "/values/" range1  "?access_token=" myAccessToken	
 	oArray := json.Load(UrlDownloadToVar(url))
-	While !settings
+	;TODO sqlite
+	while !settings
 	{
 		settings := oArray.values[A_Index][1] = profile ? [oArray.values[A_Index][2],oArray.values[A_Index][3]] : 
+		if A_Index > 20
+	        throw { msg: "could not fetch settings from gsheet ", account: profile } 
 	}
 	Return settings
-    ; Return % Array(chromePath, userAccount,sheetId)
 }
 
 ; ON PAGE
@@ -252,6 +278,7 @@ OpenCommenterProfile() {
 }
 
 CheckPage(checkOwn:=0, checkBluetick:=0) {
+	;TODO checkpage hardcode
     MouseMove, 400, 400
     SleepRand(500,900)
     MouseClick, WheelUp
@@ -611,7 +638,15 @@ UnfollowRandomAccount() {
 	else
 		clicked := False
 	SleepRand(500,1400)
-	clickInstaHomeBtn()
+
+	try
+	{
+		clickInstaHomeBtn()
+	}
+	catch e
+	{
+		LogError(e)
+	}
 
 	return clicked
 

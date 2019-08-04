@@ -233,17 +233,9 @@ BrowseHashtags(igAccount) {
 
 		While pColour = 0xFAFAFA 	; WHITE
 		{
-			outerLoopCount := A_Index
-			If outerLoopCount > 8
-			{
-				Continue
-				/* 
-				ToolTip, BrowseHashtags() failed to open following - reloading, 0, 900
-				FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-				errorMsg := failed to open post on target profile
-				Return % Array(functionName, startTime, endTime, errorMsg, 0,0,0) 
-				 */
-			}
+			
+			If A_Index > 10
+		        throw { msg: "BrowseHashtags: failed opening photo ", account:igAccount } 
 
 			Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
 			if (ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text))            

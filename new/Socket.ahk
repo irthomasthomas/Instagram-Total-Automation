@@ -113,11 +113,12 @@ class Socket
 			throw Exception("Error calling ioctlsocket",, this.GetLastError())
 		return argp
 	}
-	
+
 	Send(pBuffer, BufSize, Flags:=0)
 	{
 		if ((r := DllCall("Ws2_32\send", "UInt", this.Socket, "Ptr", pBuffer, "Int", BufSize, "Int", Flags)) == -1)
-			throw Exception("Error calling send",, this.GetLastError())
+			MsgBox ,,, "Error calling send", 5
+			; throw Exception("Error calling send",, this.GetLastError())
 		return r
 	}
 	

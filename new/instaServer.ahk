@@ -6,26 +6,37 @@
 #include Jxon.ahk
 #include Socket.ahk
 #include RemoteObj.ahk
- 
+
+; py1 socket client > socket server > interrupt true 
 ObjToPublish := new InstaServer()
 Bind_Addr := A_IPAddress1
 Bind_Port := 8337
 Server := new RemoteObj(ObjToPublish, [Bind_Addr,Bind_Port])
 tooltip, started, 0, 920
+SleepRand()    
 
 class InstaServer {
 
         session(account) 
         {
-            closeChrome()
-            this.account := account
-            this.kardashianUrl := KardashianURL()
-            this.settings := settings(account)
-            this.chrome := this.settings[1]
-            this.targetSheet := this.settings[2]
-            this.kbot := new KardashianBot(account)
-            OpenUrlChrome("https://instagram.com", this.chrome)
-            this.targetsArray := this.targetAccounts()
+            try
+            {
+                closeChrome()
+                this.account := account
+                this.kardashianUrl := KardashianURL()
+                this.settings := settings(account)
+                this.chrome := this.settings[1]
+                this.targetSheet := this.settings[2]
+                this.kbot := new KardashianBot(account)
+                ;msgbox % this.settings " " this.account " " this.chrome
+                OpenUrlChrome("https://instagram.com", this.chrome)
+                this.targetsArray := this.targetAccounts()
+            }
+            catch e
+            {
+                LogError(e)
+            }
+            
         }
 
         targetAccounts() {
@@ -59,7 +70,14 @@ class InstaServer {
         }
 
         browseRandomHashtagFeed() {
-            BrowseHashtags(this.account)
+            try
+            {
+                BrowseHashtags(this.account)
+            }
+            catch e
+            {
+                LogError(e)
+            }
         }
 
         browseFeed(nlikes:=0) {
@@ -114,7 +132,6 @@ class InstaServer {
             }
 
         }
-    
 }
 
 ^!r::Reload
