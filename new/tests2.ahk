@@ -4,30 +4,21 @@
 #include Experiments\AhkDllThread.ahk
 #singleInstance force
 
-; socket client
-    ; Bind_Addr := A_IPAddress1
-    ; msgbox % Bind_Addr
-    serverAddr := "192.168.0.31"
-    serverPort := 1339
-    Controller := new RemoteObjClient([serverAddr, serverPort])
-    sleep 1000
-    ; Controller.__Reload()
-    AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
-    AhkThread := AhkDllThread(AhkDllPath)
-    AhkThread.ahktextdll("msgbox % Controller.STATUS") 
-    
-    ; Sock := new SocketTCP()
-    ; Sock.Connect([serverAddr,serverPort])
-    ; Sock.SendText("Reload")
-    ; ; Sock.SendText(Jxon_Dump(Obj))
-    ; resp := Sock.RecvText()
-    ; if resp contains "Action"
-    ; resp := Jxon_Load(resp).RetVal
-    ; Sock.Disconnect()
-    ; msgbox % resp
-
 
 class InstaClient {
+
+    __New() {
+        
+        serverAddr := "192.168.0.31"
+        serverPort := 8337
+        try {
+            Bot := new RemoteObjClient([serverAddr, serverPort])
+            }
+        ; Bot.session("philhughesart")
+        sleep 3000
+        ; Bot.browseFeed(1)
+    }
+
 	STATUS 
 	{
 		get {
@@ -43,25 +34,67 @@ class InstaClient {
 	}
 }
 
-AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
-AhkThread2 := AhkDllThread(AhkDllPath)
-AhkThread2.ahktextdll("#include tests2.ahk") 
+; serverAddr := A_IPAddress1
 client := new InstaClient
-loop 10
-{
-    msgbox % "CLIENT.status " client.STATUS
-    sleep 2000
+msgbox % "tests 2" client.STATUS
+reload() {
+    Bot.reload()
 }
+
+browsefeed() {
+    sleep 500
+    msgbox % "browsefeed tests2" Bot.STATUS
+}
+
+; AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
+; hModule := DllCall("LoadLibrary","Str",AhkDllPath)
+; DllCall(AhkDllPath "\ahktextdll","Str","#include tests.ahk `n reload()","Str","","Str","","Cdecl UPTR")
+; MsgBox, End main thread
+; DllCall("FreeLibrary","PTR",hModule)
+; sleep 2000
 /*  AhkDllPath := A_ScriptDir "\AutoHotkey.dll"
     hModule := DllCall("LoadLibrary","Str",AhkDllPath)
     DllCall(AhkDllPath "\ahkdll","Str","test.ahk","Str","","Str","","Cdecl UPTR")
-    ; DllCall(AhkDllPath "\ahktextdll","Str","#include tests2.ahk `n browsefeed()","Str","","Str","","Cdecl UPTR")
     MsgBox, End main thread
     DllCall("FreeLibrary","PTR",hModule)
  */
-; y := ComObjActive("{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
-; msgbox % "ComObj STATUS " y.STATUS
+; msgbox % Bot.STATUS
+; AhkThread2 := AhkDllThread(AhkDllPath)
+; AhkThread2.ahktextdll(Bot.run()) 
+; client := new InstaClient
 
+; ; y := ComObjActive("{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
+; ; msgbox % "ComObj STATUS " y.STATUS
+; serverAddr := "192.168.0.31"
+; serverPort := 8337
+; try {
+;     Bot := new RemoteObjClient([serverAddr, serverPort])
+; }
+
+; AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
+; hModule := DllCall("LoadLibrary","Str",AhkDllPath)
+; DllCall(AhkDllPath "\ahktextdll","Str","#include tests.ahk `n browsefeed()","Str","","Str","","Cdecl UPTR")
+; MsgBox, browsefeed
+; DllCall("FreeLibrary","PTR",hModule)
+; loop 10
+; {
+;     sleep 2000
+;     msgbox % "bot.status " Bot.STATUS
+;     sleep 2000
+;     msgbox % "CLIENT.status " client.STATUS
+;     sleep 2000
+; }
+; serverPort1 := 8338
+; RemoteControl := new RemoteObjClient([serverAddr, serverPort1])
+
+; Bot.reload()
+; SleepRand(2000,5000) 
+; Bot := new RemoteObjClient([serverAddr, serverPort])  
+; try {
+;     state := Bot.session("philhughesart")
+; }
+; state := Bot.STATUS
+; msgbox % state
 /* 
 SleepRand(1200,3300)
 Loop 2
@@ -118,7 +151,7 @@ loop 2
 }
 
  */
-SleepRand(x:=0,y:=0) {
+ SleepRand(x:=0,y:=0, debug:=False) {
 	If x = 0
 	{
 		Random, x, 1, 11
@@ -128,6 +161,10 @@ SleepRand(x:=0,y:=0) {
 		Random, y, %x%, (x+200)
 	}
 	Random, rand, %x%, %y%
+	If debug
+	{
+		MsgBox % rand
+	}
 	Sleep, %rand%
 }
 
@@ -161,5 +198,4 @@ Reload
 
 ; MsgBox Paused: %isPaused%`nSuspended: %isSuspended%
 
-^+r::ReloadScript()
 

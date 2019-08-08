@@ -6,7 +6,6 @@ BrowseFeed(chromeProfile,nlikes:=0) {
 	If !WinExist("ahk_class Chrome_WidgetWin_1") 
     {
         ;TODO:
-        msgbox
 	    OpenUrlChrome(instaURL, chromeProfile)
         SleepRand(2900,7100)
     }
