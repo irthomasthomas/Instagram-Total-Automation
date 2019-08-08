@@ -1,6 +1,6 @@
 #singleInstance force
-#include CLR.ahk
-#include JSON.ahk
+#include CLR2.ahk
+#include JSON2.ahk
 #include FindTextFunctions.ahk
 #include googlesheets.ahk
 
@@ -51,29 +51,7 @@ loadConfig() {
 }
 
 SleepRand(x:=0,y:=0) {
-	ToolTip, SLEEP RAND ,0,930	
-
-	; TODO: Interrupt check FileSelectFile
-	try
-	{
-		file := FileOpen("INTERRUPT", "r")
-	}
-	catch e
-	{
-		
-	}
-	ToolTip, SLEEP RAND FILEOPEN,0,930	
-	Sleep 2000
-	if IsObject(file)
-	{
-		FileSetAttrib, -R, INTERRUPT
-		ToolTip, SLEEP RAND ISOBJECT,0,930	
-		sleep 1000
-	 	FileDelete INTERRUPT
-	 	Sleep 1400
-	 	Reload
-	}
-	ToolTip, SLEEP RAND MID ,0,930	
+	ToolTip, SLEEP START,0,930	
 
 	If x = 0
 	{
