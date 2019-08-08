@@ -35,7 +35,7 @@ print(str(bot))
 time.sleep(1)
 print(str(bot.Get("STATUS"))) # NEW
 bot = RemoteObjClient((host,port))
-print(str(bot.Call("shortRoutine","noplacetosit","fast")))
+print(str(bot.Call("shortRoutine","philhughesart","fast")))
 
 # print(str(bot.Call("MessageBox",("noplacetosit")))) # working
 while True:

@@ -174,7 +174,8 @@ BrowseHashtags(igAccount) {
 	followedTotal = 0
 	SleepRand(100,700)
 	Random, r, 2, 3
-	Loop % r
+	; TODO: Loop % r
+	Loop 1
 	{
 		If WinExist("ahk_class Chrome_WidgetWin_1") 
 		{
