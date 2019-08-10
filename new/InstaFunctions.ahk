@@ -1,7 +1,8 @@
 #singleInstance force
-#include CLR2.ahk
-#include JSON2.ahk
-#include FindTextFunctions.ahk
+#include CLR.ahk
+; #include CLR2.ahk
+#include JSON.ahk
+#include Lib\FindTextFunctions.ahk
 #include googlesheets.ahk
 
 global client_id :=
@@ -11,6 +12,7 @@ global influencer_sheetkey :=
 global status_sheetkey :=
 global comment_sheetkey := "1eWbBKYwzBxRRrNUrEWB--AefZHZT1K-eXj5_7vDtO-o"
 
+; TODO: Check for error messages
 loadConfig()
 
 global myAccessToken := googleAccessToken(client_id, client_secret, refresh_token)
@@ -69,6 +71,7 @@ SleepRand(x:=0,y:=0) {
 
 ;CHROME
 closeChrome() {
+	tooltip, closeChrome two
 	WinGet hWnds, List, ahk_exe chrome.exe
 	Loop, %hWnds%
 	{

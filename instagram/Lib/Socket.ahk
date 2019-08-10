@@ -129,9 +129,10 @@ class Socket
 		return this.Send(&Buffer, Length - 1)
 	}
 	
+	; TODO: Getting stuck L Recv(ByRef Buffer, BufSize:=0, Flags:=0)
 	Recv(ByRef Buffer, BufSize:=0, Flags:=0)
 	{
-		while (!(Length := this.MsgSize()) && this.Blocking)
+		while (!(Length := this.MsgSize()) && this.Blocking && (A_Index < 50))
 			Sleep, this.BlockSleep
 		if !Length
 			return 0
