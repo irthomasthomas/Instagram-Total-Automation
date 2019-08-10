@@ -16,12 +16,12 @@ CLR_LoadLibrary(AssemblyName, AppDomain=0)
 	Loop 1 {
 		if assembly := AppDomain.Load_2(AssemblyName)
 			break
-		static isnull := ComObject(13,0)
+		static null := ComObject(13,0)
 		args := ComObjArray(0xC, 1),  args[0] := AssemblyName
 		typeofAssembly := AppDomain.GetType().Assembly.GetType()
-		if assembly := typeofAssembly.InvokeMember_3("LoadWithPartialName", 0x158, isnull, isnull, args)
+		if assembly := typeofAssembly.InvokeMember_3("LoadWithPartialName", 0x158, null, null, args)
 			break
-		if assembly := typeofAssembly.InvokeMember_3("LoadFrom", 0x158, isnull, isnull, args)
+		if assembly := typeofAssembly.InvokeMember_3("LoadFrom", 0x158, null, null, args)
 			break
 	}
 	ComObjError(e)
@@ -37,9 +37,9 @@ CLR_CreateObject(Assembly, TypeName, Args*)
 	Loop % argCount
 		vargs[A_Index-1] := Args[A_Index]
 	
-	static Array_Empty := ComObjArray(0xC,0), isnull := ComObject(13,0)
+	static Array_Empty := ComObjArray(0xC,0), null := ComObject(13,0)
 	
-	return Assembly.CreateInstance_3(TypeName, true, 0, isnull, vargs, isnull, Array_Empty)
+	return Assembly.CreateInstance_3(TypeName, true, 0, null, vargs, null, Array_Empty)
 }
 
 CLR_CompileC#(Code, References="", AppDomain=0, FileName="", CompilerOptions="")
@@ -54,9 +54,9 @@ CLR_CompileVB(Code, References="", AppDomain=0, FileName="", CompilerOptions="")
 
 CLR_StartDomain(ByRef AppDomain, BaseDirectory="")
 {
-	static isnull := ComObject(13,0)
+	static null := ComObject(13,0)
 	args := ComObjArray(0xC, 5), args[0] := "", args[2] := BaseDirectory, args[4] := ComObject(0xB,false)
-	AppDomain := CLR_GetDefaultDomain().GetType().InvokeMember_3("CreateDomain", 0x158, isnull, isnull, args)
+	AppDomain := CLR_GetDefaultDomain().GetType().InvokeMember_3("CreateDomain", 0x158, null, null, args)
 	return A_LastError >= 0
 }
 

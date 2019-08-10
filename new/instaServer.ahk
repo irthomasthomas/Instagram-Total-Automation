@@ -43,6 +43,24 @@ class InstaWorker {
                 return STATUS := value
             }
         }
+        
+        ACTIVITY
+        {
+            get 
+            {
+                if FileExist( "status.ini" )
+                {	
+                    IniRead, ACTIVITY, status.ini, General, ACTIVITY
+                }
+                ; TODO: make activity.ini
+                return ACTIVITY
+            }
+            set 
+            {
+                IniWrite, %value%, status.ini, General, ACTIVITY
+                return ACTIVITY := value
+            }
+        }
 
         __New(){
         }
@@ -61,10 +79,15 @@ class InstaWorker {
                     MouseClick, WheelDown
                     SleepRand(300,1400)
                 }
-                this.STATUS := "FREE"
+                this.STATUS := "READY"
                 sleep 5000
             }
             
+        }
+
+        closeBrowser(){
+            tooltip, closeChrome
+            closeChrome()
         }
 
         session(account:="") 
@@ -112,15 +135,12 @@ class InstaWorker {
         }
         
         kardashianComment() {
-            this.STATUS := "BUSY"
                 try {
                     this.kbot.commentLB(this.kardashianUrl,this.chrome)
                 }
                 catch e {
                     LogError(e)
                 }
-            this.STATUS := "FREE"
-
         }
 
         openRandCommenter() {
@@ -129,14 +149,14 @@ class InstaWorker {
         }
 
         likePosts(n:=0) {
-            this.STATUS := "BUSY"
+            this.ACTIVITY := "Like Posts"
             tooltip, likeposts, 0, 930
             LikePostsN(n)
-            this.STATUS := "FREE"
+            this.ACTIVITY := ""
         }
 
         browseRandomHashtagFeed() {
-            this.STATUS := "BUSY"            
+            this.ACTIVITY := "Browse Random Tag"
             try
             {
                 BrowseHashtags(this.account)
@@ -146,11 +166,14 @@ class InstaWorker {
             {
                 LogError(e)
             }
-            this.STATUS := "FREE"                
+            this.ACTIVITY := ""
+
         }
 
         browseFeed(nlikes:=0) {
-            this.STATUS := "BUSY"
+            this.ACTIVITY := "Browsing Feed"
+            ; msgbox % this.ACTIVITY
+
             try {
                 liked := BrowseFeed(this.chrome,nlikes)          
             	FormatTime, time, ,yyyy-M-d HH:mm:ss tt  
@@ -160,11 +183,11 @@ class InstaWorker {
             catch e {
                 LogError(e)
             }
-            this.STATUS := "FREE"                
+            this.ACTIVITY := ""
         }
 
         followTarget(target) {
-            this.STATUS := "BUSY"            
+            this.ACTIVITY := "Follow Target from G-Sheets"
             try {
             	FormatTime, time, ,yyyy-M-d HH:mm:ss tt  
                 liked := follow(target, this.account, this.chrome)
@@ -174,8 +197,7 @@ class InstaWorker {
             catch e {
                 LogError(e)
             }
-            this.STATUS := "FREE"                
-
+            this.ACTIVITY := ""
         }
 
         SleepRand(sleeps) {
@@ -205,20 +227,20 @@ class InstaWorker {
         }
 
         unfollow() {
-            FileDelete READY
+            this.STATUS := "BUSY"
+            this.ACTIVITY := "Unfollow Rand"
             SleepRand(3000, 5500)
             FormatTime, time, ,yyyy-M-d HH:mm:ss tt  
             try {
                 unfollowed := UnfollowRandomAccount()
                 result := {unfollowed: 1}
                 instaReport(this.account, "unfollow ", result, time )
-                FileAppend,,READY
             }
             catch e {
                 LogError(e)
-                FileAppend,,READY
             }
-
+            this.STATUS := "READY"
+            this.ACTIVITY := ""
         }
 }
 

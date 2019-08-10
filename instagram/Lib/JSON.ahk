@@ -132,7 +132,7 @@ class JSON
 				{
 					val := SubStr(src, pos, i := RegExMatch(src, "[\]\},\s]|$",, pos)-pos)
 					
-					static null := "" ; for #Warn
+					static isnull := "" ; for #Warn
 					if InStr(",true,false,null,", "," . val . ",", true) ; if var in
 						val := %val%
 					else if (Abs(val) == "") ? (pos--, next := "#") : 0

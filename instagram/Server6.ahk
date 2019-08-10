@@ -1,77 +1,106 @@
-#include Jxon.ahk
-#include Socket.ahk
-#include Experiments\AhkDllThread.ahk
-#include RemoteObj.ahk
+#NoEnv
+SetBatchLines, -1
+#Include Lib\Socket.ahk
+#Include Lib\Jxon.ahk
+#Include Lib\RemoteObj.ahk
+#include control.ahk
+#include GSheets.ahk
 
-controller := new ControlServer()
+ObjToPublish := new objServer() ; This is the object that will be published
+Bind_Addr := A_IPAddress1 ; Local IP (it looks like 192.168.1.xxx)
+Bind_Port := 1337 ; Listen for connctions on port 1337 
+Server := new RemoteObj(ObjToPublish, [Bind_Addr, Bind_Port])
 
-Bind_Addr := A_IPAddress1
-Bind_Port := 1339
-Server := new RemoteObj(controller, [Bind_Addr,Bind_Port])    
-return
+; msgbox "iP " %Bind_Addr%
+;msgbox % A_IPAddress1 
 
-class ControlServer {
-    
-    STATUS {
-            get {
-                if FileExist( "status.ini" ) {	
-		            IniRead, STATUS, status.ini, General, STATUS
-                }
-                return STATUS
-            }
-            set {
-                IniWrite, %value%, status.ini, General, STATUS
-                return STATUS
-            }
-        }
+class objServer
+{	
+	print_to_python(text)
+	{
+		myTcp := new SocketTCP()
+		addr := "192.168.0.2"
+		myTcp.Connect([addr,2338])
+		command := "print_to_terminal;" . text . ";" 
+		sleep 10
+		myTcp.SendText(command)
+		myTcp.disconnect() 
+	}		
 
-    MessageBox(m) {
-        AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
-        AhkThread := AhkDllThread(AhkDllPath)
-        cmd := "#include ControlFunctions.ahk `n scrollTest("
-        cmd .= " """ m """ "
-        cmd .= ")"
-        ; cmd := "MsgBox , , Title," . m . ", 7"
-        AhkThread.ahktextdll(cmd) 
-        ; MsgBox , , Title, %m%, 7
-        this.STATUS := "WORKING!"
-        return % this.STATUS
-    }
+	rcloneDelete()
+	{
+		myTcp.connect([addr, 1337])
+		myTcp.sendText("rclone delete")
+		response := myTcp.recvText(1024)
+		return response
+	}
 
-    __Reload()
-    {
-        run, instaServer.ahk
-    }
+	GDrivePutJpg(file:=0, folder:=0)
+	{
+		myTcp := new SocketTCP()
+		addr := "192.168.0.2"
+		command := "gDriveJpgUpload"
+		command .= ";" . file
+		myTcp.Connect([addr, 2338])
+		myTcp.SendText(command)
+		while !response && (A_Index < 20) ;loops 20 seconds then gives up
+		{
+			response := myTcp.recvText(1024)
+			sleep 1000
+		}
+		myTcp.disconnect() 
+		return response
+	}
 
-    __New()
-    {
-        ; Bind_Addr := A_IPAddress1
-        ; Bind_Port2 := 1335
-    }
-    
-    shortRoutine(account, speed:="slow") {
-        AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
-        AhkThread := AhkDllThread(AhkDllPath)
-        cmd := "#include ControlFunctions.ahk `n shortRoutine("
-        cmd .= " """ account """ "
-        cmd .= ")"
-        ; cmd := "MsgBox , , Title," . m . ", 7"
-        AhkThread.ahktextdll(cmd) 
-        ; MsgBox , , Title, %m%, 7
-        this.STATUS := "BUSY"
-        return % this.STATUS
-        ; resp := [speed, account]
-        ; return resp
-    }
+	PhotoToInstagram(fileArray)
+	{
+		this.print_to_python(fileArray)
+		instaAccount := fileArray[1]
+		files := StrSplit(fileArray[2], "&")
+		captions := StrSplit(fileArray[3], "&")
+		
+		myTcp := new SocketTCP()
+		addr := "192.168.0.2"
+		myTcp.Connect([addr,2338])
+		Loop % files.MaxIndex()
+		{
+			command := "instaPhotoUpload;" . instaAccount . ";" 
+			command .= files[A_Index] . ";"
+			command .= captions[A_Index]
+			sleep 10
+			myTcp.SendText(command)
+			SleepRand(15000,35000)
+		}		
+		myTcp.disconnect() 
+		return
+	}
 
-    midRoutine(speed:="slow") {
+	InputBox(Prompt) 
+	{
+		InputBox, Out, % this.Title, %Prompt%
+		return Out
+	}
+	
+	Message(m)
+	{
+		msgbox % m
+		replyMessage := "Received: " . m
+		return replyMessage
+	}
+	
+	Continue()
+	{
+		msgbox Continue?
+		return True
+	}
+	
+	SendToClipboard(c)
+	{
+		clipboard :=
+		sleep 10
+		clipboard := c
+	}
 
-
-    }
-
-    longRoutine(speed:="slow") {
-
-    }
 }
 
 /* 
@@ -132,7 +161,7 @@ Template =
     )
 
 Bind_Addr := A_IPAddress1
-Bind_Port2 := 80
+Bind_Port2 := 1338 
 hServer := new SocketTCP()
 hServer.OnAccept := Func("OnAccept")
 hServer.Bind([Bind_Addr,Bind_Port2])
@@ -178,43 +207,20 @@ OnAccept(Server)
     else
         Sock.SendText("HTTP/1.0 404 Not Found`r`n`r`nHTTP/1.0 404 Not Found")
     Sock.Disconnect()
+}	
+ */
+
+CountFiles(Directory)
+{
+	fso := ComObjCreate("Scripting.FileSystemObject")
+	try
+		objFiles := fso.GetFolder(Directory).Files
+	catch
+		return -1
+	cnt := objFiles.count
+	IfExist, %directory%\*.db
+		cnt--
+	return cnt
 }
- */  ;socket
 
-    ; Bind_Addr := A_IPAddress1
-    ; Bind_Port2 := 1339
-    ; myTcp := new SocketTCP()
-    ; myTcp.onAccept := Func("OnTCPAccept")
-    ; myTcp.Bind([Bind_Addr,Bind_Port2])
-    ; myTcp.Listen()
-    ; ; msgbox "iP " %Bind_Addr%
-    ; Obj := {}
-    ; return
-
-    ; OnTCPAccept(this)
-    ; {
-    ;     newTcp := this.Accept()
-    ;     newTcp.onRecv := func("OnTCPRecv")
-    ;     newTcp.SendText("Connected")
-    ; }
-
-    ; OnTCPRecv(this)
-    ; {
-    ;     Text := this.RecvText()
-    ;     if Text contains Reload
-    ;         run, instaServer.ahk
-    ;     else if Text contains Action
-    ;         Query := Jxon_Load(Text)
-    ;     if (Query.Action == "__Get")
-    ;         RetVal := Obj[Query.Key]
-    ;     else if (Query.Action == "__Set")
-    ;         RetVal := obj[Query.Key] := Query.Value
-    ;     else if (Query.Action == "__Call")
-    ;         RetVal := Obj[Query.Name].Call(Obj, Query.Params*)
-    ;     this.SendText(Jxon_Dump({"RetVal": RetVal}))
-    ;     this.Disconnect()
-    ;     ; msgbox % Text
-    ; }
-
-
-^+r::Reload
+^r::Reload

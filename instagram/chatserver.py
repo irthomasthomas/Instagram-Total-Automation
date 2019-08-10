@@ -18,8 +18,9 @@ from PIL import Image
 import threading
 import sqlite3
 from sqlite3 import Error
-
-
+import RemoteObj
+from RemoteObj import RemoteObjClient
+""" 
 def access_instagram(module, action):
     global instagram_active
     lock = threading.RLock()
@@ -39,7 +40,7 @@ def access_instagram(module, action):
         else:
             print("REJECTED INSTAGRAM CONNECTION REQ FROM: " + module)
             return False
-
+ """
 def sendToGdrive(filePath):
     creds = None
     SCOPES = ['https://www.googleapis.com/auth/drive']  
@@ -71,7 +72,7 @@ def sendToGdrive(filePath):
     media = http.MediaFileUpload(filePath)
     #media = http.MediaFileUpload('photo.jpg', mimetype='image/jpeg')
     file = service.files().create(body=file_metadata,media_body=media,fields='id').execute()
-
+    # TODO: 
     print('File ID: %s' % file.get('id'))
     return file.get('id')
 
@@ -82,18 +83,18 @@ def InstagramPostPhoto(account, photo_path, caption):
     image.save(filePath)
     time.sleep(5)
     password = credentials.PASSWORDS[account]
-    with open("INTERRUPT", "w+") as f:
-        time.sleep(1)
-    while not os.path.exists("READY"):
-        time.sleep(5)
-        count += 1
-        if count > 10:
-            break
-
+    # TODO: post to queue
+    # TODO: launch bot and wait for finish
+    if not account == "blissmolecule":
+        instagram(account)
     time.sleep(5)
+    print(" INSTAGRAM UPLOAD")
     with client(account, password) as cli:
         cli.upload(filePath, caption)
-
+    if not account == "blissmolecule":
+        instagram(account)
+    # TODO: launch bot again
+    # TODO: finally set bot to auto
     # Instagram = InstagramAPI(account, password)
     # Instagram.login()
     # Instagram.uploadPhoto(filePath, caption=caption)
@@ -116,13 +117,16 @@ def threaded_client(conn):
             print("processing command: gDrive photo upload")
             print(dataArray[1])
             fileId = sendToGdrive(dataArray[1])
-            conn.sendall(str.encode(fileId))  
+            print("TEST " + str(fileId))
+            # print("TEST 2 " + str.encode(fileId))
+            # conn.sendall(str.encode(fileId))  
+            conn.sendall(str.encode(fileId))
         elif dataArray[0] == 'print_to_terminal':
             print(str(dataArray[1]))
         elif dataArray[0] == 'instagram_conn':
             print("received command: " + dataArray[0])
-            conn_status = access_instagram(dataArray[1],dataArray[2])
-            conn.sendall(str.encode(str(conn_status)))
+            # conn_status = access_instagram(dataArray[1],dataArray[2])
+            # conn.sendall(str.encode(str(conn_status)))
         elif dataArray[0] == 'get_totals':
             totals = get_totals()
             print(str(totals))
@@ -141,55 +145,67 @@ def get_ip():
         s.close()
     return IP
 
-global instagram_active 
-instagram_active = False
-
-host = "192.168.0.31"
-# host = "192.168.0.30"
-port = 1339
-# port = 1337
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((host, port))
-print(str(s))
-# s.sendall(b'HELLO FROM PYTHON')
-
-s.sendall(b'{"Action":"__Call","Name":"MessageBox","Params":["HELLO FROM PYTHON"]}')
-time.sleep(5)
-data = s.recv(1024)
-print('Received', repr(data))
-s.close()
-time.sleep(5)
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((host, port))
-s.sendall(b'{"Action":"__Get","Key":"STATUS"}')
-time.sleep(1)
-data = s.recv(1024)
-print(str(data))
-s.close()
-
-
+def instagram(account):   
+    print("trying insta automation")
+    host = "192.168.0.31"
+    port = 1339
+    bot = RemoteObjClient((host,port))
+    time.sleep(1)
+    print(str(bot))
+    bot.Call("closeBrowser")
+    time.sleep(1)
+    print(str(bot.Get("STATUS"))) # NEW
+    bot = RemoteObjClient((host,port))
+    print(str(bot.Call("shortRoutine",account,"fast")))
+    time.sleep(5)
+    while not (bot.Get("STATUS") == "READY"):
+        time.sleep(5)
+        print(str(bot.Get("STATUS"))) # NEW
+        print(str(bot.Get("ACTIVITY")))
+    bot.Call("closeBrowser")
+    print("sleeping instagram")
+    print(str(datetime.datetime.now()))
+    time.sleep(60)
+    print("finished")
 
 host = ''
-port = 1338
+port = 2338
 CONNECTION_LIST = []
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 scriptPath = os.getcwd()
 print("Socket created")
-
 try:
     s.bind((host,port))
 except socket.error as e:
     print(str(e))
     sys.exit()
-
 print("Socket has been bounded")
 
 s.listen(10)
 CONNECTION_LIST.append(s)
 print('Socket is ready. Waiting for connection ')
 print(str(get_ip()))
+""" 
+t = 200
+while True:
+    t += 500
+    # start_new_thread(instagram,("noplacetosit",))
 
+    start_new_thread(instagram,("philhughesart",))
+    # start_new_thread(instagram,("blissmolecule",))
+    t += 500
+    time.sleep(t)
+    start_new_thread(instagram,("noplacetosit",))
+    t += 500
+    time.sleep(t)
+    start_new_thread(instagram,("thomasthomas2211",))
+    t += 500
+    time.sleep(t)
+    start_new_thread(instagram,("noplacetosit",))
+    t += 500
+    time.sleep(t)
+"""
 
 while True:
     conn, addr = s.accept()

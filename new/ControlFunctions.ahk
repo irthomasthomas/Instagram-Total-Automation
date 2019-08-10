@@ -34,7 +34,6 @@ scrollTest(name) {
     }
 }
 
-
 shortRoutine(account) {
         short := [5000, 15000]
         med := [20000, 45000]
@@ -44,23 +43,29 @@ shortRoutine(account) {
         worker := startWorker()
         sleep 100
         worker.session(account)
+        worker.STATUS := "BUSY"
         sleep 3000
-        worker.session()
+        ; worker.session()
         loop 1
         {
             sleep 1000
             worker.SleepRand(short)
             worker.browseFeed("1")
             worker.SleepRand(med)
-            worker.kardashianComment()
-            worker.SleepRand(med)
+            loop 2
+            {
+                worker.kardashianComment()
+                worker.SleepRand(med)
+            }
             worker.browseRandomHashtagFeed()
         }
         targets := worker.targetAccounts()
         random, r, 1, targets.values.maxindex()
         target := targets.values[r][1]
         worker.followTarget(target)
-        
+        worker.session("")
+        worker.closeBrowser()
+        worker.STATUS := "READY"
         
         ; SleepRand(2800,6800)
         ; ; Bot.unfollow()
