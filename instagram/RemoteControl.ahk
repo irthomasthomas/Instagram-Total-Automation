@@ -33,18 +33,20 @@ class ControlServer {
             }
         }
 
-    ; MessageBox(m) {
-    ;     AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
-    ;     AhkThread := AhkDllThread(AhkDllPath)
-    ;     cmd := "#include ControlFunctions.ahk `n scrollTest("
-    ;     cmd .= " """ m """ "
-    ;     cmd .= ")"
-    ;     ; cmd := "MsgBox , , Title," . m . ", 7"
-    ;     AhkThread.ahktextdll(cmd) 
-    ;     ; MsgBox , , Title, %m%, 7
-    ;     this.STATUS := "WORKING!"
-    ;     return % this.STATUS
-    ; }
+        ; MessageBox(m) {
+        ;     AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
+        ;     AhkThread := AhkDllThread(AhkDllPath)
+        ;     cmd := "#include ControlFunctions.ahk `n scrollTest("
+        ;     cmd .= " """ m """ "
+        ;     cmd .= ")"
+        ;     ; cmd := "MsgBox , , Title," . m . ", 7"
+        ;     AhkThread.ahktextdll(cmd) 
+        ;     ; MsgBox , , Title, %m%, 7
+        ;     this.STATUS := "WORKING!"
+        ;     return % this.STATUS
+        ; }
+    
+
 
     __Reload()
     {
@@ -58,7 +60,8 @@ class ControlServer {
     }
     
     shortRoutine(account, speed:="slow") {
-        ; TODO: 
+
+        ; TODO: something in socket causing script to lock-up
         AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
         AhkThread := AhkDllThread(AhkDllPath)
         cmd := "#include ControlFunctions.ahk `n shortRoutine("
@@ -68,7 +71,8 @@ class ControlServer {
         AhkThread.ahktextdll(cmd) 
         ; MsgBox , , Title, %m%, 7
         this.STATUS := "BUSY"
-        return % this.STATUS
+        tooltip, shortroutine return, 0, 900
+        ; return % this.STATUS
         ; resp := [speed, account]
         ; return resp
     }
@@ -159,6 +163,7 @@ Template =
     </html>
     )
 
+
 Bind_Addr := A_IPAddress1
 Bind_Port2 := 80
 hServer := new SocketTCP()
@@ -169,7 +174,6 @@ return
 
 OnAccept(Server)
 {
-    
     global Template
     static Counter := 0
     Sock := Server.Accept()
