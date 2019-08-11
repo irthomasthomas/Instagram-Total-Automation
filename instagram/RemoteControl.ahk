@@ -6,6 +6,12 @@
 #Include Lib\Gdip_All.ahk
 #include Lib\base64.ahk
 
+; TODO: SPLIT OFF HTTP SERVER
+; TODO: PAUSE
+; TODO: ADD Live Computer Stats to html
+; TODO: Add some controls to html
+; TODO: Add some charts to html
+; TODO: GDIP DRAW MOUSE HISTORY PATH
 controller := new ControlServer()
 
 Bind_Addr := A_IPAddress1
@@ -68,6 +74,7 @@ class ControlServer {
     }
 
     closeBrowser() {
+        ; TODO: closeChrome may be playing up
         closeChrome()
     }
 
@@ -189,7 +196,7 @@ OnAccept(Server)
     else if (Request[2] == "/screen")
     {
         imgsrc := TakeScreenshot()
-        html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='500'/>"
+        html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='700'/>"
         Sock.SendText(html)
     }
     else if (Request[2] == "/totals")

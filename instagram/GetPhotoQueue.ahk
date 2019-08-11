@@ -13,7 +13,6 @@ CheckPhotoQueue(accessToken, remoteObj)
 	; msgbox % "remoteObj " remoteObj.__Addr[1]
 
 	; TODO: Multithreading
-        ; ToolTip Checking Queue
 		try
 		{
 	        remoteObj.print_to_python("Checking Queue")
@@ -42,12 +41,10 @@ CheckPhotoQueue(accessToken, remoteObj)
 			}
 			sleep 10
 			fileArray := Array(oArray.values[A_Index][1],oArray.values[A_Index][8],oArray.values[a_index][9])
-			tooltip % "three " fileArray[1]
 		}
 		If not fileArray
 			return
 	
-		; tooltip % "four " photoSheetId " and " accessToken " row " row
 
 		GsheetDeleteRow(photoSheetId,0,accessToken,row)
 		; TODO:	result := remoteObj.PhotoToInstagram(fileArray)

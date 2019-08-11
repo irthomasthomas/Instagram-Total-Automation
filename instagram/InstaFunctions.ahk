@@ -391,15 +391,22 @@ PutURL(url, data, method:="put") {
 kComments(){
 	global comment_sheetkey
     global myAccessToken
+	; ^ correct
     ranges := "A:A"
-    try {
-    	commentsheet := gsheet(comment_sheetkey, myAccessToken, ranges)
-		oArray := json.Load(commentsheet)
-    }
-    catch e
-    {
-        throw e
-    }
+	commentsheet := gsheet(comment_sheetkey, myAccessToken, ranges)
+	; msgbox %commentsheet%
+	; ^ correct
+	oArray := json.Load(commentsheet)
+
+    ; try {
+    ; 	commentsheet := gsheet(comment_sheetkey, myAccessToken, ranges)
+	; 	msgbox %commentsheet%
+	; 	oArray := json.Load(commentsheet)
+    ; }
+    ; catch e
+    ; {
+    ;     throw e
+    ; }
 	return oArray
 }
 
