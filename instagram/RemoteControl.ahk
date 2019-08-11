@@ -3,6 +3,8 @@
 #include Lib\AhkDllThread.ahk
 #include Lib\RemoteObj.ahk
 #include InstaFunctions.ahk
+#Include Lib\Gdip_All.ahk
+#include Lib\base64.ahk
 
 controller := new ControlServer()
 
@@ -25,18 +27,18 @@ class ControlServer {
             }
         }
 
-    MessageBox(m) {
-        AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
-        AhkThread := AhkDllThread(AhkDllPath)
-        cmd := "#include ControlFunctions.ahk `n scrollTest("
-        cmd .= " """ m """ "
-        cmd .= ")"
-        ; cmd := "MsgBox , , Title," . m . ", 7"
-        AhkThread.ahktextdll(cmd) 
-        ; MsgBox , , Title, %m%, 7
-        this.STATUS := "WORKING!"
-        return % this.STATUS
-    }
+    ; MessageBox(m) {
+    ;     AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
+    ;     AhkThread := AhkDllThread(AhkDllPath)
+    ;     cmd := "#include ControlFunctions.ahk `n scrollTest("
+    ;     cmd .= " """ m """ "
+    ;     cmd .= ")"
+    ;     ; cmd := "MsgBox , , Title," . m . ", 7"
+    ;     AhkThread.ahktextdll(cmd) 
+    ;     ; MsgBox , , Title, %m%, 7
+    ;     this.STATUS := "WORKING!"
+    ;     return % this.STATUS
+    ; }
 
     __Reload()
     {
@@ -50,7 +52,7 @@ class ControlServer {
     }
     
     shortRoutine(account, speed:="slow") {
-        ; TODO: msgbox %account%
+        ; TODO: 
         AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
         AhkThread := AhkDllThread(AhkDllPath)
         cmd := "#include ControlFunctions.ahk `n shortRoutine("
@@ -68,8 +70,8 @@ class ControlServer {
     closeBrowser() {
         closeChrome()
     }
-    midRoutine(speed:="slow") {
 
+    midRoutine(speed:="slow") {
 
     }
 
@@ -86,7 +88,7 @@ Template =
     <!DOCTYPE html>
     <html>
         <head>
-            <title>Go AutoHotkey!</title>
+            <title>AHK Web Server</title>
             <style>
                 table, td {
                     border-collapse: collapse;
@@ -100,10 +102,22 @@ Template =
                     xhttp.onreadystatechange = function() {
                         if (xhttp.readyState == 4 && xhttp.status == 200) {
                             document.getElementById("mouse").innerHTML = xhttp.responseText;
-                            setTimeout(update, 50);
+                            setTimeout(update, 1000);
                         }
                     };
                     xhttp.open("GET", "mouse", true);
+                    xhttp.send();
+                }
+
+                var updateScreen = function(){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            document.getElementById("screen").innerHTML = xhttp.responseText;
+                            setTimeout(updateScreen, 1000);
+                        }
+                    };
+                    xhttp.open("GET", "screen", true);
                     xhttp.send();
                 }
 
@@ -118,18 +132,20 @@ Template =
                     xhttp.open("GET","totals",true);
                     xhttp.send();
                 }
+
                 setTimeout(updateTotals, 1000);
-                setTimeout(update, 100);
+                setTimeout(update, 1000);
+                setTimeout(updateScreen, 1000);
+
             </script>
 
         </head>
         <body>
-        <video width="700" src="http://127.0.0.1:1234/vlc" autoplay type="video/ogg; codecs=theora"></video>
-
             <table>
                 {}
                 <tr><td>Visitor Count</td><td>{}</td></tr>
                 <tr><td>Mouse Position</td><td id="mouse"></td></tr>
+                <tr><td>Screen </td><td id="screen"></td></tr>
                 <tr><td>Totals</td><td id="totals"></td></tr>
             </table>
         </body>
@@ -164,22 +180,22 @@ OnAccept(Server)
     }
     if (Request[2] == "/")
         Sock.SendText(Format(Template, Table, ++Counter))
+
     else if (Request[2] == "/mouse")
     {
         MouseGetPos, x, y
         Sock.SendText("HTTP/1.0 200 OK`r`n`r`n" x "," y)
     }
+    else if (Request[2] == "/screen")
+    {
+        imgsrc := TakeScreenshot()
+        html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='500'/>"
+        Sock.SendText(html)
+    }
     else if (Request[2] == "/totals")
     {
-        return "999"
-        ; sleep,1000
-        ; myTcp := new SocketTCP()
-        ; addr := "192.168.0.2"
-        ; command := "get_totals"
-        ; myTcp.Connect([addr, 1337])
-        ; myTcp.SendText(command)
-        ; response := StrSplit(myTcp.recvText(1024),",")
-        ; Sock.SendText("HTTP/1.0 200 OK`r`n`r`n" response[1] "," response[2])
+        ; Sock.SendText("HTTP/1.0 200 OK`r`n`r`n <img src='image.jpg' />")
+        ; <img src='image.jpg' />
     }
     else if (Request[2] == "/favicon.ico")
         Sock.SendText("HTTP/1.0 301 Moved Permanently`r`nLocation: https://autohotkey.com/favicon.ico`r`n")
@@ -223,6 +239,36 @@ OnAccept(Server)
     ;     this.Disconnect()
     ;     ; msgbox % Text
     ; }
+
+TakeScreenshot()
+{
+    
+  ; beaucoup thanks to tic (Tariq Porter) for his GDI+ Library
+  ; https://autohotkey.com/boards/viewtopic.php?t=6517
+  ; https://github.com/tariqporter/Gdip/raw/master/Gdip.ahk
+  pToken:=Gdip_Startup()
+  If (pToken=0)
+  {
+    MsgBox,4112,Fatal Error,Unable to start GDIP
+    ExitApp
+  }
+  pBitmap:=Gdip_BitmapFromScreen()
+  If (pBitmap<=0)
+  {
+    MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
+    ExitApp
+  }
+  encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
+
+  If (ErrorLevel<>0)
+  {
+    MsgBox,4112,Fatal Error,ErrorLevel=%ErrorLevel% trying to save bitmap to`n%FileName%
+    ExitApp
+  }
+  Gdip_DisposeImage(pBitmap)
+
+  Return encoded
+}
 
 
 ^+r::Reload

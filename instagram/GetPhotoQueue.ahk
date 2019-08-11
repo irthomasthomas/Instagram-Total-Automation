@@ -14,7 +14,14 @@ CheckPhotoQueue(accessToken, remoteObj)
 
 	; TODO: Multithreading
         ; ToolTip Checking Queue
-        remoteObj.print_to_python("Checking Queue")
+		try
+		{
+	        remoteObj.print_to_python("Checking Queue")
+		}
+		catch e
+		{
+
+		}
 		fileArray = 0
         photoSheetId := "1o2ObINzmU_IB5bHzEeuXmby4ucgZPgM8_rcghRKkdL8"
         range := "A2:M"
@@ -43,8 +50,15 @@ CheckPhotoQueue(accessToken, remoteObj)
 		; tooltip % "four " photoSheetId " and " accessToken " row " row
 
 		GsheetDeleteRow(photoSheetId,0,accessToken,row)
-		result := remoteObj.PhotoToInstagram(fileArray)
-		msgbox % result
+		; TODO:	result := remoteObj.PhotoToInstagram(fileArray)
+		try
+		{
+			result := remoteObj.PhotoToInstagram(fileArray)
+		}
+		catch e
+		{
+			Reload
+		}
 		cell = Sheet2!A2
 		response := GsheetAppendRow(photoSheetId, accessToken, cell, photoData)
 		; get the row id 
