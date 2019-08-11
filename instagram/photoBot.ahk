@@ -5,6 +5,8 @@ setTitleMatchMode, 2
 DetectHiddenWindows, On 
 setWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
+; TODO: make shorter sleep 
+; TODO: IS IT TARGETING WRONG USER AFTER UPLOAD?
 
 #Include Lib\Socket.ahk
 #Include Lib\Jxon.ahk
@@ -178,7 +180,7 @@ Loop, %stage1path%
 
 }
 
-Return
+Reload
 
 setupConfigs() {
 	if FileExist( "settings.dll" ) {

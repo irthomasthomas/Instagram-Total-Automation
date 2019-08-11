@@ -23,7 +23,10 @@ class KardashianBot {
             throw { msg: "kardashianBot: Failed to ClickPost " p, account: this.account } 
         try { 
             random, i, 1, this.comments.values.Length()
-            result := doComment(this.comments.values[i][1]) 
+
+
+            result := doComment(this.comments.values[i][1])
+
             }
         catch e 
         { 
@@ -48,6 +51,7 @@ kardashianURL() {
 
 doComment(comment)
 {
+    ; msgbox % "docomment " comment
     ; Verify it is a kardashian profile first
     Text:="|<small blue tick>*183$12.2E3kDwDwzbNCQSyzDwDw3k2EU"
     if !(ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))

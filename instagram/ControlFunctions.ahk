@@ -51,13 +51,28 @@ shortRoutine(account) {
         {
             sleep 1000
             worker.SleepRand(short)
+            worker.kardashianComment()
+            worker.SleepRand(short)
             worker.browseFeed("1")
-            worker.SleepRand(med)
-            loop 2
+            random, a, 1, 2
+            random, r, 1,3
+            if a == 1
             {
-                worker.kardashianComment()
-                worker.SleepRand(med)
+                worker.browseFeed(r)
             }
+            worker.SleepRand(med)
+            random, b, 1, 2
+            if b == 1
+            {
+                random, n, 1, 4
+                loop % n
+                {
+                    worker.kardashianComment()
+                    worker.SleepRand(med)
+                    worker.SleepRand(med)
+                }
+            }
+            
             worker.browseRandomHashtagFeed()
         }
         targets := worker.targetAccounts()

@@ -84,8 +84,8 @@ def InstagramPostPhoto(account, photo_path, caption):
     image.save(filePath)
     time.sleep(5)
     password = credentials.PASSWORDS[account]
-    # TODO: post to queue
-    # TODO: launch bot and wait for finish
+    # TODO: post to queue / DONE GSHEET QUEUE
+    # TODO: IS RIGHT ACCOUNT BEING USED 
     if not account == "blissmolecule":
         instagram(account)
     time.sleep(5)
@@ -194,26 +194,26 @@ while True:
     print(str(n))
     t += 100
     # start_new_thread(instagram,("noplacetosit",))
+
     if n % 2 == 0:
         print("auto philhughesart")
         start_new_thread(instagram,("philhughesart",))
-    # start_new_thread(instagram,("blissmolecule",))
-    t += 100
-    print("sleep " + str(t))
-    time.sleep(t)
-    if n > 5:
+        # start_new_thread(instagram,("blissmolecule",))
+        t += 100
+        print("sleep " + str(t))
+        time.sleep(t)
+    if n > 11:
         print("auto noplacetosit")
         start_new_thread(instagram,("noplacetosit",))
-    t += 100
-    print("sleep " + str(t))
-    time.sleep(t)
-    if n < 8:
+        t += 100
+        print("sleep " + str(t))
+        time.sleep(t)
+    if n < 6:
         print("auto thomasthomas2211")
         start_new_thread(instagram,("thomasthomas2211",))
-    t += 100
-    print("sleep " + str(t))
-    time.sleep(t)
-    time.sleep(t)
+        t += 100
+        print("sleep " + str(t))
+        time.sleep(t)
 
 
 while True:
@@ -221,3 +221,7 @@ while True:
     print('connected to: '+addr[0]+':'+str(addr[1]))
     start_new_thread(threaded_client,(conn,))
     print(str(CONNECTION_LIST))
+
+# TODO: Fetch usernames 
+# TODO: Make default auto mode
+# TODO: Allow interrupt and post image during auto mode
