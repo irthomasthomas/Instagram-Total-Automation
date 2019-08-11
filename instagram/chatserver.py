@@ -20,6 +20,7 @@ import sqlite3
 from sqlite3 import Error
 import RemoteObj
 from RemoteObj import RemoteObjClient
+import random
 """ 
 def access_instagram(module, action):
     global instagram_active
@@ -186,26 +187,34 @@ s.listen(10)
 CONNECTION_LIST.append(s)
 print('Socket is ready. Waiting for connection ')
 print(str(get_ip()))
-""" 
-t = 200
-while True:
-    t += 500
-    # start_new_thread(instagram,("noplacetosit",))
 
-    start_new_thread(instagram,("philhughesart",))
+t = 100
+while True:
+    n = random.randint(1,10)
+    print(str(n))
+    t += 100
+    # start_new_thread(instagram,("noplacetosit",))
+    if n % 2 == 0:
+        print("auto philhughesart")
+        start_new_thread(instagram,("philhughesart",))
     # start_new_thread(instagram,("blissmolecule",))
-    t += 500
+    t += 100
+    print("sleep " + str(t))
     time.sleep(t)
-    start_new_thread(instagram,("noplacetosit",))
-    t += 500
+    if n > 5:
+        print("auto noplacetosit")
+        start_new_thread(instagram,("noplacetosit",))
+    t += 100
+    print("sleep " + str(t))
     time.sleep(t)
-    start_new_thread(instagram,("thomasthomas2211",))
-    t += 500
+    if n < 8:
+        print("auto thomasthomas2211")
+        start_new_thread(instagram,("thomasthomas2211",))
+    t += 100
+    print("sleep " + str(t))
     time.sleep(t)
-    start_new_thread(instagram,("noplacetosit",))
-    t += 500
     time.sleep(t)
-"""
+
 
 while True:
     conn, addr = s.accept()

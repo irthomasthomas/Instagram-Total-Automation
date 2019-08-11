@@ -1,4 +1,6 @@
 
+#include control.ahk
+
 UpdateGSheetCell(SheetKey, accessToken, cell, value)
 {
 	

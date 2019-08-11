@@ -36,10 +36,7 @@ global myAccessToken := GetAccessCode(client_id, client_secret, refresh_token)
 queueSheetId := "1RJffz2YvkCojjFoNubwRLuL-ywjlNwDXpinfuwSeXoE"
 global photoSheetId := "1o2ObINzmU_IB5bHzEeuXmby4ucgZPgM8_rcghRKkdL8"
 
-serverAddress := A_IPAddress1
-; serverAddress := "192.168.0.30"
-serverPort := 1337
-Remote := new RemoteObjClient([serverAddress, serverPort])
+
 extensions := "bmp,jpg,png"
 ; Remote.Message("HELLO, WORLD!")
 
@@ -60,6 +57,10 @@ return
 
 FolderMon:
 ; msgbox % Remote.__Addr[1]
+serverAddress := A_IPAddress1
+; serverAddress := "192.168.0.30"
+serverPort := 1337
+Remote := new RemoteObjClient([serverAddress, serverPort])
 CheckPhotoQueue(myAccessToken, Remote)
 ; AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
 ; AhkThread := AhkDllThread(AhkDllPath)
@@ -138,11 +139,18 @@ Loop, %stage1path%
     
 	gdriveJpg := SaveToJpg(imgPath,pythonpath)
 	SplitPath, gdriveJpg, jpgName
-	while !fileId && (A_Index < 20)
-	{
+	; while !fileId && (A_Index < 20)
+	; {
+		try
+		{
 		fileId := Remote.GDrivePutJpg(jpgName)
+		}
+		catch e
+		{
+			
+		}
 		sleep 1000
-	}
+	; }
 	; msgbox "test " %fileId%
 	imageurl := "https://drive.google.com/uc?export=view&id=" . fileid
 	filepath := StrReplace(filepath, "\", "%5C")	

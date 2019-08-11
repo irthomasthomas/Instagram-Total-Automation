@@ -20,7 +20,13 @@ class objServer
 	{
 		myTcp := new SocketTCP()
 		addr := "192.168.0.2"
-		myTcp.Connect([addr,2338])
+        try {
+    		myTcp.Connect([addr,2338])
+        }
+        catch e
+        {
+
+        }
 		command := "print_to_terminal;" . text . ";" 
 		sleep 10
 		myTcp.SendText(command)
