@@ -1,3 +1,4 @@
+
 startWorker()
 {
     try
@@ -22,17 +23,6 @@ startWorker()
     return worker
 }    
 
-scrollTest(name) {
-    worker := startWorker()
-    try 
-    {
-        working := worker.scrollTest(name)
-    }
-    catch e 
-    {
-        msgbox "scrolltest error: "%e%
-    }
-}
 
 shortRoutine(account) {
         short := [5000, 15000]
@@ -79,7 +69,7 @@ shortRoutine(account) {
         random, r, 1, targets.values.maxindex()
         target := targets.values[r][1]
         worker.followTarget(target)
-        worker.session("")
+        ; worker.session("")
         worker.closeBrowser()
         worker.STATUS := "READY"
         

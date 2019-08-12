@@ -5,6 +5,7 @@
 #Include Lib\Gdip_All.ahk
 #include Lib\base64.ahk
 
+; msgbox %A_IPAddress1% 34
 Template =
     ( Join`r`n
     HTTP/1.0 200 OK
@@ -104,7 +105,7 @@ OnAccept(Server)
         return
     }
     if (Request[2] == "/")
-        Sock.SendText(Format(Template, Table, ++Counter))
+        Sock.SendText(Format(Template, "Table", ++Counter))
 
     else if (Request[2] == "/mouse")
     {
@@ -117,7 +118,7 @@ OnAccept(Server)
         html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='700'/>"
         Sock.SendText(html)
     }
-    else if (Request[2] == "/totals")
+    else if (Request[2] == "/status")
     {
         ; Sock.SendText("HTTP/1.0 200 OK`r`n`r`n <img src='image.jpg' />")
         ; <img src='image.jpg' />
@@ -160,4 +161,4 @@ TakeScreenshot()
 }
 
 
-^+r::Reload
+^+i::Reload

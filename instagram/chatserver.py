@@ -148,7 +148,7 @@ def get_ip():
 
 def instagram(account):   
     print("trying insta automation")
-    host = "192.168.0.31"
+    host = "192.168.0.34"
     port = 1339
     bot = RemoteObjClient((host,port))
     time.sleep(1)
@@ -202,12 +202,14 @@ while True:
         t += 100
         print("sleep " + str(t))
         time.sleep(t)
-    if n > 11:
+    n = random.randint(1,10)    
+    if n > 5:
         print("auto noplacetosit")
         start_new_thread(instagram,("noplacetosit",))
         t += 100
         print("sleep " + str(t))
         time.sleep(t)
+    n = random.randint(1,10)        
     if n < 6:
         print("auto thomasthomas2211")
         start_new_thread(instagram,("thomasthomas2211",))
