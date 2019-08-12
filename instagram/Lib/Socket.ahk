@@ -2,7 +2,7 @@ class Socket
 {
 	static WM_SOCKET := 0x9987, MSG_PEEK := 2
 	static FD_READ := 1, FD_ACCEPT := 8, FD_CLOSE := 32
-	static Blocking := True, BlockSleep := 50
+	static Blocking := True, BlockSleep := 10
 	; TODO: BLOCKING TRUE
 	__New(Socket:=-1)
 	{
@@ -153,7 +153,7 @@ class Socket
 	
 	RecvLine(BufSize:=0, Flags:=0, Encoding:="UTF-8", KeepEnd:=False)
 	{
-		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n"))
+		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n")) && (A_Index < 40)
 		{
 			if !this.Blocking
 				return ""
