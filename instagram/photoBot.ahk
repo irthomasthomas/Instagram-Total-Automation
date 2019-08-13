@@ -54,7 +54,7 @@ extensions := "bmp,jpg,png"
     sleep 1000
     myTcp.disconnect() 
  */
-SetTimer, FolderMon, 20000
+SetTimer, FolderMon, 30000
 return
 
 FolderMon:

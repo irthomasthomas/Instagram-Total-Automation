@@ -40,10 +40,21 @@ shortRoutine(account) {
         loop 1
         {
             sleep 1000
+            random, n, 1, 10
+            if n > 5
+                worker.browseRandomHashtagFeed()
+            worker.SleepRand(short)            
+            random, n, 1, 10
+            if n > 5
+                worker.browseRandomHashtagFeed()
+            worker.SleepRand(short)            
             worker.SleepRand(short)
-            worker.kardashianComment()
+            random, n, 1, 10
+            if n > 5
+                ; worker.kardashianComment()
             worker.SleepRand(short)
-            worker.browseFeed("1")
+            worker.SleepRand(short)
+            worker.browseFeed("3")
             random, a, 1, 2
             random, r, 1,3
             if a == 1
@@ -57,7 +68,7 @@ shortRoutine(account) {
                 random, n, 1, 4
                 loop % n
                 {
-                    worker.kardashianComment()
+                    ; worker.kardashianComment()
                     worker.SleepRand(med)
                     worker.SleepRand(med)
                 }

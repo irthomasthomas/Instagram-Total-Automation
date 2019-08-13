@@ -1,4 +1,4 @@
-#include Lib\Socket2.ahk
+#include Lib\Socket.ahk
 #Include Lib\Gdip_All.ahk
 #include Lib\base64.ahk
 
@@ -80,8 +80,16 @@ Bind_Addr := A_IPAddress1
 Bind_Port2 := 80
 hServer := new SocketTCP()
 hServer.OnAccept := Func("OnAccept")
-hServer.Bind([Bind_Addr,Bind_Port2])
+try
+{
+    hServer.Bind([Bind_Addr,Bind_Port2])
+}
+catch e
+{
+    Reload
+}
 hServer.Listen()
+SetTimer, ReloadMe, 30000
 return
 
 OnAccept(Server)
@@ -102,7 +110,7 @@ OnAccept(Server)
         return
     }
     if (Request[2] == "/")
-        Sock.SendText(Format(Template, Table, ++Counter))
+        Sock.SendText(Format(Template, "Table", ++Counter))
 
     else if (Request[2] == "/mouse")
     {
@@ -111,8 +119,9 @@ OnAccept(Server)
     }
     else if (Request[2] == "/screen")
     {
-        imgsrc := TakeScreenshot()
-        html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='700'/>"
+        ; imgsrc := TakeScreenshot()
+        ; html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='700'/>"
+        html := "TEST"
         Sock.SendText(html)
     }
     else if (Request[2] == "/totals")
@@ -121,7 +130,8 @@ OnAccept(Server)
         ; <img src='image.jpg' />
     }
     else if (Request[2] == "/favicon.ico")
-        Sock.SendText("HTTP/1.0 301 Moved Permanently`r`nLocation: https://autohotkey.com/favicon.ico`r`n")
+        Sock.Disconnect()
+            ; Sock.SendText("HTTP/1.0 301 Moved Permanently`r`nLocation: https://autohotkey.com/favicon.ico`r`n")
     else
         Sock.SendText("HTTP/1.0 404 Not Found`r`n`r`nHTTP/1.0 404 Not Found")
     Sock.Disconnect()
@@ -186,3 +196,7 @@ ImgToBase64(image)
   Gdip_Shutdown(pToken)
   Return encoded
 }
+
+ReloadMe:
+Reload
+Return

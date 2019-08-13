@@ -1,0 +1,133 @@
+﻿BundleVersion: 1
+Name: Local bundle
+Description: Local and private variables for re-use in other Bundles
+Patterns:
+- LLVarName: 2carousel
+  LLContent: <div id="slides" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    <li data-target="#slides" data-slide-to="0" class="active"></li>
+                    <li data-target="#slides" data-slide-to="1"></li>
+                </ul>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="img/bg1.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=1st Carousel Heading|Captivating Caption]]</h1>
+                            <h3>[[Input=1st Sub Text|Awesome Subtext]]</h3>
+                            <button type="button" class="btn btn-outline-light btn-lg">[[Input=Button One|More Info]]</button>
+                            <button type="button" class="btn btn-primary btn-lg">[[Input=Button Two|Buy Now]]</button>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/bg2.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=2nd Carousel Heading|Another Captivating Caption]]</h1>
+                            <h3>[[Input=2nd Sub Text|2nd Captivating Caption]]</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+- LLVarName: 3carousel
+  LLContent: <div id="slides" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    <li data-target="#slides" data-slide-to="0" class="active"></li>
+                    <li data-target="#slides" data-slide-to="1"></li>
+                    <li data-target="#slides" data-slide-to="2"></li>
+                </ul>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="img/bg1.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=1st Carousel Heading|Captivating Caption]]</h1>
+                            <h3>[[Input=1st Sub Text|Awesome Subtext]]</h3>
+                            <button type="button" class="btn btn-outline-light btn-lg">[[Input=Button One|More Info]]</button>
+                            <button type="button" class="btn btn-primary btn-lg">[[Input=Button Two|Buy Now]]</button>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/bg2.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=2nd Carousel Heading|Another Captivating Caption]]</h1>
+                            <h3>[[Input=2nd Sub Text|2nd Captivating Caption]]</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/bg3.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=3rd Carousel Heading|Another Captivating Caption]]</h1>
+                            <h3>[[Input=3rd Sub Text|3rd Captivating Caption]]</h3>                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+- LLVarName: carousel1
+  LLContent: <div id="slides" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    <li data-target="#slides" data-slide-to="0" class="active"></li>
+                    <li data-target="#slides" data-slide-to="1"></li>
+                </ul>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="img/bg1.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2"></h1>
+                            <h3></h3>
+                            <button type="button" class="btn btn-outline-light btn-lg">[[Input=Button One|More Info]]</button>
+                            <button type="button" class="btn btn-primary btn-lg">[[Input=Button Two|Buy Now]]</button>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                            <img src="img/bg2.png">
+                            <div class="carousel-caption">
+                            <h1 class="display-2">Some text</h1>
+                            <h3>Some more text</h3>
+                            </div>
+                        </div>
+                </div>
+            </div>
+- LLVarName: MyAddress
+  LLContent: MyName
+MyStreet
+MyTown
+- LLVarName: 4carousel
+  LLContent:  <div id="slides" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    <li data-target="#slides" data-slide-to="0" class="active"></li>
+                    <li data-target="#slides" data-slide-to="1"></li>
+                    <li data-target="#slides" data-slide-to="2"></li>
+                    <li data-target="#slides" data-slide-to="3"></li>
+                </ul>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="img/bg1.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=1st Carousel Heading|Captivating Caption]]</h1>
+                            <h3>[[Input=1st Sub Text|Awesome Subtext]]</h3>
+                            <button type="button" class="btn btn-outline-light btn-lg">[[Input=Button One|More Info]]</button>
+                            <button type="button" class="btn btn-primary btn-lg">[[Input=Button Two|Buy Now]]</button>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/bg2.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=2nd Carousel Heading|Another Captivating Caption]]</h1>
+                            <h3>[[Input=2nd Sub Text|2nd Captivating Caption]]</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/bg3.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=3rd Carousel Heading|Another Captivating Caption]]</h1>
+                            <h3>[[Input=3rd Sub Text|3rd Captivating Caption]]</h3>                                
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/bg4.png">
+                        <div class="carousel-caption">
+                            <h1 class="display-2">[[Input=4th Carousel Heading|Another Captivating Caption]]</h1>
+                            <h3>[[Input=4th Sub Text|4th Captivating Caption]]</h3>                                
+                        </div>
+                    </div>
+
+                </div>
+            </div>
