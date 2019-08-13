@@ -2,7 +2,7 @@ class Socket
 {
 	static WM_SOCKET := 0x9987, MSG_PEEK := 2
 	static FD_READ := 1, FD_ACCEPT := 8, FD_CLOSE := 32
-	static Blocking := True, BlockSleep := 10
+	static Blocking := True, BlockSleep := 100
 	; TODO: BLOCKING TRUE
 	__New(Socket:=-1)
 	{
@@ -117,8 +117,8 @@ class Socket
 	Send(pBuffer, BufSize, Flags:=0)
 	{
 		if ((r := DllCall("Ws2_32\send", "UInt", this.Socket, "Ptr", pBuffer, "Int", BufSize, "Int", Flags)) == -1)
-			MsgBox ,,, "Error calling send", 5
-			; throw Exception("Error calling send",, this.GetLastError())
+			; MsgBox ,,, "Error calling send", 5
+			throw Exception("Error calling send",, this.GetLastError())
 		return r
 	}
 	
@@ -132,7 +132,7 @@ class Socket
 	; TODO: Getting stuck L Recv(ByRef Buffer, BufSize:=0, Flags:=0)
 	Recv(ByRef Buffer, BufSize:=0, Flags:=0)
 	{
-		while (!(Length := this.MsgSize()) && this.Blocking && (A_Index < 50))
+		while (!(Length := this.MsgSize()) && this.Blocking ) && A_Index < 20
 			Sleep, this.BlockSleep
 		if !Length
 			return 0
@@ -153,7 +153,7 @@ class Socket
 	
 	RecvLine(BufSize:=0, Flags:=0, Encoding:="UTF-8", KeepEnd:=False)
 	{
-		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n")) && (A_Index < 40)
+		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n")) && A_Index < 20
 		{
 			if !this.Blocking
 				return ""

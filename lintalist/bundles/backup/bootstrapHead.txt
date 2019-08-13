@@ -1,0 +1,164 @@
+﻿BundleFormat: 1
+Name: Bootstrap
+Description: Bootstrap html snippets
+Author: 
+TitleMatch: 
+Patterns:
+- LLPart1: <!--- Welcome Lead -->
+<div class="container-fluid padding">
+    <div class="row welcome text-center">
+        <div class="col-12">
+            <h4 class="display-4"></h4>
+        </div>
+        <hr>
+        <div class="col-12">
+            <p class="lead">[[Input=Lead text |Awesome ad copy]]</p>
+        </div>
+    </div>
+  LLPart2: 
+  LLKey: 
+  LLShorthand: bsl
+  LLScript: 
+- LLPart1: <!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+<div class="container-fluid">
+	<a class="navbar-brand" href="#"><img src=""></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse"	data-target="#navbarResponsive">
+		<span class="navbar-toggler-icon"></span>	
+	</button>
+	<div class="collapse navbar-collapse" id="navbarResponsive">
+		<ul class="navbar-nav lm-auto">
+				<a class="nav-link" href="#">[[Input=Menu Item One|Home]]</a>
+			<li class="nav-item">
+				<a class="nav-link" href="#">[[Input=Menu Item Two|About]]</a>
+			</li>
+				<a class="nav-link" href="#">[[Input=Menu Item Three|Services]]</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">[[Input=Menu Item Four|Team]]</a>
+			</li>
+		</ul>
+	</div>
+</div>
+</nav>
+  LLPart2: navigation
+  LLKey: 
+  LLShorthand: bsn
+  LLScript: 
+- LLPart1: <!--- Jumbotron -->
+<div class="container-fluid">
+    <div class="row jumbotron">
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+            <p class="lead">[[Input=Jumbotron|Jumbotron caption]]</p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
+            <a href="#"><button type="button" class="btn btn-outline-secondary btn-lg">[[Input=Jumbotron Button|Btn Text]]</button></a>
+        </div>
+    </div>
+</div>
+
+  LLPart2: 
+  LLKey: 
+  LLShorthand: bsj
+  LLScript: 
+- LLPart1: [[Split_C1=[[choice=2	2xImg Carousel|3	3x Img Carousel|4	4x Img Carousel]]|\t]]
+<!-- Carousel -->
+
+[[Var=[[SP_C1=1]]carousel]]
+  LLPart2: 
+  LLKey: 
+  LLShorthand: ccc
+  LLScript: 
+- LLPart1: <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>[[Input=Title Text|Some Title Text]]</title>
+	
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<link href="style.css" rel="stylesheet">
+	<!-- <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css"> -->
+</head>
+  LLPart2: 
+  LLKey: 
+  LLShorthand: bsh
+  LLScript: 
+
+- LLPart1: <!--- Three Column  -->
+<div class="container-fluid padding">
+	<div class="row text-center padding">
+		<div class="col-xs-12 col-sm-6 col-md-4">
+			<i class="fas fa-volume-up"></i>
+				<h3>[[Input=3 x Column |1st Col Heading]]</h3>
+			<p>[[Input=3 x Column |1st Column paragraph]]</p>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-4">
+			<i class="fas fas fa-graduation-cap"></i>
+            <h3>[[Input=3 x Column |2nd Col Heading]]</h3>
+			<p>[[Input=3 x Column |2nd Column paragraph]]</p>
+		</div>		
+		<div class="col-sm-12 col-md-4">
+				<i class="fab fa-soundcloud"></i>			
+			<h3>[[Input=3 x Column | 3rd Col Heading]]</h3>
+			<p>[[Input=3 x Column |3rd Column paragraph]]</p>
+		</div>
+	</div>
+</div>
+
+  LLPart2: 
+  LLKey: 
+  LLShorthand: bs3
+  LLScript:
+- LLPart1: <!--- Three Cards -->
+<div class="container-fluid padding">
+    <div class="row padding">
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top img-responsive" src="img/card1.png">
+                <div class="card-body">
+                    <h4 class="card-title">[[Input=1st Card Title|Card One Title]]</h4>
+                    <p class=""card-text">[[Input=1st Card paragraph |Card One paragraph]]</p>
+                    <a href="#" class="btn btn-outline-secondary">[[Input=1st Card Button|Btn One Text]]</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top img-responsive" src="img/card2.png">
+                <div class="card-body">
+                    <h4 class="card-title">[[Input=2nd Card Title |Card Two Title]]</h4>
+                    <p class=""card-text">[[Input=2nd Card paragraph |Card Two paragraph]]</p>
+                    <a href="#" class="btn btn-outline-secondary">[[Input=2nd Card Button|Btn Two Text]]</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top img-responsive" src="img/card3.png">
+                <div class="card-body">
+                    <h4 class="card-title">[[Input=3rd Card Title | Card Three Title]]</h4>
+                    <p class=""card-text">[[Input=3rd Card paragraph | Card Three paragraph]]</p>
+                    <a href="#" class="btn btn-outline-secondary">[[Input=3rd Card Button | Btn Three Text]]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+  LLPart2: 
+  LLKey: 
+  LLShorthand: b3c
+  LLScript:

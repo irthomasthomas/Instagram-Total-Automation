@@ -78,21 +78,21 @@ def sendToGdrive(filePath):
     return file.get('id')
 
 def InstagramPostPhoto(account, photo_path, caption):
-    # TODO: Instagram = InstagramAPI(account, password)
+    # TODO: Need to create properties for account
+    # TODO: if warning msg. account.state = paused 
     filePath = os.path.join(os.getcwd(),'instagramQueue', photo_path)
     image = Image.open(filePath)
     image.save(filePath)
     time.sleep(5)
     password = credentials.PASSWORDS[account]
-    # TODO: post to queue / DONE GSHEET QUEUE
     # TODO: IS RIGHT ACCOUNT BEING USED 
-    if not account == "blissmolecule":
+    if (not account == "blissmolecule") & (not account == "noplacetosit"):
         instagram(account)
     time.sleep(5)
     print(" INSTAGRAM UPLOAD")
     with client(account, password) as cli:
         cli.upload(filePath, caption)
-    if not account == "blissmolecule":
+    if (not account == "blissmolecule") & (not account == "noplacetosit"):
         instagram(account)
     # TODO: launch bot again
     # TODO: finally set bot to auto
@@ -199,21 +199,21 @@ while True:
         print("auto philhughesart")
         start_new_thread(instagram,("philhughesart",))
         # start_new_thread(instagram,("blissmolecule",))
-        t += 100
+        t += 150
         print("sleep " + str(t))
         time.sleep(t)
     n = random.randint(1,10)    
     if n > 5:
-        print("auto noplacetosit")
-        start_new_thread(instagram,("noplacetosit",))
-        t += 100
+        # print("auto noplacetosit")
+        # start_new_thread(instagram,("noplacetosit",))
+        t += 150
         print("sleep " + str(t))
         time.sleep(t)
     n = random.randint(1,10)        
     if n < 6:
         print("auto thomasthomas2211")
         start_new_thread(instagram,("thomasthomas2211",))
-        t += 100
+        t += 1150
         print("sleep " + str(t))
         time.sleep(t)
 

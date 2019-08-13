@@ -19,7 +19,7 @@ BrowseFeed(chromeProfile,nlikes:=0) {
 
 	MouseMove, 350, 350
 	SleepRand()	
-	While liked < nLikes
+	While (liked < nLikes) && A_Index < 100
 	{
 		Random, s, 5, 10
         Loop % s

@@ -1,0 +1,131 @@
+BundleFormat: 1
+Name: Default
+Description: Default bundle for Lintalist
+Author: Default
+TitleMatch: 
+Patterns:
+- LLPart1: Some sample text to paste from part 1
+  LLPart2: ... or part 2
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
+- LLPart1: This will show a MsgBox, as it runs the script "MsgBox Hello"
+  LLPart2: Really it will
+  LLKey: 
+  LLShorthand: 
+  LLScript: MsgBox Hello
+- LLPart1: By the way
+  LLPart2: Example of a shorthand replacement, type btw followed by a space or tab
+  LLKey: 
+  LLShorthand: btw
+  LLScript: 
+- LLPart1: Dear [[Input=What is the name of the person you are writing to?]]
+
+Today is [[DateTime=dd-MMM-yyyy]] 
+
+My Address is:
+[[Var=MyAddress]]
+
+You can find the MyAddress variables in local\local.txt, right click Manage local variables.
+
+Read the DOC for more info
+  LLPart2: A test using a local variables, date and input.
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
+- LLPart1: An example with a List, I like the colour [[Choice=Red|Blue|Yellow]]
+  LLPart2: 
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
+- LLPart1: Lets try to insert text from a file: 
+[[File=Extras\examples\testfile.txt]] 
+  LLPart2: 
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
+- LLPart1: [[image=Extras\examples\image.png]]
+  LLPart2: Pasting an image should work
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
+- LLPart1: [[rtf=Extras\examples\example.rtf]]
+  LLPart2: Example of reading an RTF file
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
+- LLPart1: [[html]]
+<h3>Hello: [[Input=What is your name]]</h3>
+<p>This <b>is</b> a <em>sentence</em> with formatting.</p>
+
+<p>Your name: [[Input=What is your name]]</p>
+
+<p>Image: <img src='docs/img/lintalist.png' alt='' border='0' /></p>
+
+<p>Unordered list</p>
+
+<ul>
+<li>bullet item</li>
+<li>bullet item</li>
+<li>bullet item</li>
+</ul>
+
+<p>Numbered list</p>
+
+<ol>
+<li>list item</li>
+<li>list item</li>
+<li>list item</li>
+</ol>
+
+<hr>
+  LLPart2: HTML example
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
+- LLPart1: [[md]]
+# Heading 1
+
+* bullet list
+* bullet list
+
+Your shoe size: [[Choice=12|13|14|15|16]]
+	
+this is a **normal line** of *text* with some markup
+
+1. list entry
+2. list entry
+
+~~~
+<ul>
+<li>list item</li>
+<li>list item</li>
+<li>list item</li>
+</ul>
+~~~
+
+Inserting a link [ahkscript](http://ahkscript.org) also works
+
+As does an image
+
+online ![Lintalist](https://raw.github.com/lintalist/lintalist/master/docs/img/lintalist.png)
+
+or local ![Lintalist](icons\search.png)
+
+Or a table (slightly deferring from the original markdown)
+
+|cells in the first row are treated     | as header cells (th)
+cell 3       |cell 4          
+cell 5       |cell 6          
+
+This markdown conversion to HTML functions comes from GenDocs.
+
+~~~
+<p><b>HTML Markup here</b></p>
+~~~
+
+End of Markdown test
+  LLPart2: Markdown example
+  LLKey: 
+  LLShorthand: 
+  LLScript: 
