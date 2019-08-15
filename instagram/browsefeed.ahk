@@ -1,9 +1,10 @@
 
 BrowseFeed(chromeProfile,nlikes:=0) {
+    ;TODO: not opening chrome
 	instaURL = "https://instagram.com"
     tooltip, browsefeed, 900, 0
     SleepRand(1000,3000)
-	If !WinExist("ahk_class Chrome_WidgetWin_1") 
+	If NOT WinExist("ahk_class Chrome_WidgetWin_1") 
     {
         ;TODO:
 	    OpenUrlChrome(instaURL, chromeProfile)

@@ -4,6 +4,7 @@
 #include Lib\FindTextFunctions.ahk
 #include googlesheets.ahk
 
+
 global client_id :=
 global client_secret :=
 global refresh_token :=
@@ -51,8 +52,6 @@ loadConfig() {
 }
 
 SleepRand(x:=0,y:=0) {
-	ToolTip, SLEEP START,0,930	
-
 	If x = 0
 	{
 		Random, x, 1, 11
@@ -63,8 +62,6 @@ SleepRand(x:=0,y:=0) {
 	}
 	Random, rand, %x%, %y%
 	Sleep, %rand%
-	ToolTip, SLEEP RAND END,0,930	
-
 }
 
 ;CHROME
@@ -79,9 +76,7 @@ closeChrome() {
 }
 
 OpenUrlChrome(URL, profile) {
-	SleepRand(1100,2200)
-
-	If !WinExist("ahk_class Chrome_WidgetWin_1") 
+	If NOT WinExist("ahk_class Chrome_WidgetWin_1") 
     {
 		run, %profile% %URL%, , max
 	}
@@ -168,16 +163,16 @@ ClickPost(postN){
 			Random, x, 545, 800
 			Random, y, 465, 700
 		}
-			MouseMove, x, y
-			SleepRand(150, 1100)
-			Click
-			SleepRand(1500, 2933)
-			Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
-			if !(ok:=FindText(789-900//2, 674-900//2, 900, 900, 0, 0, Text))
-			Continue
-			ToolTip, CLICKED OK,0,930
-			SleepRand(500,2000)
-			Return True
+		MouseMove, x, y
+		SleepRand(150, 1100)
+		Click
+		SleepRand(1500, 2933)
+		Text:="|<post a co>*207$71.0000000000001U10E00000003U20U000000051wT0S0QD5r0P6Na161AnAm0a8G404212F434EY81sA26W87wV8ECEM4B4E892EUEUE8G8UkPAn0X0aNYF10nsy1u0sS8W000000000000U"
+		if !(ok:=FindText(789-900//2, 674-900//2, 900, 900, 0, 0, Text))
+		Continue
+		ToolTip, CLICKED OK,0,930
+		SleepRand(500,2000)
+		Return True
 	}
 	Return False
 }
@@ -267,28 +262,31 @@ CheckPage(checkOwn:=0, checkBluetick:=0) {
 
 	Text:="|<private>*153$48.z06000E0zU0000k0laqMltwQlbqMnxwyzb68UAlXz66BUQlzk66BVAlzk6673AlUk6673wwzk6671qQSU"
 	if (ok:=FindText(730-70000//2, 444-70000//2, 70000, 70000, 0, 0, Text))
-		Return False
+	{
+		Return "private"
+	}
+		
 	
 	Text:="|<no posts>*161$71.0M00000000M01U000zk000M0300030k000k0C000A0k001k0M007k0y001U0k00M00600301U01U006006070020TU400C0C0041VU800Q0M00861UE00M0k00EM1UU00k1U00UU11001U300110220030600220440060A004408800A0M008A0kE00M0k00EA30U00k1k00UAA1003U3U010Dk200703002000400A06006000M00M0A006001U00k0Q007zzy003U0M0000000060U"
 	if (ok:=FindText(675-150000//2, 453-150000//2, 150000, 150000, 0, 0, Text))
-		Return False
+		Return "no posts"
 	
 	If checkBluetick
 	{
 		Text:="|<big blue tick>*188$18.0000z01zU7zs7zsDzwTzyTySTwySNyT3yTbyDzw7zs7zs1zU0z0000U"
 		if (ok:=FindText(622-300//2, 216-300//2, 300, 300, 0, 0, Text))
-			Return False
+			Return "no blue tick"
 	}
 
-    Text:="|<>*160$30.7zzzsD000wQ000CQ003Cs007bs0S7bs1zX7s3zk7s7Vs7sD0w7sC0Q7sQ0C7sQ0C7sQ0C7sQ0C7sC0Q7sD0w7s7Vs7s3zk7s1zU7s0S07s0007Q000CQ000CD000wU"
+    Text:="|<insta home>*160$30.7zzzsD000wQ000CQ003Cs007bs0S7bs1zX7s3zk7s7Vs7sD0w7sC0Q7sQ0C7sQ0C7sQ0C7sQ0C7sC0Q7sD0w7s7Vs7s3zk7s1zU7s0S07s0007Q000CQ000CD000wU"
 	if (ok:=FindText(202-500//2, 100-500//2, 500, 500, 0, 0, Text))
 	{
-		Return False
+		Return "no home btn found"
 	}
 
-	Text:="|<followers>*159$41.0000000Y0000018000002E000004VtWAS/94N6N6MGMGQa4kYUYd89191BKTm2G2+sU44a4QlU894MlV6EG7VX1sU0000002"
-	if !(ok:=FindText(715-500//2, 265-500//2, 500, 500, 0, 0, Text))
-		Return False
+	; Text:="|<followers>*144$62.A08U0000004028000000100W0000000E08U000000D728C8MFlMt28W4F68WMFF18W2FWEY44EG8UYYbt0l44W88dF0E2F18W2+IE40I8W8F1229151kW3UEUQECU"
+	; if !(ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))
+	; 	Return "no followers btn"
 
 	If checkOwn = 1
 	{
@@ -418,9 +416,9 @@ follow(target, account, chromePath)
     OpenUrlChrome(url, chromePath)
 	SleepRand(4333,9999)
 	pageValid := CheckPage()
-	If !pageValid
+	If NOT pageValid
 	{
-	    throw { msg: "FollowBot: Not valid " target, account:account } 
+	    throw { msg: "Error " pageValid " target " target, account:account } 
 	}
 	; If nLikes = 0
 	Random, nLikes, 5, 20
@@ -472,7 +470,7 @@ LikePostsN(n:=0) {
 		nLikes := n
 	else
 		random, nLikes, 3, 8
-	While !clicked
+	While !clicked && (A_Index < 20)
 	{
 		clicked := ClickPost(1)
 	}

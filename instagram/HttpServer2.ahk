@@ -1,11 +1,7 @@
-#include Lib\Jxon.ahk
 #include Lib\Socket.ahk
-#include Lib\AhkDllThread.ahk
-#include Lib\RemoteObj.ahk
 #Include Lib\Gdip_All.ahk
 #include Lib\base64.ahk
 
-; msgbox %A_IPAddress1% 34
 Template =
     ( Join`r`n
     HTTP/1.0 200 OK
@@ -78,17 +74,26 @@ Template =
     </html>
     )
 
+; FileRead, Template2, index.html
+
 Bind_Addr := A_IPAddress1
 Bind_Port2 := 80
 hServer := new SocketTCP()
 hServer.OnAccept := Func("OnAccept")
-hServer.Bind([Bind_Addr,Bind_Port2])
+try
+{
+    hServer.Bind([Bind_Addr,Bind_Port2])
+}
+catch e
+{
+    Reload
+}
 hServer.Listen()
+SetTimer, ReloadMe, 30000
 return
 
 OnAccept(Server)
 {
-    
     global Template
     static Counter := 0
     Sock := Server.Accept()
@@ -114,21 +119,24 @@ OnAccept(Server)
     }
     else if (Request[2] == "/screen")
     {
-        imgsrc := TakeScreenshot()
-        html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='700'/>"
+        ; imgsrc := TakeScreenshot()
+        ; html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='700'/>"
+        html := "TEST"
         Sock.SendText(html)
     }
-    else if (Request[2] == "/status")
+    else if (Request[2] == "/totals")
     {
         ; Sock.SendText("HTTP/1.0 200 OK`r`n`r`n <img src='image.jpg' />")
         ; <img src='image.jpg' />
     }
     else if (Request[2] == "/favicon.ico")
-        Sock.SendText("HTTP/1.0 301 Moved Permanently`r`nLocation: https://autohotkey.com/favicon.ico`r`n")
+        Sock.Disconnect()
+            ; Sock.SendText("HTTP/1.0 301 Moved Permanently`r`nLocation: https://autohotkey.com/favicon.ico`r`n")
     else
         Sock.SendText("HTTP/1.0 404 Not Found`r`n`r`nHTTP/1.0 404 Not Found")
     Sock.Disconnect()
 }
+
 
 TakeScreenshot()
 {
@@ -139,26 +147,56 @@ TakeScreenshot()
   pToken:=Gdip_Startup()
   If (pToken=0)
   {
-    MsgBox,4112,Fatal Error,Unable to start GDIP
-    ExitApp
+    ; MsgBox,4112,Fatal Error,Unable to start GDIP
+    ; ExitApp
   }
+
   pBitmap:=Gdip_BitmapFromScreen()
   If (pBitmap<=0)
   {
-    MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
-    ExitApp
+    ; MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
+    ; ExitApp
+  }
+
+  encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
+
+  If (ErrorLevel<>0)
+  {
+    ; MsgBox,4112,Fatal Error,ErrorLevel=%ErrorLevel% trying to save bitmap to`n%FileName%
+    ; ExitApp
+  }
+  Gdip_DisposeImage(pBitmap)
+  Gdip_Shutdown(pToken)
+  Return encoded
+}
+
+ImgToBase64(image)
+{
+    pToken:=Gdip_Startup()
+  If (pToken=0)
+  {
+    ; MsgBox,4112,Fatal Error,Unable to start GDIP
+    ; ExitApp
+  }
+  pBitmap := Gdip_CreateBitmapFromFile(image)
+
+  If (pBitmap<=0)
+  {
+    ; MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
+    ; ExitApp
   }
   encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
 
   If (ErrorLevel<>0)
   {
-    MsgBox,4112,Fatal Error,ErrorLevel=%ErrorLevel% trying to save bitmap to`n%FileName%
-    ExitApp
+    ; MsgBox,4112,Fatal Error,ErrorLevel=%ErrorLevel% trying to save bitmap to`n%FileName%
+    ; ExitApp
   }
   Gdip_DisposeImage(pBitmap)
-
+  Gdip_Shutdown(pToken)
   Return encoded
 }
 
-
-^+i::Reload
+ReloadMe:
+Reload
+Return

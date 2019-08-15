@@ -2,7 +2,7 @@ class Socket
 {
 	static WM_SOCKET := 0x9987, MSG_PEEK := 2
 	static FD_READ := 1, FD_ACCEPT := 8, FD_CLOSE := 32
-	static Blocking := True, BlockSleep := 50
+	static Blocking := False, BlockSleep := 50
 	
 	__New(Socket:=-1)
 	{

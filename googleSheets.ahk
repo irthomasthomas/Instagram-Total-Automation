@@ -4,7 +4,8 @@ GsheetAppendRow(SheetKey, accessToken, cell, values)
  
 	url := "https://sheets.googleapis.com/v4/spreadsheets/" SheetKey "/values/" cell  ":append?includeValuesInResponse=true&valueInputOption=USER_ENTERED&access_token=" accessToken
 	data = {"majorDimension":"ROWS","range":"%cell%","values":[[%values%]]}
-	Return PutURL(url, data, "post")
+	msgbox %data%
+    Return PutURL(url, data, "post")
 /* 	
 
     {

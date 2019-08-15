@@ -19,6 +19,30 @@ Bind_Addr := A_IPAddress1
 Bind_Port := 1339
 Server := new RemoteObj(controller, [Bind_Addr,Bind_Port])    
 
+loop
+{
+    random, r, 1, 4
+    if r > 3
+    {
+        controller.shortRoutine("blissmolecule")
+        sleep 300000
+    }
+    random, r, 1, 4
+    if r > 2
+    {
+        controller.shortRoutine("philhughesart")
+        sleep 300000
+    }
+    random, r, 1, 4
+    if r > 2
+    {
+        controller.shortRoutine("thomasthomas2211")
+        SleepRand(20000, 400000)
+    }
+        
+
+}
+
 class ControlServer {
     
     STATUS {
@@ -59,6 +83,7 @@ class ControlServer {
         ; Bind_Addr := A_IPAddress1
         ; Bind_Port2 := 1335
     }
+
     
     shortRoutine(account, speed:="slow") {
 
@@ -132,3 +157,4 @@ class ControlServer {
 
 
 ^+r::Reload
+^+p::Pause

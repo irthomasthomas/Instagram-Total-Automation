@@ -4,7 +4,99 @@ Description: Bootstrap html snippets
 Author: 
 TitleMatch: 
 Patterns:
-- LLPart1: <!--- Welcome Lead -->
+- LLPart1: <!--- Three Cards -->
+<div class="container-fluid padding">
+    <div class="row padding">
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top img-responsive" src="img/card1.png">
+                <div class="card-body">
+                    <h4 class="card-title">[[Input=1st Card Title|Card One Title]]</h4>
+                    <p class=""card-text">[[Input=1st Card paragraph |Card One paragraph]]</p>
+                    <a href="#" class="btn btn-outline-secondary">[[Input=1st Card Button|Btn One Text]]</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top img-responsive" src="img/card2.png">
+                <div class="card-body">
+                    <h4 class="card-title">[[Input=2nd Card Title |Card Two Title]]</h4>
+                    <p class=""card-text">[[Input=2nd Card paragraph |Card Two paragraph]]</p>
+                    <a href="#" class="btn btn-outline-secondary">[[Input=2nd Card Button|Btn Two Text]]</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top img-responsive" src="img/card3.png">
+                <div class="card-body">
+                    <h4 class="card-title">[[Input=3rd Card Title | Card Three Title]]</h4>
+                    <p class=""card-text">[[Input=3rd Card paragraph | Card Three paragraph]]</p>
+                    <a href="#" class="btn btn-outline-secondary">[[Input=3rd Card Button | Btn Three Text]]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+  LLPart2: 
+  LLKey: 
+  LLShorthand: b3c
+  LLScript: 
+- LLPart1: <!--- Three Column  -->
+<div class="container-fluid padding">
+	<div class="row text-center padding">
+		<div class="col-xs-12 col-sm-6 col-md-4">
+			<i class="fas fa-volume-up"></i>
+				<h3>[[Input=3 x Column |1st Col Heading]]</h3>
+			<p>[[Input=3 x Column |1st Column paragraph]]</p>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-4">
+			<i class="fas fas fa-graduation-cap"></i>
+            <h3>[[Input=3 x Column |2nd Col Heading]]</h3>
+			<p>[[Input=3 x Column |2nd Column paragraph]]</p>
+		</div>		
+		<div class="col-sm-12 col-md-4">
+				<i class="fab fa-soundcloud"></i>			
+			<h3>[[Input=3 x Column | 3rd Col Heading]]</h3>
+			<p>[[Input=3 x Column |3rd Column paragraph]]</p>
+		</div>
+	</div>
+</div>
+
+  LLPart2: 
+  LLKey: 
+  LLShorthand: bs3
+  LLScript: 
+- LLPart1: <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>[[Input=Title Text|Some Title Text]]</title>
+	
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<link href="style.css" rel="stylesheet">
+	<!-- <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css"> -->
+</head>
+  LLPart2: 
+  LLKey: 
+  LLShorthand: bsh
+  LLScript: 
+- LLPart1: <!--- Lead -->
 <div class="container-fluid padding">
     <div class="row welcome text-center">
         <div class="col-12">
@@ -56,7 +148,6 @@ Patterns:
         </div>
     </div>
 </div>
-
   LLPart2: 
   LLKey: 
   LLShorthand: bsj
@@ -69,96 +160,104 @@ Patterns:
   LLKey: 
   LLShorthand: ccc
   LLScript: 
-- LLPart1: <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>[[Input=Title Text|Some Title Text]]</title>
-	
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	
-	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-	<link href="style.css" rel="stylesheet">
-	<!-- <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css"> -->
-</head>
+- LLPart1: <!--- Two Column  -->
+<div class="container-fluid padding">
+	<div class="row padding">
+		<div class="col-lg-6">
+			<h2>[[Input=Two Column | Column One Title]]</h2>
+			<p>[[Input=Two Column | Column One Paragraph]]</p>
+			<br>
+			<a href="#" class="btn btn-primary">[[Input=Two Column | Button Text]]</a>
+		</div>
+		<div class="col-lg-6">
+			<img src="img/fp1.png" class="img-fluid">
+		</div>
+	</div>
+</div>
   LLPart2: 
   LLKey: 
-  LLShorthand: bsh
-  LLScript: 
-
-- LLPart1: <!--- Three Column  -->
+  LLShorthand: 2cl
+  LLScript:
+- LLPart1: <!--- Connect -->
 <div class="container-fluid padding">
 	<div class="row text-center padding">
-		<div class="col-xs-12 col-sm-6 col-md-4">
-			<i class="fas fa-volume-up"></i>
-				<h3>[[Input=3 x Column |1st Col Heading]]</h3>
-			<p>[[Input=3 x Column |1st Column paragraph]]</p>
+		<div class="col-12">
+			<h2>Socialise</h2>
 		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4">
-			<i class="fas fas fa-graduation-cap"></i>
-            <h3>[[Input=3 x Column |2nd Col Heading]]</h3>
-			<p>[[Input=3 x Column |2nd Column paragraph]]</p>
-		</div>		
-		<div class="col-sm-12 col-md-4">
-				<i class="fab fa-soundcloud"></i>			
-			<h3>[[Input=3 x Column | 3rd Col Heading]]</h3>
-			<p>[[Input=3 x Column |3rd Column paragraph]]</p>
+		<div class="col-12 social padding">
+			<a href="#"><i class="fab fa-facebook"></i></a>
+			<a href="#"><i class="fab fa-twitter"></i></a>
+			<a href="#"><i class="fab fa-instagram"></i></a>
+			<a href="#"><i class="fab fa-youtube"></i></a>
 		</div>
 	</div>
 </div>
 
   LLPart2: 
   LLKey: 
-  LLShorthand: bs3
+  LLShorthand: bss
   LLScript:
-- LLPart1: <!--- Three Cards -->
+- LLPart1: <!--- Footer -->
+<footer>
 <div class="container-fluid padding">
-    <div class="row padding">
-        <div class="col-md-4">
-            <div class="card">
-                <img class="card-img-top img-responsive" src="img/card1.png">
-                <div class="card-body">
-                    <h4 class="card-title">[[Input=1st Card Title|Card One Title]]</h4>
-                    <p class=""card-text">[[Input=1st Card paragraph |Card One paragraph]]</p>
-                    <a href="#" class="btn btn-outline-secondary">[[Input=1st Card Button|Btn One Text]]</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img class="card-img-top img-responsive" src="img/card2.png">
-                <div class="card-body">
-                    <h4 class="card-title">[[Input=2nd Card Title |Card Two Title]]</h4>
-                    <p class=""card-text">[[Input=2nd Card paragraph |Card Two paragraph]]</p>
-                    <a href="#" class="btn btn-outline-secondary">[[Input=2nd Card Button|Btn Two Text]]</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img class="card-img-top img-responsive" src="img/card3.png">
-                <div class="card-body">
-                    <h4 class="card-title">[[Input=3rd Card Title | Card Three Title]]</h4>
-                    <p class=""card-text">[[Input=3rd Card paragraph | Card Three paragraph]]</p>
-                    <a href="#" class="btn btn-outline-secondary">[[Input=3rd Card Button | Btn Three Text]]</a>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="row text-center">
+	<div class="col-md-4">
+		<img src="ing/w3newbiew.png">
+		<hr class="light">
+		<p>Telephone</p>
+		<p>email</p>
+		<p>Street Name</p>
+		<p>City, State</p>
+	</div>
+	<div class="col-md-4">
+		<hr class="light">
+		<h5>Open Hours</h5>
+		<hr class="light">
+		<p>Monday</p>
+		<p>Tuesday</p>
+		<p>Wednesday</p>
+	</div>
+	<div class="col-md-4">
+		<hr class="light">
+		<h5>Col 3 Footer</h5>
+		<hr class="light">
+		<p></p>
+		<p></p>
+		<p></p>
+	</div>
 </div>
- 
+</div>
+</footer>
   LLPart2: 
   LLKey: 
-  LLShorthand: b3c
+  LLShorthand: bsf
+  LLScript:
+- LLPart1: <img src="" class="img-circle" alt="">
+  LLPart2: img circle
+  LLKey: 
+  LLShorthand: circle
+  LLScript:
+- LLPart1: <img src="" class="img-thumbnail" alt="">
+
+  LLPart2: img class thumbnail
+  LLKey: 
+  LLShorthand: thumb
+  LLScript:
+- LLPart1: <img src="" class="img-rounded" alt="">
+  LLPart2: img class rounded
+  LLKey: 
+  LLShorthand: rounded
+  LLScript:
+- LLPart1: object-fit: 
+fill - stretch the image.
+contain - preserve the aspect ratio of the image.
+cover - Fill the height and width of the box.
+none - Keep the original size.
+scale-down - compare the differences between none and contain to find the smallest object size.
+
+
+  LLPart2: object-fit
+  LLKey: 
+  LLShorthand: fit
   LLScript:
