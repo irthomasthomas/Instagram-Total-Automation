@@ -5,7 +5,6 @@ GetHashtags(imgFormat:=1, imgType:="o", igAccount:=0) {
 	Category1 := Object()
 	Category2 := Object()
 	Category3 := Object()
-    ; msgbox % "GetHashtags " imgFormat " " imgType " " igAccount
 	If igAccount = philhughesart
 	{
 		nCategories = 3
@@ -74,12 +73,9 @@ GetHashtags(imgFormat:=1, imgType:="o", igAccount:=0) {
 	}
 	Else If (igAccount = "b") || (igAccount = "bliss") || (igAccount = "bm") || (igAccount = "blissMolecule") || (igAccount = b)
 	{
-		;msgbox % " GetHashtags() blissMolecule "
 		nCategories = 1
 		ranges := "BM!A1:D"
-		;msgbox % " sheetkey " hashtag_sheetkey " accesstoken " myAccessToken " ranges " ranges
 		hashtagSheetData := GetWorksheetRange(hashtag_sheetkey, myAccessToken, ranges)
-		; msgbox % "hashtagsheetdata: " hashtagSheetData
 		oArray := json.Load(hashtagSheetData)
 		
 		For i in oArray.values
@@ -152,10 +148,10 @@ GetHashtags(imgFormat:=1, imgType:="o", igAccount:=0) {
 	return % s
 
 }
- 
-BrowseHashtags(igAccount) {
+
+BrowseHashtags(this) {
 	; TODO: Move to sqlite
-	functionName = BrowseHashtags()	
+	functionName = BrowseHashtags()
 	Random,n,1,3
 	If n = 1
 		imgType := "d"
@@ -163,36 +159,39 @@ BrowseHashtags(igAccount) {
 		imgType := "o"
 	Else
 		imgType := "w"
-	hashtagString := GetHashtags(imgFormat, imgType, igAccount)
+	hashtagString := GetHashtags(imgFormat, imgType, this.account)
 	hashtagArray := StrSplit(hashtagString, "#")
 	url := "https://www.instagram.com/explore/tags/" hashtagArray[2]
+	tooltip, %url%, 100,800
 	Clipboard := url
 	CoordMode, Pixel, Screen
-	ToolTip, BrowseHashtags() ,0,920
+	; ToolTip, BrowseHashtags() , 0, 920
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
 	likedTotal = 0
 	followedTotal = 0
-	SleepRand(100,700)
+	SleepRand(2000,3700)
 	Random, r, 2, 3
 	; TODO: Loop % r
 	Loop 1
 	{
 		If WinExist("ahk_class Chrome_WidgetWin_1") 
 		{
+			sleep 1000
 			WinActivate
-			SleepRand(2200,3700)
+			sleep 1000
 			Send ^l
-			SleepRand(100)
+			sleep 1200
 			Send ^v
-			SleepRand(100)
+			sleep 1200
 			Send {Enter}
 			SleepRand(2600,4600)
 		}
 		Else
 		{
-			OpenUrlChrome(url, profile[1])
+			OpenUrlChrome(url, this.chrome)
 			SleepRand(4200,6300)
 		}
+		sleep 4000
 		Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
 		If !(ok:=FindText(600-400//2, 216-200//2, 500, 300, 0, 0, Text))
 		{
@@ -201,7 +200,8 @@ BrowseHashtags(igAccount) {
 			Continue
 		}
 		followed = 0
-		random, n, 5, 35
+		random, n, 5, 10
+		ToolTip start loop mouse, 0, 900
 		Loop % n
 		{
 			MouseClick, WheelDown
@@ -229,14 +229,14 @@ BrowseHashtags(igAccount) {
 		SleepRand()
 
 		pageValid := CheckPage()
-		If !pageValid
+		If NOT pageValid
 			Continue
 
-		While pColour = 0xFAFAFA 	; WHITE
+		While pColour = 0xFAFAFA ; WHITE
 		{
 			
-			If A_Index > 10
-		        throw { msg: "BrowseHashtags: failed opening photo ", account:igAccount } 
+			If A_Index > 15
+		        throw { msg: "BrowseHashtags: failed opening photo ", account:this.account } 
 
 			Text:="|<grid/posts>*175$12.TyzyWGmGzyWGmGzymGWGzy00U"
 			if (ok:=FindText(531-700//2, 733-700//2, 700, 800, 0, 0, Text))            
@@ -268,13 +268,8 @@ BrowseHashtags(igAccount) {
 		SleepRand(1500,3500)
 		Send {ESC}
 		SleepRand(1500,5500)
-
 		Send {Home}
 		SleepRand(1500,3500)
-
-		pageValid := CheckPage()
-			If !pageValid
-				Continue
 		
 		Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
 		if (ok:=FindText(600-400//2, 216-200//2, 500, 300, 0, 0, Text))
@@ -292,14 +287,6 @@ BrowseHashtags(igAccount) {
 		
 		SleepRand(900,2700)
 		
-		;msgbox % liked[3]
-		/* 
-		Loop % (liked[3]+4)
-		{
-			SleepRand(900,1400)
-			Send {BS} ; back to last hashtag page
-		}
-		*/
 		Send ^l
 		SleepRand()
 		Send ^v
@@ -321,7 +308,6 @@ BrowseHashtags(igAccount) {
     ; }
 	SleepRand()
 	FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
-	;msgbox % "liked[1] " liked[1] " liked[2] " liked[2] " liked[3] " liked[3] " followed " followedTotal " likedTotal " likedTotal
-	Return % Array(functionName, startTime, endTime, 0, liked[1], followed)
+	; TODO: Return % Array(functionName, startTime, endTime, 0, liked[1], followed)
 }
 

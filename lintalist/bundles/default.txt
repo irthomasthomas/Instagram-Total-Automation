@@ -2,10 +2,5 @@
 Name: Default
 Description: Default bundle for Lintalist
 Author: Lintalist
-TitleMatch:
+TitleMatch: 
 Patterns:
-- LLPart1: This is Snippet Part 1, refer to documentation for further info.
-  LLPart2: This is Snippet Part 2
-  LLKey:
-  LLShorthand:
-  LLScript:

@@ -19,7 +19,7 @@ class Socket
 		}
 		this.Socket := Socket
 	}
-
+	
 	__Delete()
 	{
 		if (this.Socket != -1)

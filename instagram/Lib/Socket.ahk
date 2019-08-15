@@ -2,8 +2,8 @@ class Socket
 {
 	static WM_SOCKET := 0x9987, MSG_PEEK := 2
 	static FD_READ := 1, FD_ACCEPT := 8, FD_CLOSE := 32
-	static Blocking := True, BlockSleep := 100
-	; TODO: BLOCKING TRUE
+	static Blocking := True, BlockSleep := 50
+	
 	__New(Socket:=-1)
 	{
 		static Init
@@ -19,7 +19,7 @@ class Socket
 		}
 		this.Socket := Socket
 	}
-
+	
 	__Delete()
 	{
 		if (this.Socket != -1)
@@ -41,7 +41,7 @@ class Socket
 				if (DllCall("Ws2_32\WSAConnect", "UInt", this.Socket, "Ptr", ai_addr
 					, "UInt", ai_addrlen, "Ptr", 0, "Ptr", 0, "Ptr", 0, "Ptr", 0, "Int") == 0)
 				{
-					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) 
+					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) ; TODO: Error Handling
 					return this.EventProcRegister(this.FD_READ | this.FD_CLOSE)
 				}
 				this.Disconnect()
@@ -66,7 +66,7 @@ class Socket
 				if (DllCall("Ws2_32\bind", "UInt", this.Socket, "Ptr", ai_addr
 					, "UInt", ai_addrlen, "Int") == 0)
 				{
-					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) 
+					DllCall("Ws2_32\freeaddrinfo", "Ptr", pAddrInfo) ; TODO: ERROR HANDLING
 					return this.EventProcRegister(this.FD_READ | this.FD_ACCEPT | this.FD_CLOSE)
 				}
 				this.Disconnect()
@@ -113,11 +113,10 @@ class Socket
 			throw Exception("Error calling ioctlsocket",, this.GetLastError())
 		return argp
 	}
-
+	
 	Send(pBuffer, BufSize, Flags:=0)
 	{
 		if ((r := DllCall("Ws2_32\send", "UInt", this.Socket, "Ptr", pBuffer, "Int", BufSize, "Int", Flags)) == -1)
-			; MsgBox ,,, "Error calling send", 5
 			throw Exception("Error calling send",, this.GetLastError())
 		return r
 	}
@@ -129,10 +128,9 @@ class Socket
 		return this.Send(&Buffer, Length - 1)
 	}
 	
-	; TODO: Getting stuck L Recv(ByRef Buffer, BufSize:=0, Flags:=0)
 	Recv(ByRef Buffer, BufSize:=0, Flags:=0)
 	{
-		while (!(Length := this.MsgSize()) && this.Blocking ) && A_Index < 20
+		while (!(Length := this.MsgSize()) && this.Blocking)
 			Sleep, this.BlockSleep
 		if !Length
 			return 0
@@ -153,7 +151,7 @@ class Socket
 	
 	RecvLine(BufSize:=0, Flags:=0, Encoding:="UTF-8", KeepEnd:=False)
 	{
-		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n")) && A_Index < 20
+		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n"))
 		{
 			if !this.Blocking
 				return ""
@@ -167,7 +165,7 @@ class Socket
 	
 	GetAddrInfo(Address)
 	{
-		
+		; TODO: Use GetAddrInfoW
 		Host := Address[1], Port := Address[2]
 		VarSetCapacity(Hints, 16+(4*A_PtrSize), 0)
 		NumPut(this.SocketType, Hints, 8, "Int")

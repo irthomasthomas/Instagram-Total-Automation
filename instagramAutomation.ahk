@@ -480,26 +480,7 @@ or returns False if photos have been liked already
         X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
         Loop %nLikes%
 		{
-			/* 
-	        SleepRand(1000, 2500)
-			Random, n, 1, 8
-			if (n = 1) ;skip photo sometimes to appear more human
-			{
-				nLikes++
-				Text:="|<RIGHT ARROW>*162$14.zzszy7zUzw7zUzw7zUzw7zUzw7zUzsDw3y1z0zUTkDs7w3y1zUzsTyDzzzs"
-				if (ok:=FindText(1163-500//2, 388-500//2, 500, 500, 0, 0, Text))
-				{
-					CoordMode, Mouse
-					X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-					SleepRand()
-                    MouseMove, %X%, %Y%
-                    SleepRand()
-                    Click
-                    SleepRand(1000,3000)
-				}
-				Continue
-			}
-			 */
+			
 			Random, r, 1, 3
 			If r = 1 ; click heart
 			{

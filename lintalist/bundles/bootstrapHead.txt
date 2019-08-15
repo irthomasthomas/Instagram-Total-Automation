@@ -4,6 +4,112 @@ Description: Bootstrap html snippets
 Author: 
 TitleMatch: 
 Patterns:
+- LLPart1: <!--- Two Column  -->
+<div class="container-fluid padding">
+	<div class="row padding">
+		<div class="col-lg-6">
+			<h2>[[Input=Two Column | Column One Title]]</h2>
+			<p>[[Input=Two Column | Column One Paragraph]]</p>
+			<br>
+			<a href="#" class="btn btn-primary">[[Input=Two Column | Button Text]]</a>
+		</div>
+		<div class="col-lg-6">
+			<img src="img/fp1.png" class="img-fluid">
+		</div>
+	</div>
+</div>
+  LLPart2: bootstrap two 2 column
+  LLKey: 
+  LLShorthand: bs2col
+  LLScript: 
+- LLPart1: <!--- Three Column  -->
+<div class="container-fluid padding">
+	<div class="row text-center padding">
+		<div class="col-xs-12 col-sm-6 col-md-4">
+			<i class="fas fa-volume-up"></i>
+				<h3>[[Input=3 x Column |1st Col Heading]]</h3>
+			<p>[[Input=3 x Column |1st Column paragraph]]</p>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-4">
+			<i class="fas fas fa-graduation-cap"></i>
+            <h3>[[Input=3 x Column |2nd Col Heading]]</h3>
+			<p>[[Input=3 x Column |2nd Column paragraph]]</p>
+		</div>		
+		<div class="col-sm-12 col-md-4">
+				<i class="fab fa-soundcloud"></i>			
+			<h3>[[Input=3 x Column | 3rd Col Heading]]</h3>
+			<p>[[Input=3 x Column |3rd Column paragraph]]</p>
+		</div>
+	</div>
+</div>
+  LLPart2: bootstrap three column 3
+  LLKey: 
+  LLShorthand: bs3col
+  LLScript: 
+- LLPart1: <!--- Lead -->
+<div class="container-fluid padding">
+    <div class="row welcome text-center">
+        <div class="col-12">
+            <h4 class="display-4"></h4>
+        </div>
+        <hr>
+        <div class="col-12">
+            <p class="lead">[[Input=Lead text |Awesome ad copy]]</p>
+        </div>
+    </div>
+  LLPart2: bootstrap lead
+  LLKey: 
+  LLShorthand: bslead
+  LLScript: 
+- LLPart1: <!--- Jumbotron -->
+<div class="container-fluid">
+    <div class="row jumbotron">
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+            <p class="lead">[[Input=Jumbotron|Jumbotron caption]]</p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
+            <a href="#"><button type="button" class="btn btn-outline-secondary btn-lg">[[Input=Jumbotron Button|Btn Text]]</button></a>
+        </div>
+    </div>
+</div>
+  LLPart2: bootstrap jumbotron
+  LLKey: 
+  LLShorthand: bsjumbo
+  LLScript: 
+- LLPart1: [[Split_C1=[[choice=2	2xImg Carousel|3	3x Img Carousel|4	4x Img Carousel]]|\t]]
+<!-- Carousel -->
+
+[[Var=[[SP_C1=1]]carousel]]
+  LLPart2: bootstrap carousel
+  LLKey: 
+  LLShorthand: bscar
+  LLScript: 
+- LLPart1: <!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+<div class="container-fluid">
+	<a class="navbar-brand" href="#"><img src=""></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse"	data-target="#navbarResponsive">
+		<span class="navbar-toggler-icon"></span>	
+	</button>
+	<div class="collapse navbar-collapse" id="navbarResponsive">
+		<ul class="navbar-nav lm-auto">
+				<a class="nav-link" href="#">[[Input=Menu Item One|Home]]</a>
+			<li class="nav-item">
+				<a class="nav-link" href="#">[[Input=Menu Item Two|About]]</a>
+			</li>
+				<a class="nav-link" href="#">[[Input=Menu Item Three|Services]]</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">[[Input=Menu Item Four|Team]]</a>
+			</li>
+		</ul>
+	</div>
+</div>
+</nav>
+  LLPart2: bootstrap nav bar navigation
+  LLKey: 
+  LLShorthand: bsnav
+  LLScript: 
 - LLPart1: <!--- Three Cards -->
 <div class="container-fluid padding">
     <div class="row padding">
@@ -39,35 +145,9 @@ Patterns:
         </div>
     </div>
 </div>
- 
-  LLPart2: 
+  LLPart2: bootstrap three card
   LLKey: 
-  LLShorthand: b3c
-  LLScript: 
-- LLPart1: <!--- Three Column  -->
-<div class="container-fluid padding">
-	<div class="row text-center padding">
-		<div class="col-xs-12 col-sm-6 col-md-4">
-			<i class="fas fa-volume-up"></i>
-				<h3>[[Input=3 x Column |1st Col Heading]]</h3>
-			<p>[[Input=3 x Column |1st Column paragraph]]</p>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4">
-			<i class="fas fas fa-graduation-cap"></i>
-            <h3>[[Input=3 x Column |2nd Col Heading]]</h3>
-			<p>[[Input=3 x Column |2nd Column paragraph]]</p>
-		</div>		
-		<div class="col-sm-12 col-md-4">
-				<i class="fab fa-soundcloud"></i>			
-			<h3>[[Input=3 x Column | 3rd Col Heading]]</h3>
-			<p>[[Input=3 x Column |3rd Column paragraph]]</p>
-		</div>
-	</div>
-</div>
-
-  LLPart2: 
-  LLKey: 
-  LLShorthand: bs3
+  LLShorthand: bs3card
   LLScript: 
 - LLPart1: <!DOCTYPE html>
 <html lang="en">
@@ -92,71 +172,60 @@ Patterns:
 	<link href="style.css" rel="stylesheet">
 	<!-- <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css"> -->
 </head>
-  LLPart2: 
+  LLPart2: bootstrap head
   LLKey: 
-  LLShorthand: bsh
+  LLShorthand: bshead
   LLScript: 
-- LLPart1: <!--- Lead -->
+- LLPart1: <!--- Connect -->
 <div class="container-fluid padding">
-    <div class="row welcome text-center">
-        <div class="col-12">
-            <h4 class="display-4"></h4>
-        </div>
-        <hr>
-        <div class="col-12">
-            <p class="lead">[[Input=Lead text |Awesome ad copy]]</p>
-        </div>
-    </div>
-  LLPart2: 
-  LLKey: 
-  LLShorthand: bsl
-  LLScript: 
-- LLPart1: <!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-<div class="container-fluid">
-	<a class="navbar-brand" href="#"><img src=""></a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse"	data-target="#navbarResponsive">
-		<span class="navbar-toggler-icon"></span>	
-	</button>
-	<div class="collapse navbar-collapse" id="navbarResponsive">
-		<ul class="navbar-nav lm-auto">
-				<a class="nav-link" href="#">[[Input=Menu Item One|Home]]</a>
-			<li class="nav-item">
-				<a class="nav-link" href="#">[[Input=Menu Item Two|About]]</a>
-			</li>
-				<a class="nav-link" href="#">[[Input=Menu Item Three|Services]]</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">[[Input=Menu Item Four|Team]]</a>
-			</li>
-		</ul>
+	<div class="row text-center padding">
+		<div class="col-12">
+			<h2>Socialise</h2>
+		</div>
+		<div class="col-12 social padding">
+			<a href="#"><i class="fab fa-facebook"></i></a>
+			<a href="#"><i class="fab fa-twitter"></i></a>
+			<a href="#"><i class="fab fa-instagram"></i></a>
+			<a href="#"><i class="fab fa-youtube"></i></a>
+		</div>
 	</div>
 </div>
-</nav>
-  LLPart2: navigation
+  LLPart2: bootstrap connect
   LLKey: 
-  LLShorthand: bsn
+  LLShorthand: bscon
   LLScript: 
-- LLPart1: <!--- Jumbotron -->
-<div class="container-fluid">
-    <div class="row jumbotron">
-        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
-            <p class="lead">[[Input=Jumbotron|Jumbotron caption]]</p>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
-            <a href="#"><button type="button" class="btn btn-outline-secondary btn-lg">[[Input=Jumbotron Button|Btn Text]]</button></a>
-        </div>
-    </div>
+- LLPart1: <!--- Footer -->
+<footer>
+<div class="container-fluid padding">
+<div class="row text-center">
+	<div class="col-md-4">
+		<img src="ing/w3newbiew.png">
+		<hr class="light">
+		<p>Telephone</p>
+		<p>email</p>
+		<p>Street Name</p>
+		<p>City, State</p>
+	</div>
+	<div class="col-md-4">
+		<hr class="light">
+		<h5>Open Hours</h5>
+		<hr class="light">
+		<p>Monday</p>
+		<p>Tuesday</p>
+		<p>Wednesday</p>
+	</div>
+	<div class="col-md-4">
+		<hr class="light">
+		<h5>Col 3 Footer</h5>
+		<hr class="light">
+		<p></p>
+		<p></p>
+		<p></p>
+	</div>
 </div>
-  LLPart2: 
+</div>
+</footer>
+  LLPart2: bootstrap footer
   LLKey: 
-  LLShorthand: bsj
-  LLScript: 
-- LLPart1: [[Split_C1=[[choice=2	2xImg Carousel|3	3x Img Carousel|4	4x Img Carousel]]|\t]]
-<!-- Carousel -->
-
-[[Var=[[SP_C1=1]]carousel]]
-  LLPart2: 
-  LLKey: 
-  LLShorthand: ccc
+  LLShorthand: bsfoot
   LLScript: 

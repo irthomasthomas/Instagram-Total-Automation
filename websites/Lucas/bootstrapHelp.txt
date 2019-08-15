@@ -12,6 +12,6 @@ cover - Fill the height and width of the box.
 none - Keep the original size.
 scale-down - compare the differences between none and contain to find the smallest object size.
 
-<img src="cinqueterre.jpg" class="img-circle" alt="Cinque Terre">
-<img src="cinqueterre.jpg" class="img-thumbnail" alt="Cinque Terre">
-<img src="cinqueterre.jpg" class="img-rounded" alt="Cinque Terre">
+<img src="" class="img-circle" alt="">
+<img src="" class="img-thumbnail" alt="">
+<img src="" class="img-rounded" alt="">
