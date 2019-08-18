@@ -1,4 +1,4 @@
-#Persistent
+#SingleInstance, Force
 
 #include InstaFunctions.ahk
 #include kardashian.ahk
@@ -7,6 +7,11 @@
 #include Lib\Jxon.ahk
 #include Lib\Socket.ahk
 #include Lib\RemoteObj.ahk
+
+SetBatchLines, -1 ; Run script at maximum speed
+SetWinDelay, -1
+SetControlDelay, -1
+
 ; #include Lib\AhkDllThread.ahk
 ; #include Lib\ObjRegisterActive.ahk
 tooltip, started, 0, 920
@@ -15,10 +20,9 @@ worker := new InstaWorker()
 ; ObjRegisterActive(worker, "{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
 
 ; Pub Obj to Socket
-Bind_Addr := A_IPAddress1
+Bind_Addr := A_IPAddress2
 Bind_Port := 8337
 Server := new RemoteObj(worker, [Bind_Addr,Bind_Port])
-
 SleepRand()    
 return
 
@@ -128,12 +132,16 @@ class InstaWorker
         }
 
         kardashianComment() {
+            this.STATUS := "BUSY"
+            this.ACTIVITY := "Kardashian Strategy"
                 try {
                     this.kbot.commentLB(this.kardashianUrl,this.chrome)
                 }
                 catch e {
                     LogError(e)
                 }
+            this.STATUS := "READY"
+            this.ACTIVITY := "NONE"
         }
 
         ; likePosts(n:=0) {
@@ -156,7 +164,7 @@ class InstaWorker
             }
             this.ACTIVITY := ""
             closeChrome()
-            this.STATUS := "BUSY"
+            this.STATUS := "READY"
         }
 
         browseFeed(nlikes:=0) {

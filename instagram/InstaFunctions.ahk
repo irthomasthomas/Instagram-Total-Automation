@@ -52,6 +52,14 @@ loadConfig() {
 }
 
 SleepRand(x:=0,y:=0) {
+	; TODO: SET AN INTERRUPT VARIABLE IN MEMORY
+	If FileExist("INTERRUPT")
+	{
+		FileDelete, INTERRUPT
+		sleep 100
+		Run, instaServer.ahk
+	}
+
 	If x = 0
 	{
 		Random, x, 1, 11

@@ -1,5 +1,5 @@
 #NoEnv  ; Do not check empty variables
-; #SingleInstance, force
+#SingleInstance, force
 ;#Warn   ; Enable warnings to assist with common errors
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
@@ -8,11 +8,12 @@ SetWinDelay, -1
 SetControlDelay, -1
 
 #include Lib\Jxon.ahk
-#include Lib\Socket2.ahk
-#include Lib\AhkDllThread.ahk
-#include Lib\RemoteObj.ahk
-#Include Lib\Gdip_All.ahk
-#include Lib\base64.ahk
+#include Lib\Socket.ahk
+; #include Lib\AhkDllThread.ahk
+; #include Lib\RemoteObj.ahk
+; #Include Lib\Gdip_All.ahk
+; #include Lib\base64.ahk
+screen := ComObjActive("{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
 
 class worker {
     STATUS
@@ -46,7 +47,7 @@ class worker {
             }
             set 
             {   
-                FileSetAttrib, -R, activity
+                ; FileSetAttrib, -R, activity
                 sleep 50
                 FileDelete, activity
                 sleep 100
@@ -57,6 +58,8 @@ class worker {
         }
 
 }
+
+global encoded := screen.encoded
 
 Template =
     ( Join`r`n
@@ -134,11 +137,11 @@ Template =
                     xhttp.send();
                 }
 
-                setTimeout(updateTotals, 1000);
-                setTimeout(update, 1000);
-                setTimeout(updateScreen, 1000);
-                setTimeout(updateStatus, 2000);
-                setTimeout(updateActivity, 2000);
+                setTimeout(updateTotals, 500);
+                setTimeout(update, 500);
+                setTimeout(updateScreen, 500);
+                setTimeout(updateStatus, 500);
+                setTimeout(updateActivity, 500);
             </script>
 
         </head>
@@ -158,16 +161,26 @@ Bind_Addr := A_IPAddress1
 Bind_Port2 := 80
 hServer := new SocketTCP()
 hServer.OnAccept := Func("OnAccept")
-hServer.Bind([Bind_Addr,Bind_Port2])
+Try {
+    hServer.Bind([Bind_Addr,Bind_Port2])
+}
+catch e 
+{
+    sleep 1000
+    run, HttpServerClone.ahk
+}
 hServer.Listen()
+SetTimer, screenshot, 3000
 return
 
 OnAccept(Server)
 {
-    Loop, Files, HttpServer.ahk
-    filemod := A_LoopFileTimeModified
+    ; Loop, Files, HttpServer.ahk
+    ; filemod := A_LoopFileTimeModified
     global Template
     static Counter := 0
+    global encoded
+    
     Sock := Server.Accept()
     Request := StrSplit(Sock.RecvLine(), " ")
 
@@ -186,6 +199,7 @@ OnAccept(Server)
         ; <script src="test.js?rndstr=<%= getRandomStr() %>"></script>
         ; mod = <script src="test.js?random="%filemod%></script>
         ; <script src="test.js?v=1"></script>
+        filemod = ""
         Sock.SendText(Format(Template, filemod, "", ++Counter))
     }
         
@@ -196,7 +210,7 @@ OnAccept(Server)
     }
     else if (Request[2] == "/screen")
     {
-        imgsrc := TakeScreenshot()
+        imgsrc := encoded
         html := "HTTP/1.0 200 OK`r`n`r`n <img src='data:image/png;base64," imgsrc "' width='700'/>"
         Sock.SendText(html)
     }
@@ -209,7 +223,8 @@ OnAccept(Server)
         Sock.SendText("HTTP/1.0 200 OK`r`n`r`n" worker.ACTIVITY)
     }
     else if (Request[2] == "/reload") {
-        Sock.SendText("HTTP/1.0 301 Moved Permanently`r`nLocation: http://192.168.0.31")
+        Sock.SendText("HTTP/1.0 301 Moved Permanently`r`nLocation: http://192.168.0.35")
+        Sock.Disconnect()
         reloadAll()
     }
     else
@@ -219,10 +234,15 @@ OnAccept(Server)
 }
 
 reloadAll(){
-    WinClose instaServer.ahk
+    ; TODO: Thread, Priority, 1 ; Make priority of current thread slightly above average.
+    ; Thread, Interrupt, 0  ; Make each newly launched thread immediately interruptible.
+    ; Thread, Interrupt, 50, 2000  ; Make each thread interruptible after 50ms or 2000 lines, whichever comes first
+
+    ; WinClose instaServer.ahk
+    FileAppend,,INTERRUPT
     Sleep 1200
     
-    WinKill instaServer.ahk
+    ; WinKill instaServer.ahk
     sleep 1000
         /*  ahk_class #32770
             ahk_exe AutoHotkey.exe
@@ -236,39 +256,46 @@ reloadAll(){
             winclose, Z:\projects\rope\instagram\instaServer.ahk - AutoHotkey v1.1
         */
         ; sleep 200
-    run, instaServer.ahk
+    ; run, instaServer.ahk
+    sleep 300
     Reload
 }
 
-TakeScreenshot()
-{
-    
-  ; beaucoup thanks to tic (Tariq Porter) for his GDI+ Library
-  ; https://autohotkey.com/boards/viewtopic.php?t=6517
-  ; https://github.com/tariqporter/Gdip/raw/master/Gdip.ahk
-  pToken:=Gdip_Startup()
-  If (pToken=0)
-  {
-    MsgBox,4112,Fatal Error,Unable to start GDIP
-    ExitApp
-  }
-  pBitmap:=Gdip_BitmapFromScreen()
-  If (pBitmap<=0)
-  {
-    MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
-    ExitApp
-  }
-  encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
+; TakeScreenshot()
+; {
+;     ObjRegisterActive(worker, "{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
+;   global encoded  
+;   ; beaucoup thanks to tic (Tariq Porter) for his GDI+ Library
+;   ; https://autohotkey.com/boards/viewtopic.php?t=6517
+;   ; https://github.com/tariqporter/Gdip/raw/master/Gdip.ahk
+;   pToken:=Gdip_Startup()
+;   If (pToken=0)
+;   {
+;     MsgBox,4112,Fatal Error,Unable to start GDIP
+;     ExitApp
+;   }
+;   pBitmap:=Gdip_BitmapFromScreen()
+;   If (pBitmap<=0)
+;   {
+;     MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
+;     ExitApp
+;   }
+;   encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
 
-  If (ErrorLevel<>0)
-  {
-    MsgBox,4112,Fatal Error,ErrorLevel=%ErrorLevel% trying to save bitmap to`n%FileName%
-    ExitApp
-  }
-  Gdip_DisposeImage(pBitmap)
+;   If (ErrorLevel<>0)
+;   {
+;     MsgBox,4112,Fatal Error,ErrorLevel=%ErrorLevel% trying to save bitmap to`n%FileName%
+;     ExitApp
+;   }
+;   Gdip_DisposeImage(pBitmap)
 
-  Return encoded
-}
+;     ;   encoded
+; }
 
+screenshot:
+global encoded := screen.encoded
+
+; TakeScreenshot()
+return
 
 ^+i::Reload

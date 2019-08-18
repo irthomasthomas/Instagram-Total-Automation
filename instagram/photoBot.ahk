@@ -4,7 +4,8 @@ SetBatchLines, -1
 setTitleMatchMode, 2
 DetectHiddenWindows, On 
 setWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-
+SetWinDelay, -1
+SetControlDelay, -1
 ; TODO: make shorter sleep 
 ; TODO: IS IT TARGETING WRONG USER AFTER UPLOAD?
 
