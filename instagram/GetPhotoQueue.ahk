@@ -10,9 +10,8 @@ sleep 1000
 
 CheckPhotoQueue(accessToken, remoteObj)
 {
-	; msgbox % "remoteObj " remoteObj.__Addr[1]
-
-	; TODO: Multithreading
+		; msgbox % "remoteObj " remoteObj.__Addr[1]
+		; TODO: Multithreading
 		try
 		{
 	        remoteObj.print_to_python("Checking Queue")
@@ -45,17 +44,20 @@ CheckPhotoQueue(accessToken, remoteObj)
 		If not fileArray
 			return
 	
-
-		GsheetDeleteRow(photoSheetId,0,accessToken,row)
+		FileAppend, ,INTERRUPT
+		sleep 10000
 		; TODO:	result := remoteObj.PhotoToInstagram(fileArray)
 		try
 		{
+	        remoteObj.print_to_python("INTERRUPTED")
 			result := remoteObj.PhotoToInstagram(fileArray)
 		}
 		catch e
 		{
 			Reload
 		}
+		GsheetDeleteRow(photoSheetId,0,accessToken,row)
+
 		cell = Sheet2!A2
 		response := GsheetAppendRow(photoSheetId, accessToken, cell, photoData)
 		; get the row id 

@@ -1,3 +1,6 @@
+SetBatchLines, -1 ; Run script at maximum speed
+SetWinDelay, -1
+SetControlDelay, -1
 
 GetHashtags(imgFormat:=1, imgType:="o", igAccount:=0) {
 	; TODO: Move to sqlite
