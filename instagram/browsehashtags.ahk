@@ -152,9 +152,10 @@ GetHashtags(imgFormat:=1, imgType:="o", igAccount:=0) {
 
 }
 
-BrowseHashtags(this) {
+BrowseHashtags(this,n:=0) {
 	; TODO: Move to sqlite
 	functionName = BrowseHashtags()
+	hashtag = ""
 	Random,n,1,3
 	If n = 1
 		imgType := "d"
@@ -164,37 +165,30 @@ BrowseHashtags(this) {
 		imgType := "w"
 	hashtagString := GetHashtags(imgFormat, imgType, this.account)
 	hashtagArray := StrSplit(hashtagString, "#")
+	While (hashtag == "")
+	{
+		hashtag := hashtagArray[(A_Index + 1)]
+		if A_Index > 35
+	        throw { msg: "BrowseHashtags: failed getting a hashtag ", account:this.account } 			
+	}
+	sleep 200
 	url := "https://www.instagram.com/explore/tags/" hashtagArray[2]
 	tooltip, %url%, 100,800
 	Clipboard := url
 	CoordMode, Pixel, Screen
-	; ToolTip, BrowseHashtags() , 0, 920
 	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
 	likedTotal = 0
 	followedTotal = 0
 	SleepRand(2000,3700)
-	Random, r, 2, 3
-	; TODO: Loop % r
-	Loop 1
+	if n == 0
+		Random, n, 1, 6
+	Loop % n
 	{
-		If WinExist("ahk_class Chrome_WidgetWin_1") 
-		{
-			sleep 1000
-			WinActivate
-			sleep 1000
-			Send ^l
-			sleep 1200
-			Send ^v
-			sleep 1200
-			Send {Enter}
-			SleepRand(2600,4600)
-		}
-		Else
-		{
-			OpenUrlChrome(url, this.chrome)
-			SleepRand(4200,6300)
-		}
-		sleep 4000
+		tooltip, "browsehashtag loop " %A_Index%
+		SleepRand(2000, 4000)
+		OpenUrlChrome(url, this.chrome)
+		
+		SleepRand(3000,8000)
 		Text:="|<Follow>*190$45.0TzAzzzs3ztbzzzDw7AsAlVz0Na0W80sXAl6F87CNaQm9DtnAna09z4Na8kVDs3Ak74NzUtb1sXU"
 		If !(ok:=FindText(600-400//2, 216-200//2, 500, 300, 0, 0, Text))
 		{
@@ -203,16 +197,15 @@ BrowseHashtags(this) {
 			Continue
 		}
 		followed = 0
-		random, n, 5, 10
+		random, n, 5, 25
 		ToolTip start loop mouse, 0, 900
 		Loop % n
 		{
 			MouseClick, WheelDown
 			SleepRand()
 		}
-		SleepRand()
 		ToolTip start loop ClickPost, 0, 900
-		SleepRand(777,1770)
+		SleepRand(777,2770)
 
 		clicked := ClickPost(1)
 		If !clicked
@@ -227,7 +220,7 @@ BrowseHashtags(this) {
 		Send {Tab}
 		SleepRand()
 		Send {Enter}
-		SleepRand(1100,5200)
+		SleepRand(2100,6200)
 		PixelGetColor, pColour, 1180, 170
 		SleepRand()
 
@@ -265,7 +258,7 @@ BrowseHashtags(this) {
 		}
 		
 		SleepRand(1500,3000)
-		
+
 		liked := LikePostsN()
 		likedTotal += liked[1]
 		SleepRand(1500,3500)
@@ -295,7 +288,7 @@ BrowseHashtags(this) {
 		Send ^v
 		SleepRand()
 		Send {Enter}
-		SleepRand(2600,3600)
+		SleepRand(2600,33600)
 	}
     clickInstaHomeBtn()
 	; Text:="|<insta logo>*147$22.3zz0zzz700CM00P00Aw0knkDkD1nUwA33kkAD60MwM1XkkAD30kw7C3kDkD0A0w003M00Nk03Xzzw3zz2"

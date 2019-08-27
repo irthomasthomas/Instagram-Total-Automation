@@ -1,12 +1,12 @@
 #Persistent
-#Include Lib\Gdip_All.ahk
-#include Lib\base64.ahk
-#include Lib\ObjRegisterActive.ahk
+#Include instagram\Lib\Gdip_All.ahk
+#include instagram\Lib\base64.ahk
+#include instagram\Lib\ObjRegisterActive.ahk
 
 global encoded = ""
 ObjRegisterActive(screen, "{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
 
-SetTimer, screenshot, 2500
+SetTimer, screenshot, 5000
 
 class screen {
     encoded {
@@ -34,7 +34,11 @@ TakeScreenshot()
             MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
             ExitApp
         }
+        SetWorkingDir, webserver\public
         encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
+        size := StrLen(encoded)
+        file := FileOpen("screen", "w")
+        file.RawWrite(encoded, size)
 
         If (ErrorLevel<>0)
         {
@@ -45,6 +49,7 @@ TakeScreenshot()
 
             ;   encoded
     }
+
 
 screenshot:
 TakeScreenshot()

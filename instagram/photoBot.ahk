@@ -6,7 +6,7 @@ DetectHiddenWindows, On
 setWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 SetWinDelay, -1
 SetControlDelay, -1
-; TODO: make shorter sleep 
+
 ; TODO: IS IT TARGETING WRONG USER AFTER UPLOAD?
 
 #Include Lib\Socket.ahk
@@ -18,9 +18,6 @@ SetControlDelay, -1
 #include GSheets.ahk
 #include Lib\AhkDllThread.ahk
 #include GetPhotoQueue.ahk
-
-; #include GetPhotoQueue.ahk
-
 
 global stage1path := "tempImages\*"
 global stage2path := "igImage"
@@ -55,16 +52,23 @@ extensions := "bmp,jpg,png"
     sleep 1000
     myTcp.disconnect() 
  */
-SetTimer, FolderMon, 30000
+SetTimer, FolderMon, 90000
 return
 
 FolderMon:
-; msgbox % Remote.__Addr[1]
 serverAddress := A_IPAddress1
-; serverAddress := "192.168.0.30"
 serverPort := 1337
 Remote := new RemoteObjClient([serverAddress, serverPort])
-CheckPhotoQueue(myAccessToken, Remote)
+try
+{
+	CheckPhotoQueue(myAccessToken, Remote)
+}
+catch e
+{
+	LogError(e)
+	sleep 2000
+	Run, photoBot.ahk
+}
 ; AhkDllPath := A_ScriptDir "\AutoHotkeyMini.dll"
 ; AhkThread := AhkDllThread(AhkDllPath)
 ; cmd := "#include GetPhotoQueue.ahk `n CheckPhotoQueue("

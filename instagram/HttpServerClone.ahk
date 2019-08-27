@@ -1,5 +1,6 @@
-#NoEnv  ; Do not check empty variables
 #SingleInstance, force
+
+#NoEnv  ; Do not check empty variables
 ;#Warn   ; Enable warnings to assist with common errors
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
@@ -163,11 +164,13 @@ hServer := new SocketTCP()
 hServer.OnAccept := Func("OnAccept")
 Try {
     hServer.Bind([Bind_Addr,Bind_Port2])
+    run, HttpServer.ahk
 }
 catch e 
 {
-    sleep 1000
-    run, HttpServer.ahk
+    sleep 2000
+    run, HttpServerClone.ahk
+    ExitApp
 }
 hServer.Listen()
 SetTimer, screenshot, 3000

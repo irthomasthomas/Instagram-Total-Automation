@@ -52,10 +52,18 @@ class RemoteObjClient
 
 RemoteObjSend(Addr, Obj)
 {
-	Sock := new SocketTCP()
-	Sock.Connect(Addr)
-	Sock.SendText(Jxon_Dump(Obj) "`r`n")
-	RetVal := Jxon_Load(Sock.RecvLine()).RetVal
-	Sock.Disconnect()
-	return RetVal
+	;TODO : handle situation where client disconnected
+	Try
+	{
+		Sock := new SocketTCP()
+		Sock.Connect(Addr)
+		Sock.SendText(Jxon_Dump(Obj) "`r`n")
+		RetVal := Jxon_Load(Sock.RecvLine()).RetVal
+		Sock.Disconnect()
+		return RetVal
+	}
+	catch e
+	{
+		
+	}
 }
