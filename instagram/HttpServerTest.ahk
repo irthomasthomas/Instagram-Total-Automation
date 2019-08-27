@@ -158,14 +158,15 @@ Template =
     )
 Bind_Addr := A_IPAddress1
 Bind_Port2 := 80
-hServer := new SocketTCP()
-hServer.OnAccept := Func("OnAccept")
+
 
 Try {
+    hServer := new SocketTCP()
+    hServer.OnAccept := Func("OnAccept")
     hServer.Bind([Bind_Addr,Bind_Port2])
 }
 catch e {
-    sleep 1000
+    sleep 1500
     run, HttpServerTest.ahk
 }
 hServer.Listen()

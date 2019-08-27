@@ -3,15 +3,16 @@ BrowseFeed(chromeProfile,nlikes:=0) {
     ;TODO: not opening chrome
 	instaURL = "https://instagram.com"
     tooltip, browsefeed, 900, 0
-    SleepRand(1000,3000)
-	If NOT WinExist("ahk_class Chrome_WidgetWin_1") 
+    SleepRand(5000,20000)
+	If !WinExist("ahk_class Chrome_WidgetWin_1") 
     {
+        Tooltip, opening chrome, 0, 800
         ;TODO:
 	    OpenUrlChrome(instaURL, chromeProfile)
         SleepRand(2900,7100)
     }
     if !nlikes
-	    Random, nLikes, 2, 8
+	    Random, nLikes, 1, 8
     liked = 0
     Send {Esc}
     SleepRand(500,1500)
@@ -58,6 +59,7 @@ BrowseFeed(chromeProfile,nlikes:=0) {
 		SleepRand(333,3333)
 	}
 	FormatTime, endTime, ,yyyy-M-d HH:mm:ss tt
+    SleepRand(5000,50000)
     Return liked
 	; Return % Array(functionName, startTime, endTime, 0, liked, 0)
 }

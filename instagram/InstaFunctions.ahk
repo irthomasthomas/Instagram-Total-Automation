@@ -51,11 +51,11 @@ loadConfig() {
 	}
 }
 
+
 SleepRand(x:=0,y:=0) {
 	; TODO: SET AN INTERRUPT VARIABLE IN MEMORY
 	If FileExist("INTERRUPT")
 	{
-		FileDelete, INTERRUPT
 		sleep 100
 		Run, instaServer.ahk
 	}
@@ -69,37 +69,19 @@ SleepRand(x:=0,y:=0) {
 		Random, y, %x%, (x+200)
 	}
 	Random, rand, %x%, %y%
+	if rand > 1000
 	Sleep, %rand%
 }
 
 ;CHROME
 closeChrome() {
-	tooltip, closeChrome two
+	tooltip, closeChrome
 	WinGet hWnds, List, ahk_exe chrome.exe
 	Loop, %hWnds%
 	{
 	  hWnd := % hWnds%A_Index% ; get next hWnd
 	  PostMessage, 0x112, 0xF060,,, ahk_id %hWnd%
 	}
-}
-
-OpenUrlChrome(URL, profile) {
-	If NOT WinExist("ahk_class Chrome_WidgetWin_1") 
-    {
-		run, %profile% %URL%, , max
-	}
-	Else
-	{
-		clipboard := URL
-		SleepRand(10,500)
-		Send {Ctrl down}l{Ctrl up}
-		SleepRand(200,800)
-		Send {Ctrl down}v{Ctrl up}
-		SleepRand()
-		Send {Enter}
-		SleepRand(1000,3000)
-	}	  
-	return
 }
 
 settings(profile)
@@ -180,8 +162,10 @@ ClickPost(postN){
 		Continue
 		ToolTip, CLICKED OK,0,930
 		SleepRand(500,2000)
+		Tooltip
 		Return True
 	}
+	tooltip
 	Return False
 }
 
@@ -358,14 +342,14 @@ instaReport(account, activity, result, time) {
             return response
 }
 
-LogError(e) {
-	FormatTime, time, ,yyyy-M-d HH:mm:ss tt
-	sheetkey := "1q7pJF4l0tIpEud62UwfHAOXbIFWQ8EQxN8wZCAWjv6Q"
-	msg := e.msg, account := e.account
-	updateValues = "%time%", "%msg%", "%account%"
-	response := GsheetAppendRow(sheetkey, myAccessToken, "Sheet1!A:E", updateValues)
-	; return response
-}
+; LogError(e) {
+; 	FormatTime, time, ,yyyy-M-d HH:mm:ss tt
+; 	sheetkey := "1q7pJF4l0tIpEud62UwfHAOXbIFWQ8EQxN8wZCAWjv6Q"
+; 	msg := e.msg, account := e.account
+; 	updateValues = "%time%", "%msg%", "%account%"
+; 	response := GsheetAppendRow(sheetkey, myAccessToken, "Sheet1!A:E", updateValues)
+; 	; return response
+; }
 
 URLDownloadToVar(url) 
 {
@@ -416,41 +400,6 @@ kComments(){
 	return oArray
 }
 
-follow(target, account, chromePath)
-{
-	FormatTime, startTime, ,yyyy-M-d HH:mm:ss tt
-	url := "https://instagram.com/"target
-	closeChrome()
-    OpenUrlChrome(url, chromePath)
-	SleepRand(4333,9999)
-	pageValid := CheckPage()
-	If NOT pageValid
-	{
-	    throw { msg: "Error " pageValid " target " target, account:account } 
-	}
-	; If nLikes = 0
-	Random, nLikes, 5, 20
-	liked := LikePostsN(nLikes)
-	SleepRand(500,1500)
-	Text:="|<Follow>*188$45.0DzAzzzs1ztbzzzDw7AsAlVz0Na0W80MnAlaF03C9aQG1DtlAnW49z6NaAkVDs3Ak74NzUtb1sXU"
-	if (ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))
-	{
-		CoordMode, Mouse
-		X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-		MouseMove, X, Y
-		SleepRand()
-		Click
-		SleepRand(1000,3000)
-		followed++
-		CoordMode, Pixel, Screen
-	}
-	Else
-	{
-	    throw { msg: "FollowBot: no follow btn " target, account:account } 
-	}
-	return liked	
-}
-
 clickFollowButton() {
 	Text:="|<Follow>*188$45.0DzAzzzs1ztbzzzDw7AsAlVz0Na0W80MnAlaF03C9aQG1DtlAnW49z6NaAkVDs3Ak74NzUtb1sXU"
 	if (ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))
@@ -467,81 +416,6 @@ clickFollowButton() {
 	{
 	    throw { msg: "FollowBot: no follow btn " } 
 	}
-}
-
-LikePostsN(n:=0) {
-	clicked = 0
-    liked = 0
-	Tooltip, LikePostsN, 0,900
-	SleepRand(500,1700)
-	If n > 0
-		nLikes := n
-	else
-		random, nLikes, 3, 8
-	While !clicked && (A_Index < 20)
-	{
-		clicked := ClickPost(1)
-	}
-	Text:="|<WHITE HEART>*169$24.3s7k66MM83k4E1U2E002U001U001U001U001U001k003E0028004A00A600M300k1U1U0k300M60048002E001U0U"
-    if !(ok:=FindText(776-300//2, 631-900//2, 350, 600, 0, 0, Text))
-    {
-        Return False
-    }
-    ELse
-	{	
-		CoordMode, Mouse
-        X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-        Loop %nLikes%
-		{
-			Random, r, 1, 3
-			SleepRand(1000,12000)
-			If r = 1 ; click heart
-			{
-				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-				Random, w, -5, 5
-				X += w
-				Random, w, -5, 5
-				Y += w
-                MouseMove, %X%, %Y%
-                SleepRand()
-				Click
-                SleepRand(500,1500)
-                liked++
-			}
-			Else ;double click image
-			{
-				Random, X, 340,700
-				Random, Y, 190,650
-				MouseMove, %X%, %Y%
-				SleepRand()
-				Click 2	
-                SleepRand(500,1500)
-                liked++
-			}
-			count := A_Index
-			;GREY RIGHT ARROW
-			Text:="|<>*162$14.zzszy7zUzw7zUzw7zUzw7zUzw7zUzsDw3y1z0zUTkDs7w3y1zUzsTyDzzzs"
-			if (ok:=FindText(1163-500//2, 388-500//2, 500, 500, 0, 0, Text))
-			{
-                SleepRand(100,500)
-				CoordMode, Mouse
-				X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
-				MouseMove, %X%, %Y%
-                SleepRand()
-                Click
-                SleepRand(1000,2500)
-			}
-			Else
-				Break
-		}
-    }
-	Send {Esc}
-	SleepRand()
-	Loop 20
-		MouseClick, WheelUP
-	CoordMode, Pixel, Screen
-	Tooltip, like posts finished,0,930
-    Return % Array(liked,nLikes,count)
 }
 
 clickMyProfileButton() {

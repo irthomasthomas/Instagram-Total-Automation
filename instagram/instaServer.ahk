@@ -1,16 +1,20 @@
-#SingleInstance, Force
-
+#SingleInstance force
 #include InstaFunctions.ahk
 #include kardashian.ahk
 #include browsefeed.ahk
 #include browsehashtags.ahk
 #include Lib\Jxon.ahk
-#include Lib\Socket.ahk
+#include Lib\Socket2.ahk
 #include Lib\RemoteObj.ahk
 
 SetBatchLines, -1 ; Run script at maximum speed
 SetWinDelay, -1
 SetControlDelay, -1
+
+DetectHiddenWindows, On
+IfWinExist , NewNameOfWindow ;if script already running 
+ ExitApp
+WinSetTitle, %A_ScriptFullPath%,, NewNameOfWindow ;the hidden window of the script deafult name starts with the full path of the script.
 
 ; #include Lib\AhkDllThread.ahk
 ; #include Lib\ObjRegisterActive.ahk
@@ -19,34 +23,42 @@ tooltip, started, 0, 920
 worker := new InstaWorker()
 ; ObjRegisterActive(worker, "{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
 
-; Pub Obj to Socket
-Bind_Addr := A_IPAddress2
+; msgbox %A_IPAddress1%
+Bind_Addr := A_IPAddress1
 Bind_Port := 8337
 Server := new RemoteObj(worker, [Bind_Addr,Bind_Port])
-SleepRand()    
+FileAppend,,instaServerREADY
+sleep 200
+FileRecycle,INTERRUPT
 return
-
 
 class InstaWorker 
 {
-
-
         STATUS
         {
             get 
             {
-                if FileExist( "status.ini" ) 
+                if FileExist( "instaServerREADY" ) 
                 {	
-                    IniRead, STATUS, status.ini, General, STATUS
+                    this.STATUS := "READY"
                 }
-                return STATUS
+                else 
+                    this.STATUS := "BUSY"
+                return this.STATUS
             }
             set 
             {
-                IniWrite, %value%, status.ini, General, STATUS
+                if value == "READY"
+                    FileAppend,,instaServerREADY
+                else
+                {
+                    FileDelete, instaServerREADY
+                }
+                ; IniWrite, %value%, status.ini, General, STATUS
                 return STATUS := value
             }
         }
+
         
         ACTIVITY
         {
@@ -60,6 +72,7 @@ class InstaWorker
                 ; TODO: make activity.ini
                 return ACTIVITY
             }
+            ; TODO: setting activity
             set 
             {   
                 FileSetAttrib, -R, activity
@@ -74,36 +87,31 @@ class InstaWorker
 
         __New() {
             closeChrome()
-            this.STATUS := "Ready"
+            this.STATUS := "READY"
         }
         
-        closeBrowser() {
-            tooltip, closeChrome
-            closeChrome()
-        }
-
         session(account:="")
         {
             if account == ""
             {
                 closeChrome()
                 this.account := ""
-                return this.STATUS := "READY"
+                this.STATUS := "READY"
             }
             else
             {
-                try
-                {
                     closeChrome()
                     this.STATUS := "starting"
+                try
+                {
                     this.account := account
                     this.kardashianUrl := KardashianURL()
                     this.settings := settings(account)
                     this.chrome := this.settings[1]
                     this.targetSheet := this.settings[2]
                     this.kbot := new KardashianBot(account)
-                    ; OpenUrlChrome("https://instagram.com", this.chrome)
                     this.targetsArray := this.targetAccounts()
+
                 }
                 catch e
                 {
@@ -124,7 +132,11 @@ class InstaWorker
             targetsArray := json.Load(UrlDownloadToVar(url))
             return targetsArray
         }
-        
+
+        closeBrowser() {
+            tooltip, closeChrome
+            closeChrome()
+        }
 
         openRandCommenter() {
             tooltip, openRandCommenter, 0, 930
@@ -132,6 +144,7 @@ class InstaWorker
         }
 
         kardashianComment() {
+            tooltip, kardashianComment, 0, 930
             this.STATUS := "BUSY"
             this.ACTIVITY := "Kardashian Strategy"
                 try {
@@ -142,16 +155,12 @@ class InstaWorker
                 }
             this.STATUS := "READY"
             this.ACTIVITY := "NONE"
+            tooltip, finished, 0, 930
+
         }
 
-        ; likePosts(n:=0) {
-        ;     this.ACTIVITY := "Like Posts"
-        ;     tooltip, likeposts, 0, 930
-        ;     LikePostsN(n)
-        ;     this.ACTIVITY := ""
-        ; }
-
         browseRandomHashtag() {
+            tooltip, browseRandomHashtag, 0, 930
             this.STATUS := "BUSY"
             this.ACTIVITY := "Browse Hashtag"
             try
@@ -163,11 +172,12 @@ class InstaWorker
                 LogError(e)
             }
             this.ACTIVITY := ""
-            closeChrome()
             this.STATUS := "READY"
+            tooltip, finished, 0, 930
         }
 
         browseFeed(nlikes:=0) {
+            tooltip, browsefeed, 0, 930
             this.STATUS := "BUSY"
             this.ACTIVITY := "Browsing Feed"
             try {
@@ -181,11 +191,13 @@ class InstaWorker
                 return e
             }
             this.ACTIVITY := ""
-            this.STATUS := "Ready"
-            return liked
+            this.STATUS := "READY"
+            tooltip, finished, 0, 930
         }
 
         followTarget(target) {
+            tooltip, followTarget, 0, 930
+
             this.STATUS := "BUSY"
             this.ACTIVITY := "Follower"
             try {
@@ -199,8 +211,10 @@ class InstaWorker
                 return e
             }
             this.ACTIVITY := ""
-            this.STATUS := "Ready"
-            return "followed " target " and liked " liked " posts"
+            this.STATUS := "READY"
+            SleepRand(10000,20000)
+            tooltip, finished, 0, 930
+            ; return "followed " target " and liked " liked " posts"
         }
 
         SleepRand(sleeps) {

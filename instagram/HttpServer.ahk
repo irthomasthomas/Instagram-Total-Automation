@@ -1,5 +1,6 @@
-#NoEnv  ; Do not check empty variables
 #SingleInstance, force
+
+#NoEnv  ; Do not check empty variables
 ;#Warn   ; Enable warnings to assist with common errors
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
@@ -8,11 +9,8 @@ SetWinDelay, -1
 SetControlDelay, -1
 
 #include Lib\Jxon.ahk
-#include Lib\Socket.ahk
-; #include Lib\AhkDllThread.ahk
-; #include Lib\RemoteObj.ahk
-; #Include Lib\Gdip_All.ahk
-; #include Lib\base64.ahk
+#include Lib\Socket2.ahk
+
 screen := ComObjActive("{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
 
 class worker {
@@ -59,7 +57,7 @@ class worker {
 
 }
 
-global encoded := screen.encoded
+global encoded := ""
 
 Template =
     ( Join`r`n
@@ -159,15 +157,18 @@ Template =
     )
 Bind_Addr := A_IPAddress1
 Bind_Port2 := 80
-hServer := new SocketTCP()
-hServer.OnAccept := Func("OnAccept")
+
 Try {
+    hServer := new SocketTCP()
+    hServer.OnAccept := Func("OnAccept")
     hServer.Bind([Bind_Addr,Bind_Port2])
+    run, HttpServerClone.ahk
 }
 catch e 
 {
-    sleep 1000
-    run, HttpServerClone.ahk
+    sleep 2000
+    run, HttpServer.ahk
+    ExitApp
 }
 hServer.Listen()
 SetTimer, screenshot, 3000
@@ -260,37 +261,6 @@ reloadAll(){
     sleep 300
     Reload
 }
-
-; TakeScreenshot()
-; {
-;     ObjRegisterActive(worker, "{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
-;   global encoded  
-;   ; beaucoup thanks to tic (Tariq Porter) for his GDI+ Library
-;   ; https://autohotkey.com/boards/viewtopic.php?t=6517
-;   ; https://github.com/tariqporter/Gdip/raw/master/Gdip.ahk
-;   pToken:=Gdip_Startup()
-;   If (pToken=0)
-;   {
-;     MsgBox,4112,Fatal Error,Unable to start GDIP
-;     ExitApp
-;   }
-;   pBitmap:=Gdip_BitmapFromScreen()
-;   If (pBitmap<=0)
-;   {
-;     MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
-;     ExitApp
-;   }
-;   encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
-
-;   If (ErrorLevel<>0)
-;   {
-;     MsgBox,4112,Fatal Error,ErrorLevel=%ErrorLevel% trying to save bitmap to`n%FileName%
-;     ExitApp
-;   }
-;   Gdip_DisposeImage(pBitmap)
-
-;     ;   encoded
-; }
 
 screenshot:
 global encoded := screen.encoded

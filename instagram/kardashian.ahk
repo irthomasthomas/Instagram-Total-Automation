@@ -14,11 +14,9 @@ class KardashianBot {
     commentLB(url,chrome) 
     {
         OpenUrlChrome(url, chrome)
-		; Sock.SendText(Jxon_Dump(Obj)) wtf
         SleepRand(1000,3000)
         Random p, 1, 2
         clicked := ClickPost(p)
-        ; clicked := True
         if !clicked
             throw { msg: "kardashianBot: Failed to ClickPost " p, account: this.account } 
         try { 

@@ -31,7 +31,7 @@ CheckPhotoQueue(accessToken, remoteObj)
 		{
 			If !(DateParse(oArray.values[A_Index][6]) = DateParse(A_Now))
 				Continue
-			If !(oArray.values[A_Index][7] => A_Hour)
+			If !(oArray.values[A_Index][7] = A_Hour)
 				Continue
 			row := A_Index
 			Loop 11
@@ -47,19 +47,32 @@ CheckPhotoQueue(accessToken, remoteObj)
 		FileAppend, ,INTERRUPT
 		sleep 10000
 		; TODO:	result := remoteObj.PhotoToInstagram(fileArray)
+
+		While NOT (FileExist("instaServerREADY"))
+		{
+			SleepRand(10000,30000)
+			if A_Index > 20 
+			{
+				cell = Sheet3!A2
+				response := GsheetAppendRow(photoSheetId, accessToken, cell, photoData)
+				throw { msg: "PhotoQueue: failed pausing instaWorker "} 
+			}
+		}
+	    remoteObj.print_to_python("INTERRUPTED")
 		try
 		{
-	        remoteObj.print_to_python("INTERRUPTED")
-			result := remoteObj.PhotoToInstagram(fileArray)
+			remoteObj.PhotoToInstagram(fileArray)
 		}
 		catch e
 		{
-			Reload
+			msgbox %e%
+				throw { msg: "PhotoQueue: failed call to: remoteObj.PhotoToInstagram() "} 
 		}
-		GsheetDeleteRow(photoSheetId,0,accessToken,row)
-
+		FileAppend,,instaServerREADY
+		FileDelete,INTERRUPT
 		cell = Sheet2!A2
 		response := GsheetAppendRow(photoSheetId, accessToken, cell, photoData)
+		GsheetDeleteRow(photoSheetId,0,accessToken,row)
 		; get the row id 
 		objData := Jxon_Load(response)
 		updaterange := objData["updates","updatedRange"]
