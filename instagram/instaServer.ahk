@@ -4,17 +4,18 @@
 #include browsefeed.ahk
 #include browsehashtags.ahk
 #include Lib\Jxon.ahk
-#include Lib\Socket2.ahk
+#include Lib\Socket.ahk
 #include Lib\RemoteObj.ahk
 
 SetBatchLines, -1 ; Run script at maximum speed
 SetWinDelay, -1
 SetControlDelay, -1
 
-DetectHiddenWindows, On
-IfWinExist , NewNameOfWindow ;if script already running 
- ExitApp
-WinSetTitle, %A_ScriptFullPath%,, NewNameOfWindow ;the hidden window of the script deafult name starts with the full path of the script.
+
+; DetectHiddenWindows, On
+; IfWinExist , NewNameOfWindow ;if script already running 
+;  ExitApp
+; WinSetTitle, %A_ScriptFullPath%,, NewNameOfWindow ;the hidden window of the script deafult name starts with the full path of the script.
 
 ; #include Lib\AhkDllThread.ahk
 ; #include Lib\ObjRegisterActive.ahk
@@ -29,7 +30,7 @@ Bind_Port := 8337
 Server := new RemoteObj(worker, [Bind_Addr,Bind_Port])
 FileAppend,,instaServerREADY
 sleep 200
-FileRecycle,INTERRUPT
+; FileRecycle,INTERRUPT
 return
 
 class InstaWorker 
@@ -38,22 +39,22 @@ class InstaWorker
         {
             get 
             {
-                if FileExist( "instaServerREADY" ) 
-                {	
-                    this.STATUS := "READY"
-                }
-                else 
-                    this.STATUS := "BUSY"
-                return this.STATUS
+                ; if FileExist( "instaServerREADY" ) 
+                ; {	
+                ;     STATUS := "READY"
+                ; }
+                ; else 
+                ;     STATUS := "BUSY"
+                return STATUS
             }
             set 
             {
-                if value == "READY"
-                    FileAppend,,instaServerREADY
-                else
-                {
-                    FileDelete, instaServerREADY
-                }
+                ; if value == "READY"
+                ;     FileAppend,,instaServerREADY
+                ; else
+                ; {
+                ;     FileDelete, instaServerREADY
+                ; }
                 ; IniWrite, %value%, status.ini, General, STATUS
                 return STATUS := value
             }
@@ -197,7 +198,6 @@ class InstaWorker
 
         followTarget(target) {
             tooltip, followTarget, 0, 930
-
             this.STATUS := "BUSY"
             this.ACTIVITY := "Follower"
             try {

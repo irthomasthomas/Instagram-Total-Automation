@@ -1,9 +1,7 @@
-#singleInstance force
 #include Lib\CLR.ahk
 #include Lib\JSON.ahk
 #include Lib\FindTextFunctions.ahk
 #include googlesheets.ahk
-
 
 global client_id :=
 global client_secret :=
@@ -54,11 +52,11 @@ loadConfig() {
 
 SleepRand(x:=0,y:=0) {
 	; TODO: SET AN INTERRUPT VARIABLE IN MEMORY
-	If FileExist("INTERRUPT")
-	{
-		sleep 100
-		Run, instaServer.ahk
-	}
+	; If FileExist("INTERRUPT")
+	; {
+	; 	sleep 100
+	; 	Run, instaServer.ahk
+	; }
 
 	If x = 0
 	{
@@ -276,6 +274,15 @@ CheckPage(checkOwn:=0, checkBluetick:=0) {
 		Return "no home btn found"
 	}
 
+	Text:="|<Sorry account not found>*129$60.3w00000000Dz00000000Tz00000000Q7U0000000Q3UDUAtbs7S00TsDtzw7Tk0zwDtzQ6Dy1sQD1sQC7z1kSC1kCC0TXkCC1kCA03nUCC1kCQs1lkCC1k7Qw1lkSC1k7MS3VsQC1k3sTzUzwC1k3sDz0zsC1k3k3w0DUC1k1k000000001k000000003U00000000TUU"
+	if (ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))
+	{
+		CoordMode, Mouse
+		X:=ok.1.1, Y:=ok.1.2, W:=ok.1.3, H:=ok.1.4, Comment:=ok.1.5, X+=W//2, Y+=H//2
+		Return "not found"
+	; Click, %X%, %Y%
+	}
+
 	; Text:="|<followers>*144$62.A08U0000004028000000100W0000000E08U000000D728C8MFlMt28W4F68WMFF18W2FWEY44EG8UYYbt0l44W88dF0E2F18W2+IE40I8W8F1229151kW3UEUQECU"
 	; if !(ok:=FindText(0, 0, A_ScreenWidth, A_ScreenHeight, 0, 0, Text))
 	; 	Return "no followers btn"
@@ -301,6 +308,7 @@ CheckPage(checkOwn:=0, checkBluetick:=0) {
 		if (ok:=FindText(566-200//2, 217-200//2, 300, 300, 0, 0, Text))
 			Return False	
 	}
+
 	Return True
 }
 

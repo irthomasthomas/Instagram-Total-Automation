@@ -21,27 +21,7 @@ from sqlite3 import Error
 import RemoteObj
 from RemoteObj import RemoteObjClient
 import random
-""" 
-def access_instagram(module, action):
-    global instagram_active
-    lock = threading.RLock()
-    with lock:
-        print("CURRENT ACTIVE MODULE: " + str(instagram_active))
-        if not instagram_active:
-            instagram_active = module
-            print("INSTAGRAM CONNECTION REQUEST FROM: " + module)
-            return module
-        elif (instagram_active == module) and (action == "start"):
-            print("INSTAGRAM START REQUEST FROM: " + module)
-            return module
-        elif (instagram_active == module) and (action == "end"):
-            instagram_active = False
-            print("INSTAGRAM DISCONNECT FROM: " + module)
-            return module
-        else:
-            print("REJECTED INSTAGRAM CONNECTION REQ FROM: " + module)
-            return False
- """
+
 def sendToGdrive(filePath):
     creds = None
     SCOPES = ['https://www.googleapis.com/auth/drive']  
@@ -88,9 +68,9 @@ def InstagramPostPhoto(account, photo_path, caption):
     # instagram(account)
     time.sleep(5)
     print("INSTAGRAM UPLOAD")
-    with client(account, password) as cli:
-        cli.upload(filePath, caption)
-    # TODO: ACOUNT ACTIVE FLAG if (not account == "blissmolecule"):
+    # with client(account, password) as cli:
+    #     cli.upload(filePath, caption)
+    # TODO: cli upload
     # instagram(account)
     print("FINISHED POSTING TO INSTAGRAM")
 

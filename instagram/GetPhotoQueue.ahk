@@ -1,4 +1,4 @@
-#Include Lib\Socket.ahk
+; #Include Lib\Socket2.ahk
 #Include Lib\Jxon.ahk
 #Include Lib\RemoteObj.ahk
 #include Lib\JSON.ahk
@@ -12,6 +12,14 @@ CheckPhotoQueue(accessToken, remoteObj)
 {
 		; msgbox % "remoteObj " remoteObj.__Addr[1]
 		; TODO: Multithreading
+		If FileExist("photoBotBUSY")
+		{
+	        ; remoteObj.print_to_python("photoBotBUSY")
+			Tooltip, photoBotBUSY
+			sleep 10000
+			return
+		}
+
 		try
 		{
 	        remoteObj.print_to_python("Checking Queue")
@@ -43,22 +51,27 @@ CheckPhotoQueue(accessToken, remoteObj)
 		}
 		If not fileArray
 			return
-	
-		FileAppend, ,INTERRUPT
-		sleep 10000
-		; TODO:	result := remoteObj.PhotoToInstagram(fileArray)
 
-		While NOT (FileExist("instaServerREADY"))
+		remoteObj.print_to_python("engaging insta worker")
+		FileAppend,,INTERRUPT
+		Sleep 1000
+		While NOT FileExist("instaServerREADY")
 		{
-			SleepRand(10000,30000)
-			if A_Index > 20 
+			Tooltip, GetPhotoQueue: Bot busy. Waiting.
+			Sleep 10000
+			If A_Index > 150
 			{
 				cell = Sheet3!A2
 				response := GsheetAppendRow(photoSheetId, accessToken, cell, photoData)
-				throw { msg: "PhotoQueue: failed pausing instaWorker "} 
+				throw { msg: "PhotoQueue: failed waiting for instaWorker "} 
 			}
 		}
-	    remoteObj.print_to_python("INTERRUPTED")
+		sleep 1400
+		FileDelete,instaServerREADY
+		FileAppend,,photoBotBUSY
+	    Tooltip, photobotBUSY flag set
+		remoteObj.print_to_python("setting interrupt flag")
+		; FileAppend, ,INTERRUPT
 		try
 		{
 			remoteObj.PhotoToInstagram(fileArray)
@@ -68,11 +81,18 @@ CheckPhotoQueue(accessToken, remoteObj)
 			msgbox %e%
 				throw { msg: "PhotoQueue: failed call to: remoteObj.PhotoToInstagram() "} 
 		}
+
 		FileAppend,,instaServerREADY
-		FileDelete,INTERRUPT
+		tooltip, fileappend instaserverREADY
+		sleep 1000
 		cell = Sheet2!A2
 		response := GsheetAppendRow(photoSheetId, accessToken, cell, photoData)
+		tooltip, gsheetappendrow
+		sleep 4000
 		GsheetDeleteRow(photoSheetId,0,accessToken,row)
+		tooltip, gsheetdeleterow
+		sleep 3000
+		FileDelete, photoBotBUSY
 		; get the row id 
 		objData := Jxon_Load(response)
 		updaterange := objData["updates","updatedRange"]
@@ -85,3 +105,4 @@ CheckPhotoQueue(accessToken, remoteObj)
 		UpdateGSheetCell(photoSheetId, accessToken, cell, url)
 		sleep 3000
 }
+
