@@ -812,4 +812,7 @@ Gdip_CropImage(pBitmap, x, y, w, h)
    return pBitmap2
 }
 
-^!r::Reload
+
+^+r::
+FileDelete, photoBotBUSY
+Reload

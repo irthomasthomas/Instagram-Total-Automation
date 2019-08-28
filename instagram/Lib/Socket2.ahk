@@ -1,3 +1,4 @@
+
 class Socket
 {
 	static WM_SOCKET := 0x9987, MSG_PEEK := 2
@@ -130,7 +131,7 @@ class Socket
 	
 	Recv(ByRef Buffer, BufSize:=0, Flags:=0)
 	{
-		while (!(Length := this.MsgSize()) && this.Blocking)
+		while (!(Length := this.MsgSize()) && this.Blocking && A_Index < 40)
 			Sleep, this.BlockSleep
 		if !Length
 			return 0
@@ -151,7 +152,7 @@ class Socket
 	
 	RecvLine(BufSize:=0, Flags:=0, Encoding:="UTF-8", KeepEnd:=False)
 	{
-		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n"))
+		while !(i := InStr(this.RecvText(BufSize, Flags|this.MSG_PEEK, Encoding), "`n")) && A_Index < 20
 		{
 			if !this.Blocking
 				return ""
