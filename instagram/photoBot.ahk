@@ -544,13 +544,13 @@ BuildCaptions(imgFormat, hashtagString, igAccount)
 		}
 		Else If (imgFormat = "3s") || (imgFormat = "3p")
 		{	
-			imgCaption31:= "#Split Pano 1/3 ◻◼◼`n➖➖➖➖➖➖➖➖➖➖`n🌏 "imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 @thomasThomas2211 `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
+			imgCaption31:= "#Split Pano 1/3 ◻◼◼`n➖➖➖➖➖➖➖➖➖➖`n🌏 "imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more  @thomasThomas2211 `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
 			imgCaption31.= hashtagString "`n`n"
 			
-			imgCaption32:= "#Split Pano 2/3 ◼◻◼`n➖➖➖➖➖➖➖➖➖➖`n🌏 "imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 @thomasThomas2211`n〰〰〰〰〰〰〰〰〰〰〰〰`n"
+			imgCaption32:= "#Split Pano 2/3 ◼◻◼`n➖➖➖➖➖➖➖➖➖➖`n🌏 "imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more  @thomasThomas2211`n〰〰〰〰〰〰〰〰〰〰〰〰`n"
 			imgCaption32.= hashtagString "`n`n"
 			
-			imgCaption33:="Split Pano 3/3 ◼◼◻`n➖➖➖➖➖➖➖➖➖➖`n🌏 "imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 @thomasThomas2211`n〰〰〰〰〰〰〰〰〰〰〰〰`n"	
+			imgCaption33:="Split Pano 3/3 ◼◼◻`n➖➖➖➖➖➖➖➖➖➖`n🌏 "imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more  @thomasThomas2211`n〰〰〰〰〰〰〰〰〰〰〰〰`n"	
 			imgCaption33.= hashtagString	"`n`n"
 			
 			aCaptions  := Array(imgCaption33, imgCaption32, imgCaption31)
@@ -576,7 +576,7 @@ BuildCaptions(imgFormat, hashtagString, igAccount)
 		}
 		Else
 		{
-			imgCaption:= imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 #thomasThomas `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
+			imgCaption:= imgTitle "`n➖➖➖➖➖➖➖➖➖➖`nSee more #thomasThomas `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
 			imgCaption .= hashtagString "`n`n"
 			sleep 10
 			aCaptions := Array(imgCaption)
@@ -641,7 +641,7 @@ BuildCaptions(imgFormat, hashtagString, igAccount)
 	{
 		If imgFormat = 1
 		{
-			imgCaption := imgTitle "`n➖➖➖➖➖➖➖➖➖➖ `nSee more 👀👉 @NoPlaceToSit `n➖➖➖➖➖➖➖➖➖➖ `n"
+			imgCaption := imgTitle "`n➖➖➖➖➖➖➖➖➖➖ `nSee more @NoPlaceToSit `n➖➖➖➖➖➖➖➖➖➖ `n"
 			imgCaption .= hashtagString
 			aCaptions := Array("",imgCaption,"")
 			sleep 10
@@ -650,10 +650,10 @@ BuildCaptions(imgFormat, hashtagString, igAccount)
 		
 		Else If imgFormat = 3w
 		{
-			imgCaption31 := "#HyperWide Pano 1/3 ◻◼◼ `n➖➖➖➖➖➖➖➖➖➖ `n "imgTitle " `n➖➖➖➖➖➖➖➖➖➖ `nSee more   @NoPlaceToSit`n〰〰〰〰〰〰〰〰〰〰〰〰 `n`n"
+			imgCaption31 := "#HyperWide Pano 1/3 ◻◼◼ `n➖➖➖➖➖➖➖➖➖➖ `n "imgTitle " `n➖➖➖➖➖➖➖➖➖➖ `nSee more @NoPlaceToSit`n〰〰〰〰〰〰〰〰〰〰〰〰 `n`n"
 			imgCaption31 .= hashtagString "`n`n"
 			
-			imgCaption32 := "#HyperWide Pano 2/3 ◼◻◼`n➖➖➖➖➖➖➖➖➖➖`n "imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more  @NoPlaceToSit `n〰〰〰〰〰〰〰〰〰〰〰〰`n`n"
+			imgCaption32 := "#HyperWide Pano 2/3 ◼◻◼`n➖➖➖➖➖➖➖➖➖➖`n "imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more @NoPlaceToSit `n〰〰〰〰〰〰〰〰〰〰〰〰`n`n"
 			imgCaption32 .= hashtagString "`n`n"		
 
 			imgCaption33 := "#HyperWide Pano 3/3 ◼◼◻`n➖➖➖➖➖➖➖➖➖➖`n "imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more @NoPlaceToSit `n〰〰〰〰〰〰〰〰〰〰〰〰`n`n"	
@@ -693,13 +693,13 @@ BuildCaptions(imgFormat, hashtagString, igAccount)
         Else If imgFormat = (imgFormat = "3s") || (imgFormat = "3p") 
         {	
             random, r, 1,2
-            imgCaption31 := "Split/Pic 1/3 ◻◼◼ 👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 #blissMolecule `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
+            imgCaption31 := "Split/Pic 1/3 ◻◼◼ 👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more #blissMolecule `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
             imgCaption31 .= hashtagString "`n"
             
-            imgCaption32 := "Split/Pic 2/3 ◼◻◼ 👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"
+            imgCaption32 := "Split/Pic 2/3 ◼◻◼ 👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"
             imgCaption32 .= hashtagString "`n"
             
-            imgCaption33 :="Split/Pic 3/3 ◼◼◻ 👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"	
+            imgCaption33 :="Split/Pic 3/3 ◼◼◻ 👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"	
             imgCaption33 .= hashtagString "`n"
 
 			aCaptions := Array(imgCaption33, imgCaption32, imgCaption31)            
@@ -707,20 +707,20 @@ BuildCaptions(imgFormat, hashtagString, igAccount)
         Else If imgFormat = 3w
         {	
             random, r, 1,2
-            imgCaption31 := "#HyperWide Split/Pic 1/3 ◻◼◼`n👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 #blissMolecule `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
+            imgCaption31 := "#HyperWide Split/Pic 1/3 ◻◼◼`n👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more #blissMolecule `n〰〰〰〰〰〰〰〰〰〰〰〰`n"
             imgCaption31 .= hashtagString
             
-            imgCaption32 := "#HyperWide Split/Pic 2/3 ◼◻◼`n👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"
+            imgCaption32 := "#HyperWide Split/Pic 2/3 ◼◻◼`n👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"
             imgCaption32 .= hashtagString
             
-            imgCaption33 := "#HyperWide Split/Pic 3/3 ◼◼◻`n👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more 👀👉 #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"	
+            imgCaption33 := "#HyperWide Split/Pic 3/3 ◼◼◻`n👀👉@blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"imgTitle  "`n➖➖➖➖➖➖➖➖➖➖`nSee more #blissMolecule`n〰〰〰〰〰〰〰〰〰〰〰〰`n"	
             imgCaption33 .= hashtagString
             
             aCaptions := Array(imgCaption33, imgCaption32, imgCaption31)            
         }
         Else
         {		
-            imgCaption := imgTitle "`nKnow more 👀👉 @blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"
+            imgCaption := imgTitle "`nKnow more @blissMolecule`n➖➖➖➖➖➖➖➖➖➖`n"
             imgCaption .= hashtagString	
 
             aCaptions := Array(commentCaption, imgCaption)
