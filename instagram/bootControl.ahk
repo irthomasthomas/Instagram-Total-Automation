@@ -37,8 +37,8 @@ loop {
     FileDelete,INTERRUPT
     Tooltip, sleeping
     ; TODO: sleeprand
-    sleep 30000
-    ; SleepRand(100000,3000000)
+    ; sleep 30000
+    SleepRand(100000,300000)
 }
 
 bootControl(account)

@@ -68,8 +68,8 @@ def InstagramPostPhoto(account, photo_path, caption):
     # instagram(account)
     time.sleep(5)
     print("INSTAGRAM UPLOAD")
-    # with client(account, password) as cli:
-    #     cli.upload(filePath, caption)
+    with client(account, password) as cli:
+        cli.upload(filePath, caption)
     # TODO: cli upload
     # instagram(account)
     print("FINISHED POSTING TO INSTAGRAM")
