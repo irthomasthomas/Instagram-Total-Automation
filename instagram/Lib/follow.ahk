@@ -9,6 +9,8 @@ follow(target, account, chromePath)
 	{
 	    throw { msg: "Error " pageValid, target:target, account:account } 
 	}
+	tooltip, page pageValid
+	sleep 4000
 	; If nLikes = 0
 	Random, nLikes, 5, 25
 	liked := LikePostsN(nLikes)
@@ -21,7 +23,7 @@ follow(target, account, chromePath)
 	}
 	Else
 	{
-	    throw { msg: "FollowBot: no follow btn " target, account:account } 
+	    throw { msg: "FollowBot: no follow btn ", target:target, account:account } 
 	}
 	MouseMove, X, Y
 	SleepRand()

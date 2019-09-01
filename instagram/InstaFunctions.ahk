@@ -253,6 +253,8 @@ CheckPage(checkOwn:=0, checkBluetick:=0) {
 	Text:="|<private>*153$48.z06000E0zU0000k0laqMltwQlbqMnxwyzb68UAlXz66BUQlzk66BVAlzk6673AlUk6673wwzk6671qQSU"
 	if (ok:=FindText(730-70000//2, 444-70000//2, 70000, 70000, 0, 0, Text))
 	{
+		tooltip, PRIVATE
+		sleep 4000
 		Return "private"
 	}
 		

@@ -3,7 +3,8 @@
 #include Lib\Socket.ahk
 #include Lib\RemoteObj.ahk
 
-accounts := ["philhughesart", "noplacetosit", "thomasthomas2211"]
+accounts := ["blissmolecule","philhughesart", "noplacetosit", "thomasthomas2211","philhughesart", "noplacetosit", "thomasthomas2211"]
+
 
 loop {
     sleep 100
@@ -38,7 +39,7 @@ loop {
     Tooltip, sleeping
     ; TODO: sleeprand
     ; sleep 30000
-    SleepRand(100000,300000)
+    SleepRand(100000,600000)
 }
 
 bootControl(account)
@@ -58,6 +59,18 @@ bootControl(account)
         }
     tooltip, instaclient session, 10, 900
     sleep 3000
+    random, n, 2, instaClient.targetsArray.values.length()
+    instaClient.followTarget(instaClient.targetsArray.values[n][1])
+    sleeprand(10000,30000)
+    instaClient.browseRandomHashtag()
+    tooltip, bootcontrol: finished browseHashtag
+    sleeprand(10000,30000)
+    instaClient.browseRandomHashtag()
+    sleeprand(10000,30000)
+
+    instaClient.browseRandomHashtag()
+    sleeprand(10000,30000)
+
     ; random, r, 2, 7
     ; loop %r%
     ; {
@@ -67,16 +80,15 @@ bootControl(account)
     ; tooltip, kardashian, 10, 900
     tooltip, followtarget, 10, 900
 
-    random, n, 2, instaClient.targetsArray.values.length()
-    instaClient.followTarget(instaClient.targetsArray.values[n][1])
+
     tooltip, followtarget end, 10, 900
 
     sleeprand1(instaClient,9000,32000)
     random, n, 1, 2
     if n == 1
-        instaClient.kardashianComment()
+        instaClient.kardashianComment(3)
     sleepRand1(instaClient,9000,35000)
-    instaClient.kardashianComment()
+    instaClient.kardashianComment(2)
     tooltip, kardashian 2, 10, 900
 
     	; 	FileDelete,instaServerREADY
@@ -89,7 +101,7 @@ bootControl(account)
     random, n, 1, 7    
     random, r, 3, 9
     if n < 4 
-        instaClient.browseRandomHashtag()
+        instaClient.browseRandomHashtag(3)
     else
         instaClient.browseFeed(r)
     tooltip, browse, 10, 900
@@ -97,7 +109,7 @@ bootControl(account)
     SleepRand1(instaClient,1000,30000)
     random, n, 1, 2
     if n == 1
-        instaClient.kardashianComment(2)
+        instaClient.kardashianComment(3)
     sleepRand1(instaClient,3000,30000)
     tooltip, kardashian 3, 10, 900
 
@@ -105,14 +117,14 @@ bootControl(account)
     if n < 4
         instaClient.browseFeed(n)
     else
-        instaClient.browseRandomHashtag()
+        instaClient.browseRandomHashtag(3)
     tooltip, browse 2, 10, 900
 
     SleepRand1(instaClient,1000,30000)
     random, n, 1, 2
     if n == 1
     loop 3 {
-        instaClient.kardashianComment()
+        instaClient.kardashianComment(2)
         sleeprand1(instaClient,5000,35000)        
     }
     tooltip,kardashian 4, 10, 900

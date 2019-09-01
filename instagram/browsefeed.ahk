@@ -7,10 +7,13 @@ BrowseFeed(chromeProfile,nlikes:=0) {
 	If !WinExist("ahk_class Chrome_WidgetWin_1") 
     {
         Tooltip, opening chrome, 0, 800
+        sleep 4000
         ;TODO:
 	    OpenUrlChrome(instaURL, chromeProfile)
         SleepRand(2900,7100)
     }
+    tooltip, Chrome exists
+    sleep 4000
     if !nlikes
 	    Random, nLikes, 1, 8
     liked = 0
