@@ -155,7 +155,6 @@ GetHashtags(imgFormat:=1, imgType:="o", igAccount:=0) {
 BrowseHashtags(this,n:=0) {
 	; TODO: Move to sqlite
 	functionName = BrowseHashtags()
-	hashtag = ""
 	Random,n,1,3
 	If n = 1
 		imgType := "d"
@@ -165,14 +164,16 @@ BrowseHashtags(this,n:=0) {
 		imgType := "w"
 	hashtagString := GetHashtags(imgFormat, imgType, this.account)
 	hashtagArray := StrSplit(hashtagString, "#")
-	While (hashtag == "")
+	hashtag =	
+	While not hashtag
 	{
 		hashtag := hashtagArray[(A_Index + 1)]
 		if A_Index > 35
 	        throw { msg: "BrowseHashtags: failed getting a hashtag ", account:this.account } 			
 	}
+
 	sleep 200
-	url := "https://www.instagram.com/explore/tags/" hashtagArray[2]
+	url := "https://www.instagram.com/explore/tags/" hashtag
 	tooltip, %url%, 100,800
 	Clipboard := url
 	CoordMode, Pixel, Screen

@@ -156,7 +156,7 @@ class InstaWorker
                 }
             this.STATUS := "READY"
             this.ACTIVITY := "NONE"
-            tooltip, finished, 0, 930
+            tooltip, kardashian finished, 0, 930
 
         }
 
@@ -174,7 +174,7 @@ class InstaWorker
             }
             this.ACTIVITY := ""
             this.STATUS := "READY"
-            tooltip, finished, 0, 930
+            tooltip, browsehashtag finished, 0, 930
         }
 
         browseFeed(nlikes:=0) {
@@ -193,7 +193,7 @@ class InstaWorker
             }
             this.ACTIVITY := ""
             this.STATUS := "READY"
-            tooltip, finished, 0, 930
+            tooltip, browsefeed finished, 0, 930
         }
 
         followTarget(target) {
@@ -213,7 +213,7 @@ class InstaWorker
             this.ACTIVITY := ""
             this.STATUS := "READY"
             SleepRand(10000,20000)
-            tooltip, finished, 0, 930
+            tooltip,followtarget finished, 0, 930
             ; return "followed " target " and liked " liked " posts"
         }
 
