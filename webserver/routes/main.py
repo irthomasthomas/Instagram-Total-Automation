@@ -13,15 +13,12 @@ routes = {
     "/goodbye" : {
         "template" : "goodbye.html"
     },
-    "/sample" : {
-        "template" : "sample.html"
+    "/telescreen" : {
+        "template" : "telescreen.html"
+    },
+    "/queuetag" : {
+        "template" : "queuetag.html"
     }
-    # ,
-    # "/screen" : {
-    #     "template" : screenshot()
-    # }
+    
 }
-
-
-
 
