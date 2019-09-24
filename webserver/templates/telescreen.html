@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-32" />
+
+    <html>
+        <head>
+            <title>Tommy Bot</title>
+            <link rel="stylesheet" href="/main.css">
+            <style>
+                table, td {
+                    border-collapse: collapse;
+                    border: 2px solid black;
+                }
+            </style>
+            <script>
+                random = {}
+                // Send requests sequentially so as to not overload the server
+                var update = function(){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            document.getElementById("mouse").innerHTML = xhttp.responseText;
+                            setTimeout(update, 4000);
+                        }
+                    };
+                    xhttp.open("GET", "mouse", true);
+                    xhttp.send();
+                }
+                var updateStatus = function(){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            document.getElementById("status").innerHTML = xhttp.responseText;
+                            setTimeout(updateStatus, 4000);
+                        }
+                    };
+                    xhttp.open("GET", "status", true);
+                    xhttp.send();
+                }
+                var updateActivity = function(){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            document.getElementById("activity").innerHTML = xhttp.responseText;
+                            setTimeout(updateActivity, 4000);
+                        }
+                    };
+                    xhttp.open("GET", "activity", true);
+                    xhttp.send();
+                }
+
+                var updateScreen = function(){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            document.getElementById("screen").innerHTML = xhttp.responseText;
+                            setTimeout(updateScreen, 4000);
+                        }
+                    };
+                    xhttp.open("GET", "screen", true);
+                    xhttp.send();
+                }
+
+                var updateTotals = function(){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            document.getElementById("totals").innerHTML = xhttp.responseText;
+                            setTimeout(updateTotals, 4000);                            
+                        }
+                    };
+                    xhttp.open("GET","totals",true);
+                    xhttp.send();
+                }
+
+                setTimeout(updateTotals, 4000);
+                setTimeout(update, 4000);
+                setTimeout(updateScreen, 4000);
+                setTimeout(updateStatus, 4000);
+                setTimeout(updateActivity, 4000);
+            </script>
+
+        </head>
+        <body>
+            <table>
+                {}
+                <tr><td><a href="/reload">reload</a></td></tr>
+                <tr><td><a href="/bubblecap">tags:bubblecap</a></td></tr>
+                <tr><td>Visitor Count</td><td>{}</td></tr>
+                <!-- <tr><td>Mouse Position</td><td id="mouse"></td></tr> -->
+                <tr><td>Screen </td><td id="screen"></td></tr>
+                <tr><td>Status</td><td id="status"></td><td id="activity"></td></tr>
+            </table>
+        </body>
+    </html>

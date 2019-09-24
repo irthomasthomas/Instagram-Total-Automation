@@ -3,19 +3,13 @@
 #include Lib\Socket.ahk
 #include Lib\RemoteObj.ahk
 
-accounts := ["blissmolecule","philhughesart", "noplacetosit", "thomasthomas2211","philhughesart", "noplacetosit", "thomasthomas2211"]
+accounts := ["philhughesart", "thomasthomas2211","philhughesart", "thomasthomas2211"]
 
 
 loop {
     sleep 100
     Tooltip, start botControl,0, 800
     sleep 3000
-    ; If FileExist("INTERRUPT")
-    ; {
-    ;     Tooltip, INTERRUPT flag exists, 0, 800
-    ;     sleep 30000
-    ;     Continue
-    ; }
     If FileExist("instaServerREADY")
     {
         Tooltip, READY flag exists, 0, 800
@@ -29,7 +23,6 @@ loop {
         Continue
     }
     random, n, 1, accounts.Length()
-
     bootControl(accounts[n])
     
     tooltip, delete INTERRUPT flag
@@ -37,9 +30,7 @@ loop {
     sleep 400
     FileDelete,INTERRUPT
     Tooltip, sleeping
-    ; TODO: sleeprand
-    ; sleep 30000
-    SleepRand(100000,600000)
+    SleepRand(100000,3000000)
 }
 
 bootControl(account)
@@ -62,22 +53,18 @@ bootControl(account)
     random, n, 2, instaClient.targetsArray.values.length()
     instaClient.followTarget(instaClient.targetsArray.values[n][1])
     sleeprand(10000,30000)
-    instaClient.browseRandomHashtag()
+    random, n, 2, instaClient.targetsArray.values.length()
+    instaClient.followTarget(instaClient.targetsArray.values[n][1])
+    sleeprand(10000,30000)
+    instaClient.browseRandomHashtag(2)
     tooltip, bootcontrol: finished browseHashtag
     sleeprand(10000,30000)
-    instaClient.browseRandomHashtag()
+    instaClient.browseRandomHashtag(3)
     sleeprand(10000,30000)
 
-    instaClient.browseRandomHashtag()
+    instaClient.browseRandomHashtag(3)
     sleeprand(10000,30000)
 
-    ; random, r, 2, 7
-    ; loop %r%
-    ; {
-    ;     SleepRand(10000,40000)
-    ;     instaClient.kardashianComment()
-    ; }
-    ; tooltip, kardashian, 10, 900
     tooltip, followtarget, 10, 900
 
 
