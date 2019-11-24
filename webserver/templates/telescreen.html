@@ -19,7 +19,7 @@
                     xhttp.onreadystatechange = function() {
                         if (xhttp.readyState == 4 && xhttp.status == 200) {
                             document.getElementById("mouse").innerHTML = xhttp.responseText;
-                            setTimeout(update, 4000);
+                            setTimeout(update, 4500);
                         }
                     };
                     xhttp.open("GET", "mouse", true);
@@ -30,7 +30,7 @@
                     xhttp.onreadystatechange = function() {
                         if (xhttp.readyState == 4 && xhttp.status == 200) {
                             document.getElementById("status").innerHTML = xhttp.responseText;
-                            setTimeout(updateStatus, 4000);
+                            setTimeout(updateStatus, 4500);
                         }
                     };
                     xhttp.open("GET", "status", true);
@@ -41,7 +41,7 @@
                     xhttp.onreadystatechange = function() {
                         if (xhttp.readyState == 4 && xhttp.status == 200) {
                             document.getElementById("activity").innerHTML = xhttp.responseText;
-                            setTimeout(updateActivity, 4000);
+                            setTimeout(updateActivity, 4500);
                         }
                     };
                     xhttp.open("GET", "activity", true);
@@ -53,7 +53,7 @@
                     xhttp.onreadystatechange = function() {
                         if (xhttp.readyState == 4 && xhttp.status == 200) {
                             document.getElementById("screen").innerHTML = xhttp.responseText;
-                            setTimeout(updateScreen, 4000);
+                            setTimeout(updateScreen, 2500);
                         }
                     };
                     xhttp.open("GET", "screen", true);

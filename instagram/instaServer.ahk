@@ -24,7 +24,7 @@ tooltip, started, 0, 920
 worker := new InstaWorker()
 ; ObjRegisterActive(worker, "{93C04B39-0465-4460-8CA0-7BFFF481FF98}")
 
-; msgbox %A_IPAddress1%
+msgbox %A_IPAddress1%
 Bind_Addr := A_IPAddress1
 Bind_Port := 8337
 Server := new RemoteObj(worker, [Bind_Addr,Bind_Port])

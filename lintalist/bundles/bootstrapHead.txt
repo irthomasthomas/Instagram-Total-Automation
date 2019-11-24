@@ -4,24 +4,6 @@ Description: Bootstrap html snippets
 Author: 
 TitleMatch: 
 Patterns:
-- LLPart1: <!--- Two Column  -->
-<div class="container-fluid padding">
-	<div class="row padding">
-		<div class="col-lg-6">
-			<h2>[[Input=Two Column | Column One Title]]</h2>
-			<p>[[Input=Two Column | Column One Paragraph]]</p>
-			<br>
-			<a href="#" class="btn btn-primary">[[Input=Two Column | Button Text]]</a>
-		</div>
-		<div class="col-lg-6">
-			<img src="img/fp1.png" class="img-fluid">
-		</div>
-	</div>
-</div>
-  LLPart2: bootstrap two 2 column
-  LLKey: 
-  LLShorthand: bs2col
-  LLScript: 
 - LLPart1: <!--- Three Column  -->
 <div class="container-fluid padding">
 	<div class="row text-center padding">
@@ -45,21 +27,6 @@ Patterns:
   LLPart2: bootstrap three column 3
   LLKey: 
   LLShorthand: bs3col
-  LLScript: 
-- LLPart1: <!--- Lead -->
-<div class="container-fluid padding">
-    <div class="row welcome text-center">
-        <div class="col-12">
-            <h4 class="display-4"></h4>
-        </div>
-        <hr>
-        <div class="col-12">
-            <p class="lead">[[Input=Lead text |Awesome ad copy]]</p>
-        </div>
-    </div>
-  LLPart2: bootstrap lead
-  LLKey: 
-  LLShorthand: bslead
   LLScript: 
 - LLPart1: <!--- Jumbotron -->
 <div class="container-fluid">
@@ -110,6 +77,66 @@ Patterns:
   LLKey: 
   LLShorthand: bsnav
   LLScript: 
+- LLPart1: <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>[[Input=Title Text|Some Title Text]]</title>
+	
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<link href="style.css" rel="stylesheet">
+	<!-- <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css"> -->
+</head>
+  LLPart2: bootstrap head
+  LLKey: 
+  LLShorthand: bshead
+  LLScript: 
+- LLPart1: <!--- Two Column  -->
+<div class="container-fluid padding">
+	<div class="row padding">
+		<div class="col-lg-6">
+			<h2>[[Input=Two Column | Column One Title]]</h2>
+			<p>[[Input=Two Column | Column One Paragraph]]</p>
+			<br>
+			<a href="#" class="btn btn-primary">[[Input=Two Column | Button Text]]</a>
+		</div>
+		<div class="col-lg-6">
+			<img src="img/fp1.png" class="img-fluid">
+		</div>
+	</div>
+</div>
+  LLPart2: bootstrap two 2 column
+  LLKey: 
+  LLShorthand: bs2col
+  LLScript: 
+- LLPart1: <!--- Lead -->
+<div class="container-fluid padding">
+    <div class="row welcome text-center">
+        <div class="col-12">
+            <h4 class="display-4"></h4>
+        </div>
+        <hr>
+        <div class="col-12">
+            <p class="lead">[[Input=Lead text |Awesome ad copy]]</p>
+        </div>
+    </div>
+  LLPart2: bootstrap lead
+  LLKey: 
+  LLShorthand: bslead
+  LLScript: 
 - LLPart1: <!--- Three Cards -->
 <div class="container-fluid padding">
     <div class="row padding">
@@ -148,33 +175,6 @@ Patterns:
   LLPart2: bootstrap three card
   LLKey: 
   LLShorthand: bs3card
-  LLScript: 
-- LLPart1: <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>[[Input=Title Text|Some Title Text]]</title>
-	
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	
-	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-	<link href="style.css" rel="stylesheet">
-	<!-- <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css"> -->
-</head>
-  LLPart2: bootstrap head
-  LLKey: 
-  LLShorthand: bshead
   LLScript: 
 - LLPart1: <!--- Connect -->
 <div class="container-fluid padding">

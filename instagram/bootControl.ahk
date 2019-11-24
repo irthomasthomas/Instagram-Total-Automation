@@ -35,7 +35,8 @@ loop {
 
 bootControl(account)
 {
-    serverAddress := "192.168.0.36"
+    ; serverAddress := "192.168.1.16"
+    serverAddress := A_IPAddress1
     serverPort := 8337
     instaClient := new RemoteObjClient([serverAddress, serverPort])
     tooltip, new instaclient

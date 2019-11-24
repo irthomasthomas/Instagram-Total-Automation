@@ -19,15 +19,12 @@ class TagQueueHandler(RequestHandler):
         try:
             qs = parse_qs(query)
             tag = qs['tag'][0]
+            print(scrape_tag(tag))
             task = q.enqueue(scrape_tag, tag)
             jobs = q.jobs
             q_len = len(q)
-            # task.enqueued_at()
             message = f"Tag Scrape Task queueue at {tag}. {q_len} jobs queued"
             self.contents = message
-            # with open("public/screen1", "r") as img:
-            #     screen = img.read()
-            # self.contents = str(screen)
             self.setStatus(200)
             return True
         except Exception as e:
@@ -40,12 +37,6 @@ class TagQueueHandler(RequestHandler):
             if file_path == "/enqueue":
                 self.setStatus(200)
                 return True
-
-                # with open("public/screen1", "r") as img:
-                #     screen = img.read()
-                # self.contents = str(screen)
-                # self.setStatus(200)
-                # return True
         except:
             print(sys.exc_info()[0])
             self.setStatus(404)
