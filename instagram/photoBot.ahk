@@ -56,7 +56,8 @@ SetTimer, FolderMon, 90000
 return
 
 FolderMon:
-serverAddress := A_IPAddress1
+serverAddress := "192.168.1.16"
+; serverAddress := A_IPAddress1
 serverPort := 1337
 Remote := new RemoteObjClient([serverAddress, serverPort])
 try
