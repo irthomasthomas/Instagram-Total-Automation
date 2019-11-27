@@ -15,14 +15,11 @@ class StaticHandler(RequestHandler):
         split_path = os.path.splitext(file_path)
         extension = split_path[1]
         try:
-            print(str(split_path[0]))
             if extension in (".jpg", ".jpeg", ".png"):
                 self.contents = open("public{}".format(file_path), "rb")
             else:
                 self.contents = open("public{}".format(file_path), "r")
             
-            print(str(self.contents))
-
             self.setContentType(extension)
             self.setStatus(200)
             return True

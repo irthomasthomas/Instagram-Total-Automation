@@ -11,24 +11,24 @@ from response.dynamicHandler import DynamicHandler
 from response.tagQueueHandler import TagQueueHandler
 from urllib.parse import parse_qs, urlparse
 
-class Server(BaseHTTPRequestHandler):
+class Webserver(BaseHTTPRequestHandler):
+    # TODO: If 404 add ip to redis list > gears > expiring key block
     def do_HEAD(self):
         return
     def do_POST(self):
         return
 
     def do_GET(self):
+        host = self.headers.get('Host')
         split_path = os.path.splitext(self.path)
         request_extension = split_path[1]
         o = urlparse(self.path)
-        print(str(o.path))
-        print(str(o.params))
-        print(str(o.query))
+        print(self.path)
+        # result = '{uri.scheme}://{uri.netloc}/'.format(uri=o)
         if o.path == "/enqueue":
             print("ENQUEUE")
             handler = TagQueueHandler()
             handler.enqueue(o.path,o.query)
-            # handler.find(self.path)
 
         elif self.path == "/screen":
             print("screen req")
