@@ -13,6 +13,7 @@ from urllib.parse import parse_qs, urlparse
 
 class Webserver(BaseHTTPRequestHandler):
     # TODO: If 404 add ip to redis list > gears > expiring key block
+    # TODO: Handle domains
     def do_HEAD(self):
         return
     def do_POST(self):
