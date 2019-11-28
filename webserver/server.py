@@ -2,51 +2,62 @@ import os
 import base64
 from http.server import BaseHTTPRequestHandler
 
-from routes.main import routes
-
+from routes.hosts import hosts
+# import routes
 from response.staticHandler import StaticHandler
 from response.templateHandler import TemplateHandler
 from response.badRequestHandler import BadRequestHandler
 from response.dynamicHandler import DynamicHandler
 from response.tagQueueHandler import TagQueueHandler
 from urllib.parse import parse_qs, urlparse
+import json
 
 class Webserver(BaseHTTPRequestHandler):
     # TODO: If 404 add ip to redis list > gears > expiring key block
     # TODO: Handle domains
+
+    routes = {}
+    for host in hosts:
+        with open("routes/{}.json".format(hosts[host]['name']), "rb") as f:
+            routes[host] = json.loads(f.read())
+
     def do_HEAD(self):
         return
     def do_POST(self):
         return
 
     def do_GET(self):
-        host = self.headers.get('Host')
-        split_path = os.path.splitext(self.path)
-        request_extension = split_path[1]
+        self.host = self.headers.get('Host')
+        # if self.host in hosts:
+        request_extension = os.path.splitext(self.path)[1]
         o = urlparse(self.path)
-        print(self.path)
-        # result = '{uri.scheme}://{uri.netloc}/'.format(uri=o)
+
         if o.path == "/enqueue":
             print("ENQUEUE")
             handler = TagQueueHandler()
             handler.enqueue(o.path,o.query)
 
-        elif self.path == "/screen":
+        elif o.path == "/screen":
             print("screen req")
             handler = DynamicHandler()
             handler.find(self.path)
         
-        elif request_extension is "" or request_extension is ".html":
-            if self.path in routes:
+        elif request_extension in ["", ".html"]:
+            if self.path in self.routes[self.host]['routes']: # Error
                 handler = TemplateHandler()
-                handler.find(routes[self.path])
+                handler.find(hosts[self.host]['name'], self.routes[self.host]['routes'][self.path])
             else:
+                print(f'badrequest {self.host}')
                 handler = BadRequestHandler()
-        elif request_extension is ".py":
+        elif request_extension not in ['.html', '.htm', '.css', '.jpg', '.jpeg', '.png', '.bmp']:
             handler = BadRequestHandler()
         else:
+            # print(f'static: host {self.host} path {self.path}')
             handler = StaticHandler()
-            handler.find(self.path)  
+            handler.find(
+                hosts[self.host]['name'],
+                self.path,
+                request_extension)
 
         self.respond({
             'handler': handler
