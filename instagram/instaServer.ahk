@@ -12,13 +12,6 @@ SetWinDelay, -1
 SetControlDelay, -1
 
 
-; DetectHiddenWindows, On
-; IfWinExist , NewNameOfWindow ;if script already running 
-;  ExitApp
-; WinSetTitle, %A_ScriptFullPath%,, NewNameOfWindow ;the hidden window of the script deafult name starts with the full path of the script.
-
-; #include Lib\AhkDllThread.ahk
-; #include Lib\ObjRegisterActive.ahk
 tooltip, started, 0, 920
 ; Pub Obj to Com
 worker := new InstaWorker()
@@ -93,6 +86,7 @@ class InstaWorker
         
         session(account:="")
         {
+            print_to_python("instaServer session() " + account)
             if account == ""
             {
                 closeChrome()
@@ -196,6 +190,7 @@ class InstaWorker
             tooltip, browsefeed finished, 0, 930
         }
 
+        
         followTarget(target) {
             tooltip, followTarget, 0, 930
             this.STATUS := "BUSY"
@@ -260,6 +255,30 @@ class InstaWorker
         }
 }
 
+
+print_to_python(text)
+	{
+		myTcp := new SocketTCP()
+		addr := "192.168.0.37"
+        try {
+    		myTcp.Connect([addr,2338]) ; host = "192.168.0.37"
+        }
+        catch e
+        {
+
+        }
+		command := "print_to_terminal;" . text . ";" 
+		sleep 10
+        try
+        {
+    		myTcp.SendText(command)
+        }
+        catch e
+        {
+
+        }
+		myTcp.disconnect()
+	}	
 ^!r::Reload
 ^!p::Pause
 

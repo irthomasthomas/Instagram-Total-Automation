@@ -13,16 +13,16 @@ Bind_Port := 1337 ; Listen for connctions on port 1337
 Server := new RemoteObj(ObjToPublish, [Bind_Addr, Bind_Port])
 
 ; msgbox "iP " %Bind_Addr%
-;msgbox % A_IPAddress1 
-
+msgbox % A_IPAddress1 ; 38
+ObjToPublish.print_to_python("hello")
 class objServer
 {	
 	print_to_python(text)
 	{
 		myTcp := new SocketTCP()
-		addr := "192.168.0.2"
+		addr := "192.168.0.37"
         try {
-    		myTcp.Connect([addr,2338])
+    		myTcp.Connect([addr,2338]) ; host = "192.168.0.37"
         }
         catch e
         {
@@ -44,7 +44,7 @@ class objServer
 	GDrivePutJpg(file:=0, folder:=0)
 	{
 		myTcp := new SocketTCP()
-		addr := "192.168.0.2"
+		addr := "192.168.0.37"
 		command := "gDriveJpgUpload"
 		command .= ";" . file
         try
@@ -74,7 +74,7 @@ class objServer
 		captions := StrSplit(fileArray[3], "&")
 		
 		myTcp := new SocketTCP()
-		addr := "192.168.0.2"
+		addr := "192.168.0.37"
 		myTcp.Connect([addr,2338])
 		Loop % files.MaxIndex()
 		{

@@ -41,7 +41,7 @@ OnAccept(Server)
     global Template
     static Counter := 0
     global encoded
-    
+    ; TODO: track mouse movement in redis stream
     Sock := Server.Accept()
     Request := StrSplit(Sock.RecvLine(), " ")
     msgbox % Request[1] " " Request[2]

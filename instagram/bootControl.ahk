@@ -3,25 +3,27 @@
 #include Lib\Socket.ahk
 #include Lib\RemoteObj.ahk
 
-accounts := ["philhughesart", "thomasthomas2211","philhughesart", "thomasthomas2211"]
-
+accounts := ["blissmolecule", "thomasthomas2211", "philhughesart", "noplacetosit"]
+; accounts := ["philhughesart", "thomasthomas2211", "philhughesart", "thomasthomas2211"]
 
 loop {
     sleep 100
     Tooltip, start botControl,0, 800
-    sleep 3000
-    If FileExist("instaServerREADY")
-    {
-        Tooltip, READY flag exists, 0, 800
-        FileDelete,instaServerREADY
-        Tooltip, READY flag deleted, 0, 800
-        SleepRand(500,1500)
-    }
-    Else
-    {
-        Sleep 30000
-        Continue
-    }
+    sleep 500
+    ; TODO: Uncomment READY check
+    ; If FileExist("instaServerREADY")
+    ; {
+    ;     Tooltip, READY flag exists, 0, 800
+    ;     FileDelete,instaServerREADY
+    ;     Tooltip, READY flag deleted, 0, 800
+    ;     SleepRand(500,1500)
+    ; }
+    ; Else
+    ; {
+    ;     Sleep 30000
+    ;     Continue
+    ; }
+
     random, n, 1, accounts.Length()
     bootControl(accounts[n])
     
@@ -35,9 +37,8 @@ loop {
 
 bootControl(account)
 {
-    ; serverAddress := "192.168.1.16"
     serverAddress := A_IPAddress1
-    serverPort := 8337
+    serverPort := 8337 ; instaServer.py
     instaClient := new RemoteObjClient([serverAddress, serverPort])
     tooltip, new instaclient
     sleep 3000
@@ -52,6 +53,9 @@ bootControl(account)
     tooltip, instaclient session, 10, 900
     sleep 3000
     random, n, 2, instaClient.targetsArray.values.length()
+    print_to_python("targets Array len: " + instaClient.targetsArray.values.length())
+    print_to_python("target account: " + account)
+    print_to_python("Follow target: " + instaClient.targetsArray.values[n][1])
     instaClient.followTarget(instaClient.targetsArray.values[n][1])
     sleeprand(10000,30000)
     random, n, 2, instaClient.targetsArray.values.length()
@@ -155,5 +159,29 @@ SleepRand1(instaClient, x:=0, y:=0) {
 	if rand > 1000
 	Sleep, %rand%
 }
+
+print_to_python(text)
+	{
+		myTcp := new SocketTCP()
+		addr := "192.168.0.37"
+        try {
+    		myTcp.Connect([addr,2338]) ; host = "192.168.0.37"
+        }
+        catch e
+        {
+
+        }
+		command := "print_to_terminal;" . text . ";" 
+		sleep 10
+        try
+        {
+    		myTcp.SendText(command)
+        }
+        catch e
+        {
+
+        }
+		myTcp.disconnect()
+	}	
 
 ^+r::Reload

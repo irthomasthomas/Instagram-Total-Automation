@@ -15,6 +15,11 @@ class StaticHandler(RequestHandler):
         try:
             if extension in (".jpg", ".jpeg", ".png"):
                 self.contents = open(f'sites/{host}/public{file_path}', "rb")
+                print(self.contents)
+                # TODO: IS FILE BEING CLOSED?
+                # with open(f'sites/{host}/public{file_path}', "rb") as f:
+                #     self.contents = f
+                #     print(self.contents)
             else:
                 self.contents = open(f'sites/{host}/public{file_path}', "r")
             self.setContentType(extension)

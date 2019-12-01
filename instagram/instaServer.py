@@ -22,6 +22,7 @@ import RemoteObj
 from RemoteObj import RemoteObjClient
 import random
 
+
 def sendToGdrive(filePath):
     creds = None
     SCOPES = ['https://www.googleapis.com/auth/drive']  
@@ -177,7 +178,7 @@ print("Socket has been bounded")
 s.listen(10)
 CONNECTION_LIST.append(s)
 print('Socket is ready. Waiting for connection ')
-print(str(get_ip()))
+print(f'MY IP: {str(get_ip())} : {port}')
 
 
 while True:

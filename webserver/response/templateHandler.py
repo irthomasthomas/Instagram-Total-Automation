@@ -15,5 +15,3 @@ class TemplateHandler(RequestHandler):
         except:
             self.setStatus(404)
             return False
-
-        

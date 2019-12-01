@@ -33,6 +33,7 @@ class TagQueueHandler(RequestHandler):
             return False
 
     def find(self, file_path):
+        print(f'find {file_path}')
         try:
             if file_path == "/enqueue":
                 self.setStatus(200)

@@ -28,10 +28,14 @@ class Webserver(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.host = self.headers.get('Host')
+        if self.host not in hosts:
+            print(f'ERROR: Invalid Host: {self.host}')
+            return
         # if self.host in hosts:
+        # TODO: Merge host:path .eg. with open(f'sites/{host}/public{file_path}', "r") as img:
+ 
         request_extension = os.path.splitext(self.path)[1]
         o = urlparse(self.path)
-
         if o.path == "/enqueue":
             print("ENQUEUE")
             handler = TagQueueHandler()
@@ -40,9 +44,11 @@ class Webserver(BaseHTTPRequestHandler):
         elif o.path == "/screen":
             print("screen req")
             handler = DynamicHandler()
-            handler.find(self.path)
-        
+            handler.find(hosts[self.host]['name'], o.path)
+
+
         elif request_extension in ["", ".html"]:
+            print(self.routes[self.host]['routes'])
             if self.path in self.routes[self.host]['routes']: # Error
                 handler = TemplateHandler()
                 handler.find(hosts[self.host]['name'], self.routes[self.host]['routes'][self.path])
@@ -52,7 +58,6 @@ class Webserver(BaseHTTPRequestHandler):
         elif request_extension not in ['.html', '.htm', '.css', '.jpg', '.jpeg', '.png', '.bmp']:
             handler = BadRequestHandler()
         else:
-            # print(f'static: host {self.host} path {self.path}')
             handler = StaticHandler()
             handler.find(
                 hosts[self.host]['name'],
