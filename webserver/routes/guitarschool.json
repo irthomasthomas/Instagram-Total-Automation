@@ -3,13 +3,9 @@
         "/" : {
         "template" : "music.html"
         },
-        "/goodbye" : 
+        "/v2" : 
         {
-        "template" : "goodbye.html"
-        },
-        "/telescreen" : 
-        {
-        "template" : "telescreen.html"
+        "template" : "v2.html"
         },
         "/queuetag" : 
         {

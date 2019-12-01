@@ -3,6 +3,9 @@
         "/" : {
         "template" : "index.html"
         },
+        "/dash" : {
+            "template" : "dash.html"
+        },
         "/goodbye" : 
         {
         "template" : "goodbye.html"

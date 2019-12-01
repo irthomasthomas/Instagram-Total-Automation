@@ -16,25 +16,11 @@ html, body {
 .nav-link {
   font-size: 1.1em !important;
 }
-/* .carousel {
-  overflow: hidden;
-} */
-.carousel.slide {
-  max-height: 480px;
-  max-width: 1280px;
-  overflow: hidden;
-}
-.carousel-inner {
-  width: 1280px;
-  left: 50%;
-  margin-left: -640px;
-}
 .carousel-inner img {
-    object-fit: scale-down; /* Do not scale the image */
+    object-fit: none; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
     width: 100%;
-    max-width: 1280px;
-    max-height: 480px;
+    max-height: 615px;
     margin-bottom: 1rem;
 }
 .carousel-caption {
@@ -105,7 +91,7 @@ html, body {
   color: #3b5998;
 }
 .fa-twitter {
-  color: #2163af;
+  color: 
 }
 .fa-youtube {
   color: #bb0000;

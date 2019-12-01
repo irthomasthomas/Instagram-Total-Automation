@@ -14,7 +14,7 @@ import json
 
 class Webserver(BaseHTTPRequestHandler):
     # TODO: If 404 add ip to redis list > gears > expiring key block
-    # TODO: Handle domains
+    # TODO: Load all files to memory
 
     routes = {}
     for host in hosts:
@@ -33,7 +33,7 @@ class Webserver(BaseHTTPRequestHandler):
             return
         # if self.host in hosts:
         # TODO: Merge host:path .eg. with open(f'sites/{host}/public{file_path}', "r") as img:
- 
+
         request_extension = os.path.splitext(self.path)[1]
         o = urlparse(self.path)
         if o.path == "/enqueue":
@@ -46,9 +46,11 @@ class Webserver(BaseHTTPRequestHandler):
             handler = DynamicHandler()
             handler.find(hosts[self.host]['name'], o.path)
 
-
         elif request_extension in ["", ".html"]:
-            print(self.routes[self.host]['routes'])
+            # print(self.path)
+            # print(self.routes[self.host]['routes'])
+            # print(f"find: {hosts[self.host]['name']} path: {self.routes[self.host]['routes'][self.path]}")
+
             if self.path in self.routes[self.host]['routes']: # Error
                 handler = TemplateHandler()
                 handler.find(hosts[self.host]['name'], self.routes[self.host]['routes'][self.path])
@@ -78,7 +80,7 @@ class Webserver(BaseHTTPRequestHandler):
         else:
             content = "404 Not Found"
         self.end_headers()
-
+        # TODO: Handle TAG images
         if isinstance( handler, (DynamicHandler)):
             html = "<img src='data:image/png;base64,{}' width='700'/>".format(content)
             return bytes(html,"ascii")

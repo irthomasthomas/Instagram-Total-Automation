@@ -12,7 +12,6 @@ class DynamicHandler(RequestHandler):
             if file_path == '/screen':
                 print(f'sites/{host}/public{file_path}')
                 with open(f'sites/{host}/public{file_path}', "r") as img:
-                # with open('public/screen1', 'r') as img:
                     screen = img.read()
                 self.contents = str(screen)
                 self.setStatus(200)

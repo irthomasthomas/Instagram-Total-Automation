@@ -6,6 +6,7 @@ class TemplateHandler(RequestHandler):
         self.contentType = "text/html"
 
     def find(self, host, routeData):
+        # print(f'tmplt find: sites/{host}/templates/{routeData["template"]}')
         try:
             template_file = open(
                 f'sites/{host}/templates/{routeData["template"]}')
