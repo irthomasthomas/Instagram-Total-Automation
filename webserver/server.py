@@ -54,7 +54,7 @@ class Webserver(BaseHTTPRequestHandler):
 
                 handler = TemplateHandler()
                 handler.find(file_path, URL='TESTING')
-                pageData = handler.render(file_path, URL='TESTING')
+                # pageData = handler.render(file_path, URL='TESTING')
             else:
                 print(f'badrequest {self.host}')
                 handler = BadRequestHandler()
