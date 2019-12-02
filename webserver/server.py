@@ -1,4 +1,5 @@
 import os
+
 import base64
 from http.server import BaseHTTPRequestHandler
 
@@ -13,7 +14,6 @@ from urllib.parse import parse_qs, urlparse
 import json
 
 class Webserver(BaseHTTPRequestHandler):
-    # TODO: If 404 add ip to redis list > gears > expiring key block
     # TODO: Load all files to memory
 
     routes = {}
@@ -31,8 +31,8 @@ class Webserver(BaseHTTPRequestHandler):
         if self.host not in hosts:
             print(f'ERROR: Invalid Host: {self.host}')
             return
-        # if self.host in hosts:
         # TODO: Merge host:path .eg. with open(f'sites/{host}/public{file_path}', "r") as img:
+        host = hosts[self.host]['name']
 
         request_extension = os.path.splitext(self.path)[1]
         o = urlparse(self.path)
@@ -44,16 +44,17 @@ class Webserver(BaseHTTPRequestHandler):
         elif o.path == "/screen":
             print("screen req")
             handler = DynamicHandler()
-            handler.find(hosts[self.host]['name'], o.path)
+            handler.find(host, o.path)
 
         elif request_extension in ["", ".html"]:
-            # print(self.path)
-            # print(self.routes[self.host]['routes'])
-            # print(f"find: {hosts[self.host]['name']} path: {self.routes[self.host]['routes'][self.path]}")
-
+            
             if self.path in self.routes[self.host]['routes']: # Error
+                routeData = self.routes[self.host]['routes'][self.path]
+                file_path = f'sites/{host}/templates/{routeData["template"]}'
+
                 handler = TemplateHandler()
-                handler.find(hosts[self.host]['name'], self.routes[self.host]['routes'][self.path])
+                handler.find(file_path, URL='TESTING')
+                pageData = handler.render(file_path, URL='TESTING')
             else:
                 print(f'badrequest {self.host}')
                 handler = BadRequestHandler()
@@ -73,9 +74,11 @@ class Webserver(BaseHTTPRequestHandler):
     def handle_http(self, handler):
         status_code = handler.getStatus()
         self.send_response(status_code)
-        
         if status_code is 200:
-            content = handler.getContents()
+            if isinstance( handler, (TemplateHandler)):
+                content = handler.read()
+            else:
+                content = handler.getContents()
             self.send_header("Content-type", handler.getContentType())
         else:
             content = "404 Not Found"

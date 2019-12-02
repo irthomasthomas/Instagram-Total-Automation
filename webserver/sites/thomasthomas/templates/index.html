@@ -6,29 +6,30 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <link href="style.css" rel="stylesheet">
 <script>
-$(document).ready(function(){
+$$(document).ready(function(){
 
-$(".filter-button").click(function(){
-    var value = $(this).attr('data-filter');
+$$(".filter-button").click(function(){
+    var value = $$(this).attr('data-filter');
     
     if(value == "all")
     {
-        $('.filter').show('1000');
+        $$('.filter').show('1000');
     }
     else
     {
-        $(".filter").not('.'+value).hide('3000');
-        $('.filter').filter('.'+value).show('3000');
+        $$(".filter").not('.'+value).hide('3000');
+        $$('.filter').filter('.'+value).show('3000');
         
     }
 });
 
-if ($(".filter-button").removeClass("active")) {
-$(this).removeClass("active");
+if ($$(".filter-button").removeClass("active"))
+{
+    $$(this).removeClass("active");
 }
-$(this).addClass("active");
-
+$$(this).addClass("active");
 });
+
 </script>
  <meta charset=”utf-8" />
  <meta http-equiv=”X-UA-Compatible” content=”IE=edge”>
@@ -52,6 +53,7 @@ $(this).addClass("active");
         </div>
         <br/>
             <!-- TODO: Make dynamic -->
+            $URL
             <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
                 <img src="http://fakeimg.pl/365x365/" class="img-responsive">
             </div>
