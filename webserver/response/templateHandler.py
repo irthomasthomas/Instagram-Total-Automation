@@ -11,7 +11,8 @@ class TemplateHandler(RequestHandler):
             self.contents = self.render(file_path, **kwargs)
             self.setStatus(200)
             return True
-        except:
+        except Exception as e:
+            print(f'exception {e}')
             self.setStatus(404)
             return False
 

@@ -28,6 +28,7 @@ class Webserver(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.host = self.headers.get('Host')
+        print(f'host: {self.host}')
         if self.host not in hosts:
             print(f'ERROR: Invalid Host: {self.host}')
             return
@@ -36,6 +37,7 @@ class Webserver(BaseHTTPRequestHandler):
 
         request_extension = os.path.splitext(self.path)[1]
         o = urlparse(self.path)
+        print(str(o))
         if o.path == "/enqueue":
             print("ENQUEUE")
             handler = TagQueueHandler()

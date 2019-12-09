@@ -3,8 +3,13 @@
         "/" : {
         "template" : "index.html"
         },
-        "/dash" : {
-            "template" : "dash.html"
+        "/dash" : 
+        {
+        "template" : "dash.html"
+        },
+        "/shop" : 
+        {
+        "template" : "shop.html"
         },
         "/goodbye" : 
         {

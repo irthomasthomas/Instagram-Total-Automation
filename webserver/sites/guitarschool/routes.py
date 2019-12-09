@@ -5,9 +5,9 @@ routes = {
     '/goodbye' : {
         'template' : 'goodbye.html'
     },
-    '/telescreen' : {
-        'template' : 'telescreen.html'
-    },
+    # '/telescreen' : {
+    #     'template' : 'telescreen.html'
+    # },
     '/queuetag' : {
         'template' : 'queuetag.html'
     }
