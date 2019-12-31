@@ -12,7 +12,7 @@ from google.auth.transport.requests import Request
 from googleapiclient import http
 from _thread import *
 import sys
-from InstagramAPI import InstagramAPI
+# from InstagramAPI import InstagramAPI
 import credentials
 from PIL import Image
 import threading
@@ -21,6 +21,7 @@ from sqlite3 import Error
 import RemoteObj
 from RemoteObj import RemoteObjClient
 import random
+
 
 def sendToGdrive(filePath):
     creds = None
@@ -177,7 +178,7 @@ print("Socket has been bounded")
 s.listen(10)
 CONNECTION_LIST.append(s)
 print('Socket is ready. Waiting for connection ')
-print(str(get_ip()))
+print(f'MY IP: {str(get_ip())} : {port}')
 
 
 while True:

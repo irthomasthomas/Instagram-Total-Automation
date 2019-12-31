@@ -1,0 +1,17 @@
+Main Carousel / BG image = Width 1920
+
+
+img {
+    width: 200px; /* You can set the dimensions to whatever you want */
+    height: 200px;
+    object-fit: cover;
+}
+fill - stretch the image.
+contain - preserve the aspect ratio of the image.
+cover - Fill the height and width of the box.
+none - Keep the original size.
+scale-down - compare the differences between none and contain to find the smallest object size.
+
+<img src="" class="img-circle" alt="">
+<img src="" class="img-thumbnail" alt="">
+<img src="" class="img-rounded" alt="">

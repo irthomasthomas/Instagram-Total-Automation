@@ -1,0 +1,27 @@
+{
+    "routes" : {
+        "/" : {
+        "template" : "index.html"
+        },
+        "/dash" : 
+        {
+        "template" : "dash.html"
+        },
+        "/shop" : 
+        {
+        "template" : "shop.html"
+        },
+        "/goodbye" : 
+        {
+        "template" : "goodbye.html"
+        },
+        "/telescreen" : 
+        {
+        "template" : "telescreen.html"
+        },
+        "/queuetag" : 
+        {
+        "template" : "queuetag.html"
+        }
+    }
+}

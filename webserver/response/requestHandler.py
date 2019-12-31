@@ -8,7 +8,8 @@ class RequestHandler():
         self.contents = MockFile()
     
     def getContents(self):
-        return self.contents.read()
+        content = self.contents.read()
+        return content
 
     def read(self):
         return self.contents

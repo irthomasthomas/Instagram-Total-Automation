@@ -6,8 +6,8 @@ DetectHiddenWindows, On
 setWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 SetWinDelay, -1
 SetControlDelay, -1
-
 ; TODO: IS IT TARGETING WRONG USER AFTER UPLOAD?
+
 
 #Include Lib\Socket.ahk
 #Include Lib\Jxon.ahk
@@ -38,20 +38,7 @@ global photoSheetId := "1o2ObINzmU_IB5bHzEeuXmby4ucgZPgM8_rcghRKkdL8"
 
 
 extensions := "bmp,jpg,png"
-; Remote.Message("HELLO, WORLD!")
 
-/* 
-    myTcp := new SocketTCP()
-    addr := "192.168.0.31"
-    myTcp.Connect([addr,1339])
-    command := "HELLLOH!"
-
-    ; command := "print_to_terminal;" . text . ";" 
-    sleep 10
-    myTcp.SendText(command)
-    sleep 1000
-    myTcp.disconnect() 
- */
 SetTimer, FolderMon, 90000
 return
 
@@ -78,7 +65,6 @@ catch e
 ; cmd .= ")"
 ; AhkThread.ahktextdll(cmd) 
 sleep 1000
-; CheckPhotoQueueSheet(myAccessToken, Remote)
 
 Loop, %stage1path%
 {

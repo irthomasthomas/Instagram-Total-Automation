@@ -3,25 +3,28 @@
 #include Lib\Socket.ahk
 #include Lib\RemoteObj.ahk
 
-accounts := ["philhughesart", "thomasthomas2211","philhughesart", "thomasthomas2211"]
+accounts := ["blissmolecule", "thomasthomas2211", "thomasthomas2211"]
+; accounts := ["philhughesart", "thomasthomas2211", "philhughesart", "thomasthomas2211"]
 
 
 loop {
     sleep 100
     Tooltip, start botControl,0, 800
-    sleep 3000
-    If FileExist("instaServerREADY")
-    {
-        Tooltip, READY flag exists, 0, 800
-        FileDelete,instaServerREADY
-        Tooltip, READY flag deleted, 0, 800
-        SleepRand(500,1500)
-    }
-    Else
-    {
-        Sleep 30000
-        Continue
-    }
+    sleep 500
+    ; TODO: Uncomment READY check
+    ; If FileExist("instaServerREADY")
+    ; {
+    ;     Tooltip, READY flag exists, 0, 800
+    ;     FileDelete,instaServerREADY
+    ;     Tooltip, READY flag deleted, 0, 800
+    ;     SleepRand(500,1500)
+    ; }
+    ; Else
+    ; {
+    ;     Sleep 30000
+    ;     Continue
+    ; }
+
     random, n, 1, accounts.Length()
     bootControl(accounts[n])
     
@@ -35,9 +38,8 @@ loop {
 
 bootControl(account)
 {
-    ; serverAddress := "192.168.1.16"
     serverAddress := A_IPAddress1
-    serverPort := 8337
+    serverPort := 8337 ; instaServer.py
     instaClient := new RemoteObjClient([serverAddress, serverPort])
     tooltip, new instaclient
     sleep 3000
@@ -52,19 +54,22 @@ bootControl(account)
     tooltip, instaclient session, 10, 900
     sleep 3000
     random, n, 2, instaClient.targetsArray.values.length()
+    print_to_python("targets Array len: " + instaClient.targetsArray.values.length())
+    print_to_python("target account: " + account)
+    print_to_python("Follow target: " + instaClient.targetsArray.values[n][1])
     instaClient.followTarget(instaClient.targetsArray.values[n][1])
-    sleeprand(10000,30000)
+    sleeprand(10000,40000)
     random, n, 2, instaClient.targetsArray.values.length()
     instaClient.followTarget(instaClient.targetsArray.values[n][1])
-    sleeprand(10000,30000)
+    sleeprand(10000,40000)
     instaClient.browseRandomHashtag(2)
     tooltip, bootcontrol: finished browseHashtag
-    sleeprand(10000,30000)
+    sleeprand(10000,40000)
     instaClient.browseRandomHashtag(3)
-    sleeprand(10000,30000)
+    sleeprand(10000,40000)
 
     instaClient.browseRandomHashtag(3)
-    sleeprand(10000,30000)
+    sleeprand(10000,40000)
 
     tooltip, followtarget, 10, 900
 
@@ -75,14 +80,14 @@ bootControl(account)
     random, n, 1, 2
     if n == 1
         instaClient.kardashianComment(3)
-    sleepRand1(instaClient,9000,35000)
+    sleepRand1(instaClient,9000,55000)
     instaClient.kardashianComment(2)
     tooltip, kardashian 2, 10, 900
 
     	; 	FileDelete,instaServerREADY
 		; FileAppend,,photoBotBUSY
     
-    sleeprand1(instaClient,3000,23000)
+    sleeprand1(instaClient,3000,43000)
     ; random, n, 2, instaClient.targetsArray.values.length()
     ; instaClient.followTarget(instaClient.targetsArray.values[n][1])
     
@@ -94,11 +99,11 @@ bootControl(account)
         instaClient.browseFeed(r)
     tooltip, browse, 10, 900
     
-    SleepRand1(instaClient,1000,30000)
+    SleepRand1(instaClient,10000,50000)
     random, n, 1, 2
     if n == 1
         instaClient.kardashianComment(3)
-    sleepRand1(instaClient,3000,30000)
+    sleepRand1(instaClient,3000,40000)
     tooltip, kardashian 3, 10, 900
 
     random, n, 1, 7        
@@ -108,23 +113,23 @@ bootControl(account)
         instaClient.browseRandomHashtag(3)
     tooltip, browse 2, 10, 900
 
-    SleepRand1(instaClient,1000,30000)
+    SleepRand1(instaClient,5000,40000)
     random, n, 1, 2
     if n == 1
     loop 3 {
         instaClient.kardashianComment(2)
-        sleeprand1(instaClient,5000,35000)        
+        sleeprand1(instaClient,5000,55000)        
     }
     tooltip,kardashian 4, 10, 900
 
     result := instaClient.browseRandomHashtag(2)
     tooltip,browse 3, 10, 900
 
-    sleeprand1(instaClient,3000,13000)
+    sleeprand1(instaClient,6000,23000)
 
     instaClient.closeBrowser()    
     Tooltip, sleeping
-    sleepRand1(instaClient,30000,60000)    
+    sleepRand1(instaClient,30000,80000)    
 
 }
 
@@ -134,7 +139,7 @@ SleepRand1(instaClient, x:=0, y:=0) {
     {
         Tooltip, INTERRUPT
         instaClient.closeBrowser()    
-        random, s, 60000,120000
+        random, s, 60000,160000
         Sleep %s%
         FileAppend,,instaServerREADY
         Sleep 1000
@@ -155,5 +160,29 @@ SleepRand1(instaClient, x:=0, y:=0) {
 	if rand > 1000
 	Sleep, %rand%
 }
+
+print_to_python(text)
+	{
+		myTcp := new SocketTCP()
+		addr := "192.168.0.37"
+        try {
+    		myTcp.Connect([addr,2338]) ; host = "192.168.0.37"
+        }
+        catch e
+        {
+
+        }
+		command := "print_to_terminal;" . text . ";" 
+		sleep 10
+        try
+        {
+    		myTcp.SendText(command)
+        }
+        catch e
+        {
+
+        }
+		myTcp.disconnect()
+	}	
 
 ^+r::Reload

@@ -1,0 +1,39 @@
+<!-- Head -->
+
+<!-- Navigation -->
+
+<!--- Image Carousel -->
+
+<!--- Jumbotron -->
+
+<!--- Welcome Section -->
+
+<!--- Three Column Section -->
+
+<!--- Two Column Section -->
+
+<!--- Fixed background -->
+  
+<!--- Meet the team -->
+
+<!--- Cards -->
+
+<!--- Two Column Section -->
+
+<!--- Connect -->
+
+<!--- Footer -->
+
+
+<!--- Lead -->
+
+
+</body>
+</html>
+
+
+
+
+
+
+

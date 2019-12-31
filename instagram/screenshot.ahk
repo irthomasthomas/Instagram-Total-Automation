@@ -34,7 +34,7 @@ TakeScreenshot()
             MsgBox,4112,Fatal Error,pBitmap=%pBitmap% trying to get bitmap from the screen
             ExitApp
         }
-        SetWorkingDir, webserver\public
+        SetWorkingDir, webserver\sites\thomasthomas\public
         encoded:=Gdip_EncodeBitmapTo64string(pBitmap, "png")
         size := StrLen(encoded)
         file := FileOpen("screen", "w")

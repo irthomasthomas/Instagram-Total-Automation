@@ -1,0 +1,15 @@
+{
+    "routes" : {
+        "/" : {
+        "template" : "music.html"
+        },
+        "/v2" : 
+        {
+        "template" : "v2.html"
+        },
+        "/queuetag" : 
+        {
+        "template" : "queuetag.html"
+        }
+    }
+}

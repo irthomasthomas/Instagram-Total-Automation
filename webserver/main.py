@@ -3,7 +3,7 @@ from http.server import HTTPServer
 from server import Webserver
 
 HOST_NAME = '192.168.0.37'
-PORT = 80
+PORT = 8080
 
 if __name__ == '__main__':
     httpd = HTTPServer((HOST_NAME, PORT), Webserver)
