@@ -8,9 +8,9 @@ class DynamicHandler(RequestHandler):
 
     def find(self, host, file_path):
         try:
-            print(f'DynamicHandler: Find: path: {file_path}')
+            # print(f'DynamicHandler: Find: path: {file_path}')
             if file_path == '/screen':
-                print(f'sites/{host}/public{file_path}')
+                # print(f'sites/{host}/public{file_path}')
                 with open(f'sites/{host}/public{file_path}', "r") as img:
                     screen = img.read()
                 self.contents = str(screen)

@@ -41,8 +41,8 @@ hosts = {
         'dir' : 'sites/thomasthomas'
     },
     'ecsta.tk' : {
-        'name': 'thomasthomas',
-        'dir' : 'sites/thomasthomas'
+        'name': 'ecsta',
+        'dir' : 'sites/search-app/public'
     }
 }
 

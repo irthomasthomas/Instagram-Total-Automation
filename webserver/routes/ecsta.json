@@ -1,0 +1,11 @@
+{
+    "routes" : {
+        "/" : {
+        "template" : "index.html"
+        },
+        "/queuetag" : 
+        {
+        "template" : "queuetag.html"
+        }
+    }
+}

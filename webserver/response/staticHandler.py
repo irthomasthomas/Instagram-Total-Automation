@@ -13,15 +13,12 @@ class StaticHandler(RequestHandler):
     
     def find(self, host, file_path, extension):
         try:
-            print(f'sites/{host}/public{file_path}')
+            # print(f'sites/{host}/public{file_path}')
             if extension in (".jpg", ".jpeg", ".png"):
                 self.contents = open(f'sites/{host}/public{file_path}', "rb")
-                # TODO: IS FILE BEING CLOSED?
-                # with open(f'sites/{host}/public{file_path}', "rb") as f:
-                #     self.contents = f
-                #     print(self.contents)
             else:
                 self.contents = open(f'sites/{host}/public{file_path}', "r")
+            # print(f'static_handler {self.contents}')
             self.setContentType(extension)
             self.setStatus(200)
             return True
