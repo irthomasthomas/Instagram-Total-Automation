@@ -36,13 +36,18 @@ hosts = {
         'name': 'chinafunds',
         'dir' : 'sites/chinafunds'
     },
+
     'rekek.tk' : {
         'name': 'thomasthomas',
         'dir' : 'sites/thomasthomas'
     },
     'ecsta.tk' : {
         'name': 'ecsta',
-        'dir' : 'sites/search-app/public'
+        'dir' : 'sites/ecsta/public'
+    },
+    'stonergram.ml' : {
+        'name': 'ecsta',
+        'dir' : 'sites/ecsta/public'
     }
 }
 

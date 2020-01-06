@@ -33,7 +33,7 @@ class Webserver(BaseHTTPRequestHandler):
 
     def do_GET(self):
         # print(f'self.path: {self.path}') # /enqueue?tag=bubblecap # /enqueue?tag=bubblecap&page=22
-
+        # TODO: CHECK request is from ecsta.tk
         # Check if the requested host is valid.
         self.host = self.headers.get('Host')
         if self.host not in hosts:
@@ -49,20 +49,16 @@ class Webserver(BaseHTTPRequestHandler):
         
         # CHECK CACHE
         hash = r.get(self.path)
-        # print(f'hash1: {hash}')
         if hash:
-            # hash = json.dumps(hash)
-            # print(f'hash2: {hash}')      
+            print(f'FOUND CACHE FOR: {self.path}')
             handler = CacheHandler()      
             handler.send_cache(hash)
 
         elif path == "/enqueue":
             # TODO: HANDLE '#'
-                handler = TagQueueHandler()
-                handler.enqueue(query)
-            # except:
-            #     print(f'ENQUEUE ERROR counld not split path')
-            #     handler = BadRequestHandler()
+            print(f'NO CACHE:{self.path}')
+            handler = TagQueueHandler()
+            handler.enqueue(query)
             
         elif path == "/screen":
             host = hosts[self.host]['name'] # thomasthomas
