@@ -38,6 +38,7 @@ class Webserver(BaseHTTPRequestHandler):
         self.host = self.headers.get('Host')
         if self.host not in hosts:
             print(f'ERROR: Invalid Host Req to: {self.host} from {self.client_address}')
+            handler = BadRequestHandler()
             return
         self.path = self.path.lower().strip('#')
         print(f'PATH: {self.path}')
@@ -81,7 +82,10 @@ class Webserver(BaseHTTPRequestHandler):
             else:
                 print(f'badrequest {self.host}')
                 handler = BadRequestHandler()
-        elif request_extension not in ['.html', '.htm', '.css', '.jpg', '.jpeg', '.png', '.bmp', '.js']:
+        elif request_extension not in [
+            '.html', '.htm', '.css',
+            '.jpg', '.jpeg', '.png',
+            '.bmp', '.js', '.ico']:
             handler = BadRequestHandler()
         else:
             handler = StaticHandler()

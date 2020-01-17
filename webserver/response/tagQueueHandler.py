@@ -30,6 +30,7 @@ class TagQueueHandler(RequestHandler):
         toplist = []
         # top10tags = rb.topkList('top10tags')
         top10tags = rb.topkList('top100tags')
+        # TODO: mk RB top100tags
         for t in top10tags:
             stream = r.xread({f'tags:out:{t}': b"0-0"}, count=100)
             if stream:
@@ -54,17 +55,21 @@ class TagQueueHandler(RequestHandler):
     def get_tags(self, tag):
         # TODO: SUBSCRIBE TO UPDATES FROM STREAM
         # TODO: RELATED RESULTS
-        # TODO: SCRAPE 1 PAGE DEEP OF RELATED TAGS
+        # TODO: DONE -SCRAPE 1 PAGE DEEP OF RELATED TAGS
         # TODO: MERGE RESULTS WITH RELATED TAGS
         # TODO: TIMER IS SLOWER WHEN RESULTS ARE NOT READ
         # TODO: PRODUCT DENSITY SCORE
-        root_tag_key = f'rootTag:{tag}'
-        root_tag = r.get(root_tag_key)
-        if not root_tag:
-            print(f'Setting new rootTag key')
-            r.set(f'rootTag:{tag}', tag)
-            root_tag = tag
+        # TODO: # rb.topkAdd('topk:10requests', tag)
+
+        # TODO: WRONG SETTING KEY TO KEY 
+        # root_tag_key = f'rootTag:{tag}'
+        # root_tag = r.get(root_tag_key)
+        # if not root_tag:
+        #     print(f'Setting new rootTag key')
+        #     r.set(f'rootTag:{tag}', tag)
+        #     root_tag = tag
         # TODO Need to change tagsin to set
+
         res = r.sadd('tagsin', tag) # TODO: Add rootTag
         print(f'sadd: {res}')
         if res > 0:
@@ -92,7 +97,8 @@ class TagQueueHandler(RequestHandler):
                 {
                     "id": post['postId'],
                     "imgUrl": post['imgUrl'],
-                    "link": post['link']
+                    "link": post['link'],
+                    "related": post['related_tag']
                 })
 
         json_result = json.dumps(results)

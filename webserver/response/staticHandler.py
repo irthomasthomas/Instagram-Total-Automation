@@ -8,6 +8,7 @@ class StaticHandler(RequestHandler):
             ".css" : "text/css",
             ".jpg" : "image/jpeg",
             ".png" : "image/png",
+            ".ico" : "icon/ico",
             "notfound" : "text/plain"
         }
     

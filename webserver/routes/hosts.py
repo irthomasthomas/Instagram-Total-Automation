@@ -45,6 +45,10 @@ hosts = {
         'name': 'ecsta',
         'dir' : 'sites/ecsta/public'
     },
+    '176.254.106.152' : {
+        'name': 'ecsta',
+        'dir' : 'sites/ecsta/public'
+    },
     'stonergram.ml' : {
         'name': 'ecsta',
         'dir' : 'sites/ecsta/public'
