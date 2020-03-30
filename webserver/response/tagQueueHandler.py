@@ -25,20 +25,21 @@ class TagQueueHandler(RequestHandler):
     
     def gettop10tags(self):
         # TODO: SANITIZE / AND #
-        # TODO: top100:request
-        # start1 = perf_counter()
         toplist = []
         # top10tags = rb.topkList('top10tags')
-        top10tags = rb.topkList('top100tags')
+        # top10tags = rb.topkList('top100tags')
+        top10tags = r.zrevrange('topz:products', 0, -1)
         # TODO: mk RB top100tags
         for t in top10tags:
-            stream = r.xread({f'tags:out:{t}': b"0-0"}, count=100)
+            stream = r.xread({f'tags:out:{t}': b"0-0"}, count=1)
             if stream:
                 try:
                     top10dic = {
                         "postId": stream[0][1][0][1]['postId'],
                         "imgUrl": stream[0][1][0][1]['imgUrl'],
-                        "link": f'http://thomasthomas.tk/enqueue?tag={t}&page=1',
+                        "link": f'http://192.168.43.226:9090/enqueue?tag={t}&page=1',
+                        # "link": f'http://thomasthomas.tk:9090/enqueue?tag={t}&page=1',
+                        # "link": f'http://thomasthomas.tk/enqueue?tag={t}&page=1',
                         "rootTag": stream[0][1][0][1]['rootTag']
                     }
                     toplist.append(top10dic)                    
@@ -46,32 +47,24 @@ class TagQueueHandler(RequestHandler):
                     print('index out of range')
                 
         page_response = f'{{"total":1,"total_pages":1,"results":{json.dumps(toplist)}}}'
-        r.set('/enqueue?tag=top10tags&page=1', page_response)
-        # end1 = perf_counter()
-        # print(f'time1: {end1 - start1}')
+        # r.set('/enqueue?tag=top10tags&page=1', page_response, ex=600)
         return page_response
 
 
     def get_tags(self, tag):
         # TODO: SUBSCRIBE TO UPDATES FROM STREAM
-        # TODO: RELATED RESULTS
-        # TODO: DONE -SCRAPE 1 PAGE DEEP OF RELATED TAGS
-        # TODO: MERGE RESULTS WITH RELATED TAGS
+        # TODO: Done: MERGE RESULTS WITH RELATED TAGS
         # TODO: TIMER IS SLOWER WHEN RESULTS ARE NOT READ
-        # TODO: PRODUCT DENSITY SCORE
-        # TODO: # rb.topkAdd('topk:10requests', tag)
+        # TODO: Done: PRODUCT DENSITY SCORE
 
-        # TODO: WRONG SETTING KEY TO KEY 
         # root_tag_key = f'rootTag:{tag}'
         # root_tag = r.get(root_tag_key)
         # if not root_tag:
         #     print(f'Setting new rootTag key')
         #     r.set(f'rootTag:{tag}', tag)
         #     root_tag = tag
-        # TODO Need to change tagsin to set
 
         res = r.sadd('tagsin', tag) # TODO: Add rootTag
-        print(f'sadd: {res}')
         if res > 0:
             r.lpush('list:tagsin', tag)
         
@@ -82,15 +75,14 @@ class TagQueueHandler(RequestHandler):
         stream = r.xread({stream_key:b"0-0"}, count=28, block=10000)
         if len(stream) == 1:
             print('requesting more from stream')
-            sleep(1)
+            sleep(0.5)
             stream = r.xread({stream_key:b"0-0"},count=10)
         
-        start2 = perf_counter()
         if stream:
             try:
                 stream = stream[0][1]
             except:
-                print('index out of range')          
+                print('stream index out of range')          
 
         for (_, post) in stream:
             results.append(
@@ -107,8 +99,6 @@ class TagQueueHandler(RequestHandler):
         # TODO: TEST DIC v F-String
         page_response = f'{{"total":{total},"total_pages":{total_pages},"results":{json_result}}}'
         
-        end2 = perf_counter()
-        print(f'timer2: {end2 - start2}')
 
         return page_response
 

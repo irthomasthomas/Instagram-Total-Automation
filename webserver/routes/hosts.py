@@ -1,6 +1,6 @@
 # TODO: Handle WWW
 hosts = {
-    'thomasthomas.tk' : {
+    'thomasthomas.tk:9090' : {
         'name': 'thomasthomas',
         'dir' : 'sites/thomasthomas'
     },
@@ -36,7 +36,6 @@ hosts = {
         'name': 'chinafunds',
         'dir' : 'sites/chinafunds'
     },
-
     'rekek.tk' : {
         'name': 'thomasthomas',
         'dir' : 'sites/thomasthomas'
@@ -45,9 +44,13 @@ hosts = {
         'name': 'ecsta',
         'dir' : 'sites/ecsta/public'
     },
-    '176.254.106.152' : {
+    '192.168.43.226:8080' : {
         'name': 'ecsta',
         'dir' : 'sites/ecsta/public'
+    },
+    '192.168.43.226:9090' : {
+        'name': 'thomasthomas',
+        'dir' : 'sites/thomasthomas'
     },
     'stonergram.ml' : {
         'name': 'ecsta',
