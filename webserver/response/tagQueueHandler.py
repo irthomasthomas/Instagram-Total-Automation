@@ -37,7 +37,7 @@ class TagQueueHandler(RequestHandler):
                     top10dic = {
                         "postId": stream[0][1][0][1]['postId'],
                         "imgUrl": stream[0][1][0][1]['imgUrl'],
-                        "link": f'http://192.168.43.226:9090/enqueue?tag={t}&page=1',
+                        "link": f'http://157.52.255.203:9090/enqueue?tag={t}&page=1',
                         # "link": f'http://thomasthomas.tk:9090/enqueue?tag={t}&page=1',
                         # "link": f'http://thomasthomas.tk/enqueue?tag={t}&page=1',
                         "rootTag": stream[0][1][0][1]['rootTag']
@@ -85,13 +85,21 @@ class TagQueueHandler(RequestHandler):
                 print('stream index out of range')          
 
         for (_, post) in stream:
-            results.append(
-                {
-                    "id": post['postId'],
-                    "imgUrl": post['imgUrl'],
-                    "link": post['link'],
-                    "related": post['related_tag']
-                })
+            try:
+                results.append(
+                    {
+                        "id": post['postId'],
+                        "imgUrl": post['imgUrl'],
+                        "link": post['link'],
+                        "related": post['related_tag']
+                    })
+            except:
+                results.append(
+                    {
+                        "id": post['postId'],
+                        "imgUrl": post['imgUrl'],
+                        "link": post['link']
+                    })
 
         json_result = json.dumps(results)
         total = r.xlen(f'tags:out:{tag}')
@@ -120,9 +128,12 @@ class TagQueueHandler(RequestHandler):
             raise Exception(f'Bad request to queue service. Echo:{query}')
 
         if tag == 'top10tags':
+            print("TOP10TAGS")
             message = self.gettop10tags()
         else:
             message = self.get_tags(tag)
+        
+        
         r.lpush('cache:queue', tag)
 
         self.contents = message

@@ -2,7 +2,7 @@ import time
 from http.server import HTTPServer
 from server import Webserver
 
-HOST_NAME = '192.168.43.226'
+HOST_NAME = '157.52.255.203'
 # HOST_NAME = '172.26.72.73'
 PORT = 9090
 
