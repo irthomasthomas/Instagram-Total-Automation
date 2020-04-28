@@ -44,11 +44,11 @@ hosts = {
         'name': 'ecsta',
         'dir' : 'sites/ecsta/public'
     },
-    '157.52.255.203:8080' : {
+    '185.214.164.173:80' : {
         'name': 'ecsta',
         'dir' : 'sites/ecsta/public'
     },
-    '157.52.255.203:9090' : {
+    '185.214.164.173:9090' : {
         'name': 'thomasthomas',
         'dir' : 'sites/thomasthomas'
     },
