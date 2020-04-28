@@ -2,7 +2,7 @@ from response.requestHandler import RequestHandler
 import sys
 from urllib.parse import parse_qs, urlparse
 import redis
-from app.tasks import scrape_tag
+#from app.tasks import scrape_tag
 from datetime import datetime
 
 r = redis.Redis()
