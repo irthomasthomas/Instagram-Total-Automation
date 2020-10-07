@@ -76,7 +76,7 @@ class TagQueueHandler(RequestHandler):
         if len(stream) == 1:
             print('requesting more from stream')
             sleep(0.5)
-            stream = r.xread({stream_key:b"0-0"},count=10)
+            stream = r.xread({stream_key:b"0-0"}, count=10)
         
         if stream:
             try:
@@ -132,7 +132,6 @@ class TagQueueHandler(RequestHandler):
             message = self.gettop10tags()
         else:
             message = self.get_tags(tag)
-        
         
         r.lpush('cache:queue', tag)
 
